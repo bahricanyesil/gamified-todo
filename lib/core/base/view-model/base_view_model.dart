@@ -8,11 +8,12 @@ import '../../managers/navigation_manager.dart';
 /// Base view model class to create customized view models extending this.
 abstract class BaseViewModel extends ChangeNotifier {
   /// Default constructor of [BaseViewModel].
-  BaseViewModel() {
+  BaseViewModel(this.context) {
     _init();
   }
 
-  //TODO(Bahrican): Add context
+  /// Current context of the view.
+  BuildContext context;
 
   ViewStates _viewState = ViewStates.uninitialized;
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-import '../managers/navigation_manager.dart';
+import '../managers/navigation/navigation_manager.dart';
 
 /// Provides the list of providers will be used across the app.
 class ProviderList {

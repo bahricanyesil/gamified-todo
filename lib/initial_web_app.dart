@@ -14,14 +14,15 @@ class InitialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     _initialize();
     return MultiProvider(
-        providers: ProviderList.providers,
-        child: MaterialApp.router(
-          title: 'Gamified To Do',
-          debugShowCheckedModeBanner: false,
-          routerDelegate: NavigationManager(),
-          backButtonDispatcher: RootBackButtonDispatcher(),
-          routeInformationParser: CustomRouteInfoParser(),
-        ));
+      providers: ProviderList.providers,
+      child: MaterialApp.router(
+        title: 'Gamified To Do',
+        debugShowCheckedModeBanner: false,
+        routerDelegate: NavigationManager(),
+        backButtonDispatcher: RootBackButtonDispatcher(),
+        routeInformationParser: CustomRouteInfoParser(),
+      ),
+    );
   }
 
   void _initialize() => setUrlStrategy(PathUrlStrategy());

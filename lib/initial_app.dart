@@ -11,12 +11,13 @@ class InitialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MultiProvider(
-      providers: ProviderList.providers,
-      child: MaterialApp.router(
-        title: 'Gamified To Do',
-        debugShowCheckedModeBanner: false,
-        routerDelegate: NavigationManager(),
-        backButtonDispatcher: RootBackButtonDispatcher(),
-        routeInformationParser: CustomRouteInfoParser(),
-      ));
+        providers: ProviderList.providers,
+        child: MaterialApp.router(
+          title: 'Gamified To Do',
+          debugShowCheckedModeBanner: false,
+          routerDelegate: NavigationManager(),
+          backButtonDispatcher: RootBackButtonDispatcher(),
+          routeInformationParser: CustomRouteInfoParser(),
+        ),
+      );
 }
