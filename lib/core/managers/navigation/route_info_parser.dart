@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../constants/navigation/navigation_constants.dart';
+import 'navigation_manager.dart';
 
 import 'screen_config.dart';
 
@@ -10,11 +12,14 @@ class CustomRouteInfoParser extends RouteInformationParser<ScreenConfig> {
   @override
   Future<ScreenConfig> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final Uri uri = Uri.parse(routeInformation.location!);
+    final Uri uri =
+        Uri.parse(routeInformation.location ?? NavigationConstants.root);
     if (uri.pathSegments.isEmpty) return defaultScreen;
     switch (uri.pathSegments[0]) {
-      case 'home':
+      case NavigationConstants.root:
         return ScreenConfig.defaultScreen();
+      case NavigationConstants.home:
+        return ScreenConfig.home();
     }
 
     return defaultScreen;
@@ -22,7 +27,9 @@ class CustomRouteInfoParser extends RouteInformationParser<ScreenConfig> {
 
   @override
   RouteInformation? restoreRouteInformation(ScreenConfig configuration) {
-    if (configuration.path == defaultScreen.path) return null;
+    if (configuration.path == NavigationManager.instance.initialScreen?.path) {
+      return null;
+    }
     return RouteInformation(location: configuration.path);
   }
 }

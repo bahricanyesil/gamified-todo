@@ -3,25 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../constants/enums/view_states.dart';
-import '../../managers/navigation_manager.dart';
+import '../../managers/navigation/navigation_manager.dart';
 
 /// Base view model class to create customized view models extending this.
 abstract class BaseViewModel extends ChangeNotifier {
   /// Default constructor of [BaseViewModel].
-  BaseViewModel(this.context) {
+  BaseViewModel() {
     _init();
   }
-
-  /// Current context of the view.
-  BuildContext context;
 
   ViewStates _viewState = ViewStates.uninitialized;
 
   /// Getter for [_viewState], shows the current state of the view.
   ViewStates get state => _viewState;
-
-  // TODO(Bahrican): Implement and uncomment.
-  // final LocalManager localManager = LocalManager.instance;
 
   /// Singleton navigation manager to use across the view models.
   final NavigationManager navigationManager = NavigationManager.instance;

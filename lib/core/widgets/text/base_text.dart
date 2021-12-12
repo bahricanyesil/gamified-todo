@@ -11,6 +11,9 @@ class BaseText extends StatelessWidget {
     this.textAlign = TextAlign.center,
     this.color,
     this.fit,
+    this.fontSizeFactor,
+    this.fontWeight,
+    this.maxLength = 90000000,
     Key? key,
   }) : super(key: key);
 
@@ -29,15 +32,36 @@ class BaseText extends StatelessWidget {
   /// Custom box fit option for [FittedBox], default is [BoxFit.scaleDown].
   final BoxFit? fit;
 
+  /// Custom font size factor.
+  final double? fontSizeFactor;
+
+  /// Custom font weight.
+  final FontWeight? fontWeight;
+
+  /// Maximum length for the task.
+  final int maxLength;
+
   @override
   Widget build(BuildContext context) => FittedBox(
         fit: fit ?? BoxFit.scaleDown,
         child: Text(
-          text,
-          style: style ??
-              TextStyles(context).normalStyle(color: color).merge(style),
+          _text,
+          style: _style(context),
           textAlign: textAlign,
           overflow: TextOverflow.clip,
         ),
       );
+
+  String get _text =>
+      text.length > maxLength ? text.substring(0, maxLength) : text;
+
+  TextStyle _style(BuildContext context) =>
+      style ??
+      TextStyles(context)
+          .normalStyle(
+            color: color,
+            fontSizeFactor: fontSizeFactor,
+            fontWeight: fontWeight,
+          )
+          .merge(style);
 }

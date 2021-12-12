@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'screen_config.dart';
@@ -38,17 +39,52 @@ class NavigationManager extends RouterDelegate<ScreenConfig>
       );
 
   @override
-  Future<void> setInitialRoutePath(ScreenConfig configuration) async =>
-      setNewRoutePath(configuration);
+  Future<void> setInitialRoutePath(ScreenConfig configuration) async {
+    _pages.clear();
+    _addPage(configuration);
+    return SynchronousFuture<void>(null);
+  }
+
+  @override
+  Future<void> setRestoredRoutePath(ScreenConfig configuration) async {
+    /// Checks if new screen already exists in the history.
+    for (final Page<dynamic> page in _pages) {
+      /// If the screen exists, removes all the screens after it.
+      if ((page.arguments as ScreenConfig?) == configuration) {
+        final int index = _pages.indexOf(page);
+        _pages.removeRange(index + 1, _pages.length);
+        notifyListeners();
+        return SynchronousFuture<void>(null);
+      }
+    }
+
+    /// Adds new screen to the history.
+    _addPageHelper(configuration);
+    return SynchronousFuture<void>(null);
+  }
 
   @override
   Future<void> setNewRoutePath(ScreenConfig configuration) async {
-    _pages.clear();
-    addPage(configuration);
+    _addPage(configuration);
+    return SynchronousFuture<void>(null);
   }
 
+  /// Pops a page from the history.
+  @override
+  Future<bool> popRoute() async {
+    if (_canPop) {
+      _pages.removeLast();
+      notifyListeners();
+      return SynchronousFuture<bool>(true);
+    }
+    return SynchronousFuture<bool>(false);
+  }
+
+  /// Gets the initial root screen.
+  ScreenConfig? get initialScreen => _pages.first.arguments as ScreenConfig?;
+
   /// Adds a new page to the current page path.
-  void addPage(ScreenConfig newScreen) {
+  void _addPage(ScreenConfig newScreen) {
     if (_canAdd(newScreen)) _addPageHelper(newScreen);
   }
 
@@ -99,16 +135,6 @@ class NavigationManager extends RouterDelegate<ScreenConfig>
     _pages.remove(route.settings);
     notifyListeners();
     return true;
-  }
-
-  @override
-  Future<bool> popRoute() async {
-    if (_canPop) {
-      _pages.removeLast();
-      notifyListeners();
-      return true;
-    }
-    return false;
   }
 
   bool get _canPop => _pages.length > 1;

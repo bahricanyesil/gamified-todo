@@ -15,16 +15,35 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  # UI Style
+  # UI-Style
   cupertino_icons: ^1.0.2
+  google_fonts: ^2.1.0
 
   # State Management
   provider: ^6.0.1
 
+  # Local Storage
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+
+  # Models
+  uuid: ^3.0.5
+
+  # Data Format
+  intl: ^0.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  # Automations
+  build_runner: ^2.1.5
+
+  # Clean code
   flutter_lints: ^1.0.0
+
+  # Local Storage
+  hive_generator: ^1.1.1
 
 flutter:
 
