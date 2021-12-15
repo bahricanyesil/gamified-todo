@@ -9,7 +9,6 @@ import '../../../core/decoration/text_styles.dart';
 import '../../../core/extensions/color/color_extensions.dart';
 import '../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../core/extensions/date/date_time_extensions.dart';
-import '../../../core/extensions/text-style/decoration_extensions.dart';
 import '../../../core/widgets/text/base_text.dart';
 import '../../../core/widgets/text/not_fitted_text.dart';
 import '../../../product/constants/enums/task_status.dart';
@@ -29,32 +28,55 @@ class HomeScreen extends StatelessWidget with HomeTexts {
         bodyBuilder: _bodyBuilder,
       );
 
-  Widget _bodyBuilder(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: context.medWidth,
-          vertical: context.lowMedHeight,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _title(context),
-            Expanded(
-              child: ListView.builder(
-                padding: context.verticalPadding(Sizes.low),
-                itemCount: 10,
-                itemBuilder: (BuildContext innerContext, int index) => Padding(
-                  padding: context.bottomPadding(Sizes.low),
-                  child: _TaskItem(
-                      task: context.read<HomeViewModel>().tasks[index]),
-                ),
+  Widget _bodyBuilder(BuildContext context) {
+    print('BUİLD BODY');
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: context.medWidth,
+        vertical: context.lowMedHeight,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          A(),
+          B(),
+          Expanded(
+            child: ListView.builder(
+              padding: context.verticalPadding(Sizes.low),
+              itemCount: 12,
+              itemBuilder: (BuildContext innerContext, int index) => Padding(
+                padding: context.bottomPadding(Sizes.low),
+                child:
+                    _TaskItem(task: context.read<HomeViewModel>().tasks[index]),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-  Widget _title(BuildContext context) => BaseText(
-        HomeTexts.tasksTitle,
-        style: TextStyles(context).titleStyle().underline(),
-      );
+class A extends StatelessWidget {
+  const A({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print('A UPDATE');
+    return BaseText(
+        context.select<HomeViewModel, int>((home) => home.a).toString(),
+        style: TextStyles(context).titleStyle());
+  }
+}
+
+class B extends StatelessWidget {
+  const B({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print('B UPDATE');
+    return BaseText(
+        context.select<HomeViewModel, int>((home) => home.b).toString(),
+        style: TextStyles(context).titleStyle());
+  }
 }

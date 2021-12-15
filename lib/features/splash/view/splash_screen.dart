@@ -53,8 +53,9 @@ class _SplashScreenState extends State<SplashScreen> with SplashTexts {
   }
 
   Future<bool> _initializeApp() async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    throw Exception();
+    // await Future<void>.delayed(const Duration(seconds: 1));
+    // throw Exception();
+    return true;
   }
 
   Future<bool> _retryInitialization() async {

@@ -71,7 +71,8 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
     );
   }
 
-  Widget get _child => context.watch<T>().state == ViewStates.uninitialized
+  Widget get _child => context.select<T, ViewStates>((T p) => p.state) ==
+          ViewStates.uninitialized
       ? const Center(child: LoadingIndicator())
       : widget.bodyBuilder(context);
 

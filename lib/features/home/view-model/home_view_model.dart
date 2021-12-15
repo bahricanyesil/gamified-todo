@@ -10,20 +10,25 @@ class HomeViewModel extends BaseViewModel {
   /// Local manager instance for tasks.
   final TasksLocalManager tasksLocalManager = TasksLocalManager();
 
+  int a = 0;
+  int b = 0;
+
   @override
   Future<void> init() async {
     await tasksLocalManager.initStorage();
     tasks = tasksLocalManager.allValues();
     tasks = List<Task>.generate(
-        12,
-        (int index) => Task.mock(
-            content:
-                """YEAAYYY YEAY YEAAYYY YEAAYYY YEAAYYY YEAAYYY YEAAYYY YEAAYYY
-                 YEAAYYY GREAADSYGAYSDGY YEAAYYY GREAADSYGAYSDGY YEAAYYY 
-                 GREAADSYGAYSDGY YEAAYYY 
-                GREAADSYGAYSDGY YEAAYYY GREAADSYGAYSDGY YEAAYYY GREAADSYGAYSDGY
-                 YEAAYYY GREAADSYGAYSDGY YEAAYYY GREAADSYGAYSDGY
-                  YEAAYYY GREAADSYGAYSDGY $index"""));
-    tasks.sort((Task a, Task b) => a < b);
+      12,
+      (int index) => Task.mock(content: 'YEAAYYY YEAY YEAAYYY $index'),
+    );
+    tasks.sort((Task a, Task b) => a > b);
+
+    Future.delayed(Duration(seconds: 3), () => updateB());
+  }
+
+  void updateB() {
+    print('IPDATE');
+    b = 1234;
+    notifyListeners();
   }
 }

@@ -5,13 +5,26 @@ class _TaskItem extends StatelessWidget {
   final Task task;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-        shape: _shape(context),
-        leading: _TaskPriorityNumber(priority: task.priority),
-        contentPadding: context.horizontalPadding(Sizes.lowMed),
-        title: _title,
-        subtitle: _subtitle(context),
-        trailing: _TaskStatus(status: task.status),
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: task.priority.color.darken(.3),
+            width: 1.2,
+          ),
+          borderRadius: BorderRadii.lowCircular,
+        ),
+        child: Row(
+          children: <Widget>[
+            _TaskStatus(status: task.status),
+          ],
+        ),
+        // ListTile(
+        //   leading: _TaskPriorityNumber(priority: task.priority),
+        //   contentPadding: context.horizontalPadding(Sizes.lowMed),
+        //   title: _title,
+        //   subtitle: _subtitle(context),
+        //   trailing: _TaskStatus(status: task.status),
+        // ),
       );
 
   Widget get _title => NotFittedText(task.content, textAlign: TextAlign.start);
@@ -19,11 +32,6 @@ class _TaskItem extends StatelessWidget {
   Widget _subtitle(BuildContext context) => NotFittedText(task.createdAt.dm,
       textAlign: TextAlign.start,
       style: TextStyles(context).subtitleTextStyle());
-
-  RoundedRectangleBorder _shape(BuildContext context) => RoundedRectangleBorder(
-        borderRadius: BorderRadii.lowCircular,
-        side: BorderSide(color: task.priority.color.darken(.3), width: 1.2),
-      );
 }
 
 class _TaskPriorityNumber extends StatelessWidget {
@@ -33,12 +41,11 @@ class _TaskPriorityNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
+        alignment: Alignment.center,
         constraints: BoxConstraints(minWidth: context.responsiveSize * 12),
-        padding: context.allPadding(Sizes.low),
-        decoration: BoxDecoration(
-          color: priority.color,
-          shape: BoxShape.circle,
-        ),
+        padding: EdgeInsets.all(context.responsiveSize * .8),
+        decoration:
+            BoxDecoration(color: priority.color, shape: BoxShape.circle),
         child: priority.numberText,
       );
 }
@@ -55,3 +62,18 @@ class _TaskStatus extends StatelessWidget {
         ],
       );
 }
+
+// class _TitleSubtitle extends StatelessWidget {
+//   const _TitleSubtitle({required this.status, Key? key}) : super(key: key);
+//   final String title;
+//   final String subtitle;
+
+//   @override
+//   Widget build(BuildContext context) => Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           status.icon,
+//         ],
+//       );
+
+// }
