@@ -12,15 +12,17 @@ class TaskAdapter extends TypeAdapter<Task> {
 
   @override
   Task read(BinaryReader reader) {
-    final int numOfFields = reader.readByte();
-    final Map<int, dynamic> fields = <int, dynamic>{
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Task(
       priority: fields[0] as Priorities,
       content: fields[1] as String,
       groupId: fields[7] as String,
-    );
+    )
+      ..status = fields[5] as TaskStatus
+      ..dueDate = fields[6] as DateTime;
   }
 
   @override

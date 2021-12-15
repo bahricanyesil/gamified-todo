@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/enums/sizes.dart';
+import '../../../core/constants/enums/view-enums/sizes.dart';
 
 import '../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../core/managers/navigation/navigation_shelf.dart';
@@ -52,11 +52,7 @@ class _SplashScreenState extends State<SplashScreen> with SplashTexts {
     setState(() => _retrying = true);
   }
 
-  Future<bool> _initializeApp() async {
-    // await Future<void>.delayed(const Duration(seconds: 1));
-    // throw Exception();
-    return true;
-  }
+  Future<bool> _initializeApp() async => true;
 
   Future<bool> _retryInitialization() async {
     await Future<void>.delayed(const Duration(seconds: 1));

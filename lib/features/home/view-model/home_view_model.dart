@@ -1,3 +1,5 @@
+import 'package:gamified_todo/product/constants/enums/task/task_enums_shelf.dart';
+
 import '../../../core/base/view-model/base_view_model.dart';
 import '../../../product/managers/local-storage/tasks/tasks_local_manager.dart';
 import '../../../product/models/task/task.dart';
@@ -10,25 +12,28 @@ class HomeViewModel extends BaseViewModel {
   /// Local manager instance for tasks.
   final TasksLocalManager tasksLocalManager = TasksLocalManager();
 
-  int a = 0;
-  int b = 0;
-
   @override
   Future<void> init() async {
     await tasksLocalManager.initStorage();
     tasks = tasksLocalManager.allValues();
     tasks = List<Task>.generate(
       12,
-      (int index) => Task.mock(content: 'YEAAYYY YEAY YEAAYYY $index'),
+      (int index) => Task.mock(
+          content:
+              'YEAAYYY YEAY YYY $index DAHASHDAHSDUIAHSDIUADHSıuahdsıuahsdu'),
     );
     tasks.sort((Task a, Task b) => a > b);
-
-    Future.delayed(Duration(seconds: 3), () => updateB());
+    Future<void>.delayed(const Duration(seconds: 2), _updateEl);
   }
 
-  void updateB() {
-    print('IPDATE');
-    b = 1234;
+  /// Updates the status of a task in the list.
+  void updateTaskStatus(int index, TaskStatus newStatus) {
+    tasks[index].status = newStatus;
+    notifyListeners();
+  }
+
+  void _updateEl() {
+    tasks[4].content = 'apokdapsd';
     notifyListeners();
   }
 }

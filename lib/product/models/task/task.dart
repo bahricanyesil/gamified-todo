@@ -4,12 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/constants/enums/tasks/priorities.dart';
 import '../../../core/extensions/date/date_time_extensions.dart';
 import '../../../core/extensions/enum/enum_extensions.dart';
 import '../../../core/helpers/hasher.dart';
-import '../../constants/enums/task_award_status.dart';
-import '../../constants/enums/task_status.dart';
+import '../../constants/enums/task/task_enums_shelf.dart';
 import '../../managers/local-storage/hive_configs.dart';
 
 part 'task.g.dart';
@@ -54,11 +52,11 @@ class Task with HiveObjectMixin {
 
   /// Priority of the task.
   @HiveField(0)
-  final Priorities priority;
+  Priorities priority;
 
   /// Content of the task.
   @HiveField(1)
-  final String content;
+  String content;
 
   /// Unique id of the task.
   @HiveField(2)
@@ -74,15 +72,15 @@ class Task with HiveObjectMixin {
 
   /// Status of the task. Refer to [TaskStatus] enum.
   @HiveField(5)
-  final TaskStatus status;
+  TaskStatus status;
 
   /// Planned due date of the task.
   @HiveField(6)
-  final DateTime dueDate;
+  DateTime dueDate;
 
   /// Group id of the task.
   @HiveField(7)
-  final String groupId;
+  String groupId;
 
   /// Refers to the tasks those this task is award of.
   @HiveField(8)

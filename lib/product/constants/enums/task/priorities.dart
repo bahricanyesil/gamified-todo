@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme/color/l_colors.dart';
-import '../../../widgets/widgets_shelf.dart';
+import '../../../../../core/theme/color/l_colors.dart';
+import '../../../../core/widgets/widgets_shelf.dart';
 
 /// Determines the priorities of the tasks.
 enum Priorities {

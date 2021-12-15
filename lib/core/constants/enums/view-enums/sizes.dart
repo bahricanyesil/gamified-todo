@@ -1,5 +1,8 @@
 /// Enum to determine the size types.
 enum Sizes {
+  /// Refers to the extreme low valued sizes.
+  extremeLow,
+
   /// Refers to the low valued sizes.
   low,
 

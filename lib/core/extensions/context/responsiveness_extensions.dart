@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../../constants/enums/sizes.dart';
+import '../../constants/enums/view-enums/sizes.dart';
 
 /// Extensions for responsive ui designs with context.
 extension ResponsivenessExtensions on BuildContext {
@@ -17,6 +17,12 @@ extension ResponsivenessExtensions on BuildContext {
   double get responsiveSize =>
       min(height * 16, width * 9) / (isLandscape ? 24 : 12);
 
+  /// Customized extreme low height value.
+  double get extremeLowHeight => height * .8;
+
+  /// Customized extreme low width value.
+  double get extremeLowWidth => width * 1;
+
   /// Customized low height value.
   double get lowHeight => height * 1.6;
 
@@ -24,16 +30,16 @@ extension ResponsivenessExtensions on BuildContext {
   double get lowWidth => width * 2;
 
   /// Customized low-medium height value.
-  double get lowMedHeight => height * 3;
+  double get lowMedHeight => height * 2.5;
 
   /// Customized low-medium width value.
-  double get lowMedWidth => width * 3.5;
+  double get lowMedWidth => width * 3.2;
 
   /// Customized medium height value.
-  double get medHeight => height * 5.6;
+  double get medHeight => height * 4;
 
   /// Customized medium width value.
-  double get medWidth => width * 5.6;
+  double get medWidth => width * 5;
 
   /// Customized medium-high height value.
   double get medHighHeight => height * 7;
@@ -90,10 +96,20 @@ extension ResponsivenessExtensions on BuildContext {
     return EdgeInsets.only(bottom: sizedValues[1]);
   }
 
+  /// Returns a responsive horizontal [SizedBox] to give space.
+  SizedBox sizedW(double factor) => SizedBox(width: width * factor);
+
+  /// Returns a responsive vertical [SizedBox] to give space.
+  SizedBox sizedH(double factor) => SizedBox(height: height * factor);
+
   List<double> _getSizedValue(Sizes sizeType) {
     late double horizontalValue;
     late double verticalValue;
     switch (sizeType) {
+      case Sizes.extremeLow:
+        horizontalValue = extremeLowWidth;
+        verticalValue = extremeLowHeight;
+        break;
       case Sizes.low:
         horizontalValue = lowWidth;
         verticalValue = lowHeight;

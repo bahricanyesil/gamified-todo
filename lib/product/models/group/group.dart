@@ -37,11 +37,11 @@ class Group with HiveObjectMixin {
 
   /// The date when the group is lastly updated.
   @HiveField(2)
-  final DateTime updatedAt;
+  DateTime updatedAt;
 
   /// The title of the task group.
   @HiveField(3)
-  final String title;
+  String title;
 
   @override
   String toString() => """

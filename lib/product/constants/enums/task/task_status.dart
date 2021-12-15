@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/extensions/color/color_extensions.dart';
-import '../../../core/theme/color/l_colors.dart';
-import '../../../core/widgets/icons/base_icon.dart';
+import '../../../../core/extensions/color/color_extensions.dart';
+import '../../../../core/theme/color/l_colors.dart';
+import '../../../../core/widgets/icons/base_icon.dart';
 
 /// Enum to indicate the status of a task.
 /// * Open

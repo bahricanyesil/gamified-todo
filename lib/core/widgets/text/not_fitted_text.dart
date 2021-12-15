@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../decoration/text_styles.dart';
+import '../../extensions/string/string_util_extensions.dart';
 
 /// Base text with custom parameters but not wrapped with [FittedBox].
 class NotFittedText extends StatelessWidget {
@@ -9,7 +10,7 @@ class NotFittedText extends StatelessWidget {
     this.text, {
     this.style,
     this.textAlign = TextAlign.center,
-    this.maxLines,
+    this.maxLines = 1,
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +28,7 @@ class NotFittedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        text,
+        text.useCorrectEllipsis,
         style: TextStyles(context).subBodyStyle().merge(style),
         textAlign: textAlign,
         overflow: TextOverflow.ellipsis,
