@@ -35,7 +35,7 @@ class AnimatedListModel<T> {
   /// Inserts an item to the list.
   void insert(int index, T item) {
     items.insert(index, item);
-    _animatedList!.insertItem(index);
+    _animatedList?.insertItem(index);
   }
 
   /// Removes an item from the list.

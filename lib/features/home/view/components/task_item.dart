@@ -93,7 +93,7 @@ class TaskItem extends StatelessWidget with ListenHomeValue {
 
   Container _background(BuildContext context) => Container(
         decoration: _boxDeco(context, color: Priorities.low.color),
-        padding: context.leftPadding(Sizes.med),
+        padding: context.leftPadding(Sizes.medHigh),
         alignment: Alignment.centerLeft,
         child: const BaseText('Finish',
             textAlign: TextAlign.end, color: AppColors.white),

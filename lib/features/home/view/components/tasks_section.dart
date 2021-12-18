@@ -96,7 +96,7 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList>
 
   void _restart(int diff) {
     if (diff > 0 && _timer == null) {
-      final int interval = itemCount * 75 ~/ diff;
+      final int interval = itemCount * (isExpanded ? 25 : 10) ~/ diff;
       _timer = Timer.periodic(Duration(milliseconds: interval), _timerCallback);
     }
   }

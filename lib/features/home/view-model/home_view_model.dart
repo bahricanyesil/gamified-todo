@@ -15,7 +15,7 @@ class HomeViewModel extends BaseViewModel {
   List<Task> tasks = <Task>[];
 
   /// List of tasks section titles.
-  static const List<TasksSection> tasksSectionTitles = <TasksSection>[
+  static const List<TasksSection> tasksSections = <TasksSection>[
     TasksSection(title: 'Active Tasks', status: TaskStatus.active),
     TasksSection(title: 'Open Tasks', status: TaskStatus.open),
     TasksSection(title: 'Finished Tasks', status: TaskStatus.finished),
@@ -25,6 +25,10 @@ class HomeViewModel extends BaseViewModel {
   /// Stores the expansion status of the animated lists.
   final List<bool> expandedLists =
       List<bool>.generate(TaskStatus.values.length, (_) => false);
+
+  /// Stores the visiblity of the animated lists.
+  final List<bool> visibleSections =
+      List<bool>.generate(TaskStatus.values.length, (_) => true);
 
   /// Stores the [AnimatedListModel] configurations of the animated lists.
   late final List<AnimatedListModel<Task>> listModels;
@@ -90,6 +94,14 @@ class HomeViewModel extends BaseViewModel {
   void setExpanded(TaskStatus status) {
     final int index = TaskStatus.values.indexOf(status);
     expandedLists[index] = !expandedLists[index];
+    notifyListeners();
+  }
+
+  /// Sets the visibility of a section.
+  // ignore: avoid_positional_boolean_parameters
+  void setSectionVisibility(TaskStatus status, bool value) {
+    final int index = TaskStatus.values.indexOf(status);
+    visibleSections[index] = value;
     notifyListeners();
   }
 

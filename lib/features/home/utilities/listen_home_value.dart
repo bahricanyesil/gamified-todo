@@ -19,7 +19,14 @@ mixin ListenHomeValue {
           model.expandedLists[TaskStatus.values.indexOf(status)]);
 
   /// Returns listened tasks by status.
-  List<Task> listenStatusTasks(BuildContext context, TaskStatus status) =>
-      context.select<HomeViewModel, List<Task>>(
-          (HomeViewModel model) => model.tasks.byStatus(status));
+  List<Task> listenStatusTasks(BuildContext context, TaskStatus status) {
+    context.select<HomeViewModel, int>(
+        (HomeViewModel model) => model.tasks.byStatus(status).length);
+    return context.read<HomeViewModel>().tasks.byStatus(status);
+  }
+
+  /// Retunrs the visibility status of the section.
+  bool listenVisibleSection(BuildContext context, TaskStatus status) =>
+      context.select<HomeViewModel, bool>((HomeViewModel model) =>
+          model.visibleSections[TaskStatus.values.indexOf(status)]);
 }
