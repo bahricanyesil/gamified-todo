@@ -57,7 +57,7 @@ extension TaskStatusValue on TaskStatus {
 }
 
 /// List of [TaskStatus] extensions.
-extension Ordered on List<TaskStatus> {
+extension OrderedTasks on List<TaskStatus> {
   /// Ordered task status list.
   List<TaskStatus> get ordered => <TaskStatus>[
         TaskStatus.pastDue,

@@ -117,8 +117,9 @@ class Task with HiveObjectMixin {
   /// Compares two [Task] item.
   int operator >(Task other) {
     if (identical(this, other)) return 0;
-    final List<TaskStatus> taskStatus = TaskStatus.values.ordered;
-    if (taskStatus.indexOf(other.status) > taskStatus.indexOf(status)) {
+    final List<Priorities> taskPriorities = Priorities.values.ordered;
+    if (taskPriorities.indexOf(other.priority) >
+        taskPriorities.indexOf(priority)) {
       return -1;
     }
     return 1;

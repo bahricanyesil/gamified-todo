@@ -15,9 +15,9 @@ mixin Durations {
   /// Medium-Fast duration constant with 800 miliseconds.
   static const Duration medFast = Duration(milliseconds: 800);
 
-  /// Fast duration constant with 600 miliseconds.
-  static const Duration fast = Duration(milliseconds: 600);
+  /// Fast duration constant with 250 miliseconds.
+  static const Duration fast = Duration(milliseconds: 240);
 
-  /// Too fast duration constant with 400 miliseconds.
-  static const Duration tooFast = Duration(milliseconds: 400);
+  /// Too fast duration constant with 125 miliseconds.
+  static const Duration tooFast = Duration(milliseconds: 120);
 }

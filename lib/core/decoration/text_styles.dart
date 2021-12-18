@@ -12,7 +12,7 @@ class TextStyles {
   /// Custom text style for titles in the login screen.
   /// Such as: "welcome", "loginFormTitle" and so on.
   TextStyle titleStyle({Color? color, TextDecoration? decoration}) => TextStyle(
-        fontSize: _context.responsiveSize * 9,
+        fontSize: _context.responsiveSize * 8,
         color: color ?? Theme.of(_context).primaryColor,
         fontWeight: FontWeight.bold,
         wordSpacing: 3.5,
@@ -32,14 +32,16 @@ class TextStyles {
 
   /// Custom text style for subbody texts in the login screen.
   /// Such as: "forgotPassword" text.
-  TextStyle subBodyStyle({Color? color, TextDecoration? decoration}) =>
+  TextStyle subBodyStyle(
+          {Color? color, TextDecoration? decoration, double? height}) =>
       TextStyle(
-        fontSize: _context.responsiveSize * 5.5,
+        fontSize: _context.responsiveSize * 5.2,
         color: color ?? Colors.black.withOpacity(.8),
         fontWeight: FontWeight.w400,
         wordSpacing: 2.4,
         letterSpacing: 1.1,
         decoration: decoration,
+        height: height,
       );
 
   /// Custom text style for normal/regular texts in the login screen.

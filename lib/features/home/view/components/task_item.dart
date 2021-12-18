@@ -1,34 +1,59 @@
-part of '../home_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class _TaskItem extends StatelessWidget with ListenHomeValue {
-  const _TaskItem({required this.taskIndex, Key? key}) : super(key: key);
-  final int taskIndex;
+import '../../../../core/constants/border/border_radii.dart';
+import '../../../../core/constants/durations/durations.dart';
+import '../../../../core/constants/enums/view-enums/sizes.dart';
+import '../../../../core/decoration/text_styles.dart';
+import '../../../../core/extensions/color/color_extensions.dart';
+import '../../../../core/extensions/context/responsiveness_extensions.dart';
+import '../../../../core/extensions/date/date_time_extensions.dart';
+import '../../../../core/theme/color/l_colors.dart';
+import '../../../../core/widgets/text/text_widgets_shelf.dart';
+import '../../../../product/constants/enums/task/priorities.dart';
+import '../../../../product/constants/enums/task/task_status.dart';
+import '../../../../product/extensions/task_extensions.dart';
+import '../../utilities/listen_home_value.dart';
+import '../../view-model/home_view_model.dart';
+
+/// Task item widget for animated lists.
+class TaskItem extends StatelessWidget with ListenHomeValue {
+  /// Default constructor for [TaskItem].
+  const TaskItem({
+    required this.id,
+    this.isRemoved = false,
+    Key? key,
+  }) : super(key: key);
+
+  /// Id of the task.
+  final String id;
+
+  /// Indicates whether the item is removed.
+  final bool isRemoved;
 
   @override
-  Widget build(BuildContext context) => Dismissible(
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: _boxDeco(context),
+        child: isRemoved ? _customListTile(context) : _dismissible(context),
+      );
+
+  Widget _dismissible(BuildContext context) => Dismissible(
         key: UniqueKey(),
-        onDismissed: (DismissDirection direction) {
-          final HomeViewModel model = context.read<HomeViewModel>();
-          if (direction == DismissDirection.startToEnd) {
-            print('JERE');
-            model.updateTaskStatus(taskIndex, TaskStatus.finished);
-          } else if (direction == DismissDirection.endToStart) {
-            model.tasks.removeAt(taskIndex);
-          }
-        },
-        // confirmDismiss: (_) async => false,
+        confirmDismiss: (DismissDirection direction) =>
+            context.read<HomeViewModel>().confirmDismiss(direction, id),
+        direction: _direction(context),
+        background: _background(context),
+        secondaryBackground: _secondaryBackground(context),
+        movementDuration: Durations.tooFast,
         child: _customListTile(context),
       );
 
-  Widget _customListTile(BuildContext context) => DecoratedBox(
-        decoration: _boxDeco(context),
-        child: Row(
-          children: <Widget>[
-            Expanded(child: _TaskPriorityNumber(priority: _priority(context))),
-            Expanded(flex: 5, child: _textColumn(context)),
-            Expanded(child: _TaskStatus(taskIndex: taskIndex)),
-          ],
-        ),
+  Widget _customListTile(BuildContext context) => Row(
+        children: <Widget>[
+          Expanded(child: _TaskPriorityNumber(priority: _priority(context))),
+          Expanded(flex: 5, child: _textColumn(context)),
+          Expanded(child: _TaskStatus(id: id)),
+        ],
       );
 
   Widget _textColumn(BuildContext context) => Padding(
@@ -36,23 +61,52 @@ class _TaskItem extends StatelessWidget with ListenHomeValue {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _Title(taskIndex: taskIndex),
-            _Subtitle(taskIndex: taskIndex),
-          ],
+          children: <Widget>[_Title(id: id), _Subtitle(id: id)],
         ),
       );
 
-  BoxDecoration _boxDeco(BuildContext context) => BoxDecoration(
+  DismissDirection _direction(BuildContext context) {
+    final TaskStatus? taskStatus =
+        context.read<HomeViewModel>().tasks.byId(id)?.status;
+    switch (taskStatus) {
+      case TaskStatus.open:
+        return DismissDirection.startToEnd;
+      case TaskStatus.finished:
+        return DismissDirection.endToStart;
+      default:
+        return DismissDirection.horizontal;
+    }
+  }
+
+  Priorities _priority(BuildContext context) => listenValue<Priorities>(
+      (HomeViewModel value) =>
+          value.tasks.byId(id)?.priority ?? Priorities.medium,
+      context);
+
+  Container _secondaryBackground(BuildContext context) => Container(
+        decoration: _boxDeco(context, color: Priorities.high.color),
+        padding: context.rightPadding(Sizes.medHigh),
+        alignment: Alignment.centerRight,
+        child: const BaseText('Open',
+            textAlign: TextAlign.start, color: AppColors.white),
+      );
+
+  Container _background(BuildContext context) => Container(
+        decoration: _boxDeco(context, color: Priorities.low.color),
+        padding: context.leftPadding(Sizes.med),
+        alignment: Alignment.centerLeft,
+        child: const BaseText('Finish',
+            textAlign: TextAlign.end, color: AppColors.white),
+      );
+
+  BoxDecoration _boxDeco(BuildContext context, {Color? color}) => BoxDecoration(
+        color: color?.darken(.07),
         border: Border.all(
-          color: _priority(context).color.darken(.3),
+          color: color?.darken(.1) ?? _priority(context).color.darken(.3),
           width: 1.2,
         ),
         borderRadius: BorderRadii.lowCircular,
       );
-
-  Priorities _priority(BuildContext context) => listenValue<Priorities>(
-      (HomeViewModel value) => value.tasks[taskIndex].priority, context);
 }
 
 class _TaskPriorityNumber extends StatelessWidget {
@@ -72,34 +126,32 @@ class _TaskPriorityNumber extends StatelessWidget {
 }
 
 class _TaskStatus extends StatelessWidget with ListenHomeValue {
-  const _TaskStatus({required this.taskIndex, Key? key}) : super(key: key);
-  final int taskIndex;
+  const _TaskStatus({required this.id, Key? key}) : super(key: key);
+  final String id;
 
   @override
-  Widget build(BuildContext context) {
-    print(taskIndex);
-    return _status(context).icon;
-  }
+  Widget build(BuildContext context) => _status(context).icon;
 
-  TaskStatus _status(BuildContext context) => listenValue(
-      (HomeViewModel value) => value.tasks[taskIndex].status, context);
+  TaskStatus _status(BuildContext context) => listenValue<TaskStatus>(
+      (HomeViewModel value) => value.tasks.byId(id)?.status ?? TaskStatus.open,
+      context);
 }
 
 class _Title extends StatelessWidget with ListenHomeValue {
-  const _Title({required this.taskIndex, Key? key}) : super(key: key);
-  final int taskIndex;
+  const _Title({required this.id, Key? key}) : super(key: key);
+  final String id;
 
   @override
   Widget build(BuildContext context) =>
       NotFittedText(_title(context), textAlign: TextAlign.start);
 
-  String _title(BuildContext context) => listenValue(
-      (HomeViewModel value) => value.tasks[taskIndex].content, context);
+  String _title(BuildContext context) => listenValue<String>(
+      (HomeViewModel value) => value.tasks.byId(id)?.content ?? '', context);
 }
 
 class _Subtitle extends StatelessWidget with ListenHomeValue {
-  const _Subtitle({required this.taskIndex, Key? key}) : super(key: key);
-  final int taskIndex;
+  const _Subtitle({required this.id, Key? key}) : super(key: key);
+  final String id;
 
   @override
   Widget build(BuildContext context) => NotFittedText(
@@ -108,6 +160,8 @@ class _Subtitle extends StatelessWidget with ListenHomeValue {
         style: TextStyles(context).subtitleTextStyle(),
       );
 
-  DateTime _creationDate(BuildContext context) => listenValue(
-      (HomeViewModel value) => value.tasks[taskIndex].createdAt, context);
+  DateTime _creationDate(BuildContext context) => listenValue<DateTime>(
+      (HomeViewModel value) =>
+          value.tasks.byId(id)?.createdAt ?? DateTime.now(),
+      context);
 }

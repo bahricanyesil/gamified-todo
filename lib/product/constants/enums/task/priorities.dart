@@ -44,3 +44,13 @@ extension PriorityExtensions on Priorities {
     }
   }
 }
+
+/// List of [Priorities] extensions.
+extension OrderedPriorities on List<Priorities> {
+  /// Ordered task status list.
+  List<Priorities> get ordered => <Priorities>[
+        Priorities.high,
+        Priorities.medium,
+        Priorities.low,
+      ];
+}
