@@ -118,13 +118,13 @@ class Task with HiveObjectMixin {
 
   /// Compares two [Task] item.
   int operator >(Task other) {
-    if (identical(this, other)) return 0;
+    if (this == other) return 0;
     final List<Priorities> taskPriorities = Priorities.values.ordered;
-    if (taskPriorities.indexOf(other.priority) >
+    if (taskPriorities.indexOf(other.priority) <
         taskPriorities.indexOf(priority)) {
-      return -1;
+      return 1;
     }
-    return 1;
+    return -1;
   }
 
   /// This hashCode part is inspired from Quiver package.
