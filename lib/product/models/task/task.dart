@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
+import 'package:gamified_todo/core/helpers/equality_checkers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,7 +15,7 @@ part 'task.g.dart';
 @HiveType(typeId: HiveConfigs.tasks)
 
 /// [Task] model is to store the information about a task.
-class Task with HiveObjectMixin {
+class Task with HiveObjectMixin, EqualityCheckers {
   /// Default constructor for [Task].
   /// Overrides [toString], [hashCode] methods and [==] operator.
   Task({
@@ -111,8 +111,8 @@ class Task with HiveObjectMixin {
         other.dueDate == dueDate &&
         other.status.value == status.value &&
         other.groupId == groupId &&
-        _areListsEqual(awardIds, other.awardIds) &&
-        _areListsEqual(awardOfIds, other.awardOfIds) &&
+        listsEqual(awardIds, other.awardIds) &&
+        listsEqual(awardOfIds, other.awardOfIds) &&
         other.id == id;
   }
 
@@ -142,9 +142,6 @@ class Task with HiveObjectMixin {
         awardOfIds.toString(),
         id,
       ]);
-
-  bool _areListsEqual(List<dynamic> list1, List<dynamic> list2) =>
-      const DeepCollectionEquality.unordered().equals(list1, list2);
 
   /// Gets the award status of the task to determine whether it is an award.
   TaskAwardStatus get awardStatus {
