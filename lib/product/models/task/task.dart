@@ -41,8 +41,10 @@ class Task with HiveObjectMixin {
   })  : id = const Uuid().v4(),
         content = content ?? 'This is a great task.',
         groupId = groupId ?? '1',
-        priority = priority ?? Priorities.values[Random().nextInt(3)],
-        status = status ?? TaskStatus.values[Random().nextInt(4)],
+        priority = priority ??
+            Priorities.values[Random().nextInt(Priorities.values.length)],
+        status = status ??
+            TaskStatus.values[Random().nextInt(TaskStatus.values.length)],
         createdAt =
             DateTime.now().subtract(Duration(days: Random().nextInt(20))),
         updatedAt = DateTime.now(),
