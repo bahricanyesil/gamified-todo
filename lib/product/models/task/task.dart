@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
+import 'package:gamified_todo/core/helpers/equality_checkers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,7 +15,7 @@ part 'task.g.dart';
 @HiveType(typeId: HiveConfigs.tasks)
 
 /// [Task] model is to store the information about a task.
-class Task with HiveObjectMixin {
+class Task with HiveObjectMixin, EqualityCheckers {
   /// Default constructor for [Task].
   /// Overrides [toString], [hashCode] methods and [==] operator.
   Task({
@@ -41,8 +41,10 @@ class Task with HiveObjectMixin {
   })  : id = const Uuid().v4(),
         content = content ?? 'This is a great task.',
         groupId = groupId ?? '1',
-        priority = priority ?? Priorities.values[Random().nextInt(3)],
-        status = status ?? TaskStatus.values[Random().nextInt(4)],
+        priority = priority ??
+            Priorities.values[Random().nextInt(Priorities.values.length)],
+        status = status ??
+            TaskStatus.values[Random().nextInt(TaskStatus.values.length)],
         createdAt =
             DateTime.now().subtract(Duration(days: Random().nextInt(20))),
         updatedAt = DateTime.now(),
@@ -109,20 +111,20 @@ class Task with HiveObjectMixin {
         other.dueDate == dueDate &&
         other.status.value == status.value &&
         other.groupId == groupId &&
-        _areListsEqual(awardIds, other.awardIds) &&
-        _areListsEqual(awardOfIds, other.awardOfIds) &&
+        listsEqual(awardIds, other.awardIds) &&
+        listsEqual(awardOfIds, other.awardOfIds) &&
         other.id == id;
   }
 
   /// Compares two [Task] item.
   int operator >(Task other) {
-    if (identical(this, other)) return 0;
+    if (this == other) return 0;
     final List<Priorities> taskPriorities = Priorities.values.ordered;
-    if (taskPriorities.indexOf(other.priority) >
+    if (taskPriorities.indexOf(other.priority) <
         taskPriorities.indexOf(priority)) {
-      return -1;
+      return 1;
     }
-    return 1;
+    return -1;
   }
 
   /// This hashCode part is inspired from Quiver package.
@@ -140,9 +142,6 @@ class Task with HiveObjectMixin {
         awardOfIds.toString(),
         id,
       ]);
-
-  bool _areListsEqual(List<dynamic> list1, List<dynamic> list2) =>
-      const DeepCollectionEquality.unordered().equals(list1, list2);
 
   /// Gets the award status of the task to determine whether it is an award.
   TaskAwardStatus get awardStatus {
