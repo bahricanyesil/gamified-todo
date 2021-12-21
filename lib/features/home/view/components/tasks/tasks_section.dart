@@ -1,4 +1,4 @@
-part of '../home_screen.dart';
+part of '../../home_screen.dart';
 
 class _TasksSection extends StatelessWidget with ListenHomeValue {
   const _TasksSection({required this.tasksSection, Key? key}) : super(key: key);
@@ -78,8 +78,7 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList>
     isExpanded = listenExpanded(context, widget.status);
     _startTimer(isExpanded);
     return AnimatedContainer(
-      duration: Duration(milliseconds: itemCount * (isExpanded ? 50 : 20)),
-      height: min(tasks.length, itemCount) * context.height * 8,
+      duration: Duration(milliseconds: itemCount * (isExpanded ? 200 : 80)),
       child: CustomAnimatedList<Task>(animatedListModel: _animatedModel),
     );
   }
@@ -96,7 +95,8 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList>
 
   void _restart(int diff) {
     if (diff > 0 && _timer == null) {
-      final int interval = itemCount * (isExpanded ? 25 : 10) ~/ diff;
+      final int interval = itemCount * (isExpanded ? 100 : 40) ~/ diff;
+      itemCount = isExpanded ? itemCount + 1 : itemCount - 1;
       _timer = Timer.periodic(Duration(milliseconds: interval), _timerCallback);
     }
   }

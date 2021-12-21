@@ -42,16 +42,17 @@ extension TaskStatusValue on TaskStatus {
   BaseIcon get icon {
     switch (this) {
       case TaskStatus.open:
-        return BaseIcon(Icons.access_time_outlined,
+        return SizedBaseIcon(Icons.access_time_outlined,
             color: AppColors.medPriority.darken());
       case TaskStatus.active:
-        return const BaseIcon(Icons.run_circle_outlined,
+        return const SizedBaseIcon(Icons.run_circle_outlined,
             color: AppColors.loadingColor);
       case TaskStatus.pastDue:
-        return const BaseIcon(Icons.close_outlined,
+        return const SizedBaseIcon(Icons.close_outlined,
             color: AppColors.highPriority);
       case TaskStatus.finished:
-        return BaseIcon(Icons.check, color: AppColors.lowPriority.darken());
+        return SizedBaseIcon(Icons.check,
+            color: AppColors.lowPriority.darken());
     }
   }
 }
@@ -65,4 +66,19 @@ extension OrderedTasks on List<TaskStatus> {
         TaskStatus.open,
         TaskStatus.finished
       ];
+}
+
+/// Nullable [TaskStatus] extensions.
+extension NullableTaskStatusExtensions on TaskStatus? {
+  /// Returns the dismiss direction for task status.
+  DismissDirection get direction {
+    switch (this) {
+      case TaskStatus.open:
+        return DismissDirection.startToEnd;
+      case TaskStatus.finished:
+        return DismissDirection.endToStart;
+      default:
+        return DismissDirection.horizontal;
+    }
+  }
 }

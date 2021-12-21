@@ -6,7 +6,7 @@ import '../../../product/constants/enums/task/task_enums_shelf.dart';
 import '../../../product/extensions/task_extensions.dart';
 import '../../../product/managers/local-storage/tasks/tasks_local_manager.dart';
 import '../../../product/models/task/task.dart';
-import '../view/components/task_item.dart';
+import '../view/components/tasks/task_item.dart';
 import '../view/ui-models/tasks_section_title.dart';
 
 /// View model to manaage the data on home screen.

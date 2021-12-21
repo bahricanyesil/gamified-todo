@@ -1,13 +1,16 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/decoration/text_styles.dart';
+import '../../../../../product/constants/enums/task/task_status.dart';
 import '../../../core/base/view/base_view.dart';
 import '../../../core/constants/constants_shelf.dart';
 import '../../../core/decoration/text_styles.dart';
 import '../../../core/extensions/extensions_shelf.dart';
+import '../../../core/theme/color/l_colors.dart';
+import '../../../core/widgets/app-bar/default_app_bar.dart';
 import '../../../core/widgets/divider/custom_divider.dart';
 import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/constants/enums/task/task_status.dart';
@@ -17,7 +20,9 @@ import '../utilities/listen_home_value.dart';
 import '../view-model/home_view_model.dart';
 import 'ui-models/tasks_section_title.dart';
 
-part 'components/tasks_section.dart';
+part 'components/filter/filter_sections.dart';
+part 'components/home-app-bar/home_title.dart';
+part 'components/tasks/tasks_section.dart';
 
 /// Home Screen of the app.
 class HomeScreen extends StatelessWidget with HomeTexts, ListenHomeValue {
@@ -27,6 +32,16 @@ class HomeScreen extends StatelessWidget with HomeTexts, ListenHomeValue {
   @override
   Widget build(BuildContext context) => BaseView<HomeViewModel>(
         bodyBuilder: _bodyBuilder,
+        appBar: DefaultAppBar(
+          titleW: const _HomeTitle(), titlePadding: context.medWidth,
+          // leadingW: ,
+        ),
+        //  <Widget>[
+        //   const BaseIcon(Icons.checklist_outlined,
+        //       color: AppColors.white, sizeFactor: 8.2),
+        //   SizedBox(width: context.width * 2.3),
+        //  ,
+        // ],
       );
 
   Widget _bodyBuilder(BuildContext context) {
@@ -36,12 +51,9 @@ class HomeScreen extends StatelessWidget with HomeTexts, ListenHomeValue {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: context.medWidth,
-        vertical: context.lowMedHeight,
+        vertical: context.lowHeight,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-            children: <Widget>[const _FilterSections(), _listView(sections)]),
-      ),
+      child: _listView(sections),
     );
   }
 
@@ -58,61 +70,4 @@ class HomeScreen extends StatelessWidget with HomeTexts, ListenHomeValue {
         padding: context.verticalPadding(Sizes.extremeLow),
         child: CustomDivider(context),
       );
-}
-
-class _FilterSections extends StatelessWidget {
-  const _FilterSections({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        childAspectRatio: 4.2,
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisSpacing: context.width,
-        children: List<_CheckboxListTile>.generate(TaskStatus.values.length,
-            (int index) => _CheckboxListTile(status: TaskStatus.values[index])),
-      );
-}
-
-class _CheckboxListTile extends StatelessWidget with ListenHomeValue {
-  const _CheckboxListTile({required this.status, Key? key}) : super(key: key);
-  final TaskStatus status;
-
-  @override
-  Widget build(BuildContext context) {
-    final bool value = listenVisibleSection(context, status);
-    return GestureDetector(
-      onTap: () => _changeVisibility(!value, status, context),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _checkbox(context, value),
-          _expanded(context, value),
-        ],
-      ),
-    );
-  }
-
-  Widget _checkbox(BuildContext context, bool value) => Checkbox(
-        value: value,
-        onChanged: (bool? value) => _changeVisibility(value, status, context),
-      );
-
-  Widget _expanded(BuildContext context, bool value) => Expanded(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: BaseText(
-            status.value,
-            style: TextStyles(context).subBodyStyle(
-                color: value ? context.primaryColor.darken() : null),
-          ),
-        ),
-      );
-
-  void _changeVisibility(bool? value, TaskStatus status, BuildContext context) {
-    if (value != null) {
-      context.read<HomeViewModel>().setSectionVisibility(status, value);
-    }
-  }
 }

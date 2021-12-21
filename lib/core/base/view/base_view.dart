@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/enums/view-enums/view_states.dart';
+import '../../extensions/context/responsiveness_extensions.dart';
 import '../../widgets/app-bar/default_app_bar.dart';
 import '../../widgets/widgets_shelf.dart';
 import '../view-model/base_view_model.dart';
@@ -13,8 +14,7 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
     required this.bodyBuilder,
     this.customDispose,
     this.customInitState,
-    this.appBarChildren,
-    this.appBarSize,
+    this.appBar,
     this.resizeToAvoidBottomInset = true,
     this.safeArea = true,
     Key? key,
@@ -29,11 +29,8 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
   /// Custom init state method to call on init state.
   final VoidCallback? customInitState;
 
-  /// Optional children list for app bar.
-  final List<Widget>? appBarChildren;
-
-  /// Custom app bar size.
-  final double? appBarSize;
+  /// Custom app bar.
+  final DefaultAppBar? appBar;
 
   /// Determines whether to resize to avoid bottom inset in [Scaffold].
   final bool resizeToAvoidBottomInset;
@@ -67,9 +64,12 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
     return Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       appBar: _appBar,
-      body: SafeArea(child: _child),
+      body: _safeAreadChild,
     );
   }
+
+  Widget get _safeAreadChild =>
+      widget.safeArea ? SafeArea(child: _child) : _child;
 
   Widget get _child => context.select<T, ViewStates>((T p) => p.state) ==
           ViewStates.uninitialized
@@ -77,8 +77,5 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
       : widget.bodyBuilder(context);
 
   DefaultAppBar? get _appBar =>
-      widget.appBarChildren != null && widget.appBarSize != null
-          ? DefaultAppBar(
-              size: widget.appBarSize!, children: widget.appBarChildren!)
-          : null;
+      widget.appBar?.copyWithSize(context.height * 5.5);
 }

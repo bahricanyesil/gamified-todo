@@ -10,14 +10,18 @@ class LoadingIndicator extends StatelessWidget {
   /// Default constructor for [LoadingIndicator].
   const LoadingIndicator({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => Center(
-        child: SizedBox.fromSize(
-          size: Size.square(_size(context)),
-          child: Stack(
-            children:
-                List<Widget>.generate(12, (int i) => _listElement(context, i)),
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: SizedBox.fromSize(
+            size: Size.square(_size(context)),
+            child: _stack(context),
           ),
         ),
+      );
+
+  Widget _stack(BuildContext context) => Stack(
+        children:
+            List<Widget>.generate(12, (int i) => _listElement(context, i)),
       );
 
   Widget _listElement(BuildContext context, int i) {
@@ -32,7 +36,7 @@ class LoadingIndicator extends StatelessWidget {
     );
   }
 
-  double _size(BuildContext context) => context.responsiveSize * 50;
+  double _size(BuildContext context) => context.responsiveSize * 40;
 }
 
 class _LoadingBubble extends StatefulWidget {

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/constants/border/border_radii.dart';
-import '../../../../core/constants/durations/durations.dart';
-import '../../../../core/constants/enums/view-enums/sizes.dart';
-import '../../../../core/decoration/text_styles.dart';
-import '../../../../core/extensions/color/color_extensions.dart';
-import '../../../../core/extensions/context/responsiveness_extensions.dart';
-import '../../../../core/extensions/date/date_time_extensions.dart';
-import '../../../../core/theme/color/l_colors.dart';
-import '../../../../core/widgets/text/text_widgets_shelf.dart';
-import '../../../../product/constants/enums/task/priorities.dart';
-import '../../../../product/constants/enums/task/task_status.dart';
-import '../../../../product/extensions/task_extensions.dart';
-import '../../utilities/listen_home_value.dart';
-import '../../view-model/home_view_model.dart';
+import '../../../../../core/constants/border/border_radii.dart';
+import '../../../../../core/constants/durations/durations.dart';
+import '../../../../../core/constants/enums/view-enums/sizes.dart';
+import '../../../../../core/decoration/text_styles.dart';
+import '../../../../../core/extensions/color/color_extensions.dart';
+import '../../../../../core/extensions/context/responsiveness_extensions.dart';
+import '../../../../../core/extensions/date/date_time_extensions.dart';
+import '../../../../../core/theme/color/l_colors.dart';
+import '../../../../../core/widgets/text/text_widgets_shelf.dart';
+import '../../../../../product/constants/enums/task/priorities.dart';
+import '../../../../../product/constants/enums/task/task_status.dart';
+import '../../../../../product/extensions/task_extensions.dart';
+import '../../../utilities/listen_home_value.dart';
+import '../../../view-model/home_view_model.dart';
 
 /// Task item widget for animated lists.
 class TaskItem extends StatelessWidget with ListenHomeValue {
@@ -65,19 +65,6 @@ class TaskItem extends StatelessWidget with ListenHomeValue {
         ),
       );
 
-  DismissDirection _direction(BuildContext context) {
-    final TaskStatus? taskStatus =
-        context.read<HomeViewModel>().tasks.byId(id)?.status;
-    switch (taskStatus) {
-      case TaskStatus.open:
-        return DismissDirection.startToEnd;
-      case TaskStatus.finished:
-        return DismissDirection.endToStart;
-      default:
-        return DismissDirection.horizontal;
-    }
-  }
-
   Priorities _priority(BuildContext context) => listenValue<Priorities>(
       (HomeViewModel value) =>
           value.tasks.byId(id)?.priority ?? Priorities.medium,
@@ -107,6 +94,10 @@ class TaskItem extends StatelessWidget with ListenHomeValue {
         ),
         borderRadius: BorderRadii.lowCircular,
       );
+
+  DismissDirection _direction(BuildContext context) =>
+      context.read<HomeViewModel>().tasks.byId(id)?.status.direction ??
+      DismissDirection.horizontal;
 }
 
 class _TaskPriorityNumber extends StatelessWidget {

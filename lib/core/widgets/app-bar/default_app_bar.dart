@@ -1,44 +1,51 @@
 import 'package:flutter/material.dart';
-import '../../constants/enums/view-enums/sizes.dart';
 
-import '../../extensions/context/responsiveness_extensions.dart';
-
-/// Default App Bar implements [PreferredSizeWidget]
+/// Default App Bar extends [AppBar]
 /// with its required functions.
-class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
+class DefaultAppBar extends AppBar implements PreferredSizeWidget {
   /// Default app bar constructor.
-  const DefaultAppBar({
-    required this.size,
-    required this.children,
+  DefaultAppBar({
+    this.size,
+    this.color,
+    this.titleW,
+    this.leadingW,
+    this.titlePadding,
     Key? key,
-  }) : super(key: key);
+  }) : super(
+          backgroundColor: color,
+          automaticallyImplyLeading: false,
+          centerTitle: false,
+          titleSpacing: titlePadding,
+          title: titleW,
+          leading: leadingW,
+          key: key,
+        );
 
-  /// Height of the app bar.
-  final double size;
+  /// Size of the app bar.
+  final double? size;
 
-  /// Widgets will be placed into the app bar.
-  final List<Widget> children;
+  /// Background color of the app bar.
+  final Color? color;
 
-  @override
-  Widget build(BuildContext context) => AppBar(
-        backgroundColor: Colors.blueAccent,
-        flexibleSpace: getMainRow(context),
-        automaticallyImplyLeading: false,
-      );
+  /// Title of the app bar.
+  final Widget? titleW;
 
-  /// Creates the main row of the app bar with given
-  /// [children] widgets and suitable padding value.
-  Widget getMainRow(BuildContext context) => Padding(
-        padding: context.horizontalPadding(Sizes.medHigh),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: children,
-          ),
-        ),
-      );
+  /// Leading widget of the app bar.
+  final Widget? leadingW;
+
+  /// Horizontal padding for title.
+  final double? titlePadding;
 
   /// Overrides the [preferredSize] field with a given height value [size].
   @override
-  Size get preferredSize => Size.fromHeight(size);
+  Size get preferredSize => Size.fromHeight(size ?? 100);
+
+  /// Copies the given [DefaultAppBar] with the one we have.
+  DefaultAppBar copyWithSize(double size) => DefaultAppBar(
+        color: color,
+        titleW: titleW,
+        leadingW: leadingW,
+        titlePadding: titleSpacing,
+        size: size,
+      );
 }

@@ -7,6 +7,9 @@ import '../../constants/enums/view-enums/sizes.dart';
 extension ResponsivenessExtensions on BuildContext {
   MediaQueryData get _mediaQuery => MediaQuery.of(this);
 
+  /// Top padding of the screen.
+  double get screenTopPadding => _mediaQuery.viewPadding.top;
+
   /// One percent of the screen height, in terms of logical pixels.
   double get height => _mediaQuery.size.height * 0.01;
 

@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../extensions/context/responsiveness_extensions.dart';
 
+/// [BaseIcon] with default size.
+class SizedBaseIcon extends BaseIcon {
+  /// Default constructor for [SizedBaseIcon]..
+  const SizedBaseIcon(IconData icon, {Color? color, Key? key})
+      : super(icon, color: color, sizeFactor: 8.25, key: key);
+}
+
 /// Base icon with custom parameters
 /// Wraps [Icon] with [FittedBox], and gives some paddings.
 class BaseIcon extends StatelessWidget {
@@ -28,16 +35,14 @@ class BaseIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FittedBox(
         fit: BoxFit.scaleDown,
-        child: Padding(
-          padding: _getPadding(context),
-          child: Icon(
-            iconData,
-            size: sizeFactor != null
-                ? (context.responsiveSize * sizeFactor!)
-                : null,
-            color: color,
-          ),
-        ),
+        child: Padding(padding: _getPadding(context), child: _icon(context)),
+      );
+
+  Widget _icon(BuildContext context) => Icon(
+        iconData,
+        size:
+            sizeFactor != null ? (context.responsiveSize * sizeFactor!) : null,
+        color: color,
       );
 
   EdgeInsets _getPadding(BuildContext context) =>
