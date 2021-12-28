@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../extensions/context/responsiveness_extensions.dart';
+import '../../theme/color/l_colors.dart';
 
 /// [BaseIcon] with default size.
 class SizedBaseIcon extends BaseIcon {
@@ -42,9 +44,26 @@ class BaseIcon extends StatelessWidget {
         iconData,
         size:
             sizeFactor != null ? (context.responsiveSize * sizeFactor!) : null,
-        color: color,
+        color: color ?? AppColors.white,
       );
 
   EdgeInsets _getPadding(BuildContext context) =>
       padding ?? EdgeInsets.symmetric(horizontal: context.width * .8);
+}
+
+/// [BaseIcon] with primary color.
+class PrimaryBaseIcon extends BaseIcon {
+  /// Default constructor for [PrimaryBaseIcon].
+  const PrimaryBaseIcon(
+    IconData icon, {
+    EdgeInsets? padding,
+    double? sizeFactor,
+    Key? key,
+  }) : super(
+          icon,
+          color: AppColors.primaryColor,
+          padding: padding,
+          sizeFactor: sizeFactor,
+          key: key,
+        );
 }

@@ -13,7 +13,7 @@ class _TasksSection extends StatelessWidget with ListenHomeValue {
 
   List<Widget> _columnChildren(BuildContext context) => <Widget>[
         _TitleRow(section: tasksSection),
-        context.sizedH(1),
+        context.sizedH(.5),
         _AnimatedTaskList(status: tasksSection.status),
       ];
 }
@@ -78,7 +78,7 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList>
     isExpanded = listenExpanded(context, widget.status);
     _startTimer(isExpanded);
     return AnimatedContainer(
-      duration: Duration(milliseconds: itemCount * (isExpanded ? 200 : 80)),
+      duration: Duration(milliseconds: itemCount * (isExpanded ? 160 : 64)),
       child: CustomAnimatedList<Task>(animatedListModel: _animatedModel),
     );
   }
@@ -95,7 +95,7 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList>
 
   void _restart(int diff) {
     if (diff > 0 && _timer == null) {
-      final int interval = itemCount * (isExpanded ? 100 : 40) ~/ diff;
+      final int interval = itemCount * (isExpanded ? 80 : 32) ~/ diff;
       itemCount = isExpanded ? itemCount + 1 : itemCount - 1;
       _timer = Timer.periodic(Duration(milliseconds: interval), _timerCallback);
     }

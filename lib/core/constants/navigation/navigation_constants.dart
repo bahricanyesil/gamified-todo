@@ -5,4 +5,7 @@ mixin NavigationConstants {
 
   /// Home screen path configuration.
   static const String home = '/home';
+
+  /// Settings screen path configuration.
+  static const String settings = '/settings';
 }

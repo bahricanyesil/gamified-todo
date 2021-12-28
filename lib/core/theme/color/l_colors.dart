@@ -67,6 +67,9 @@ abstract class IColors {
 @immutable
 class AppColors {
   /// White color.
+  static const Color primaryColor = Color(0xff668cff);
+
+  /// White color.
   static const Color white = Color(0xfff5f5f5);
 
   /// Green color.

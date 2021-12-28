@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../features/screens_shelf.dart';
+import '../../../features/settings/view/settings_screen.dart';
 import '../../constants/navigation/navigation_constants.dart';
 import '../../helpers/hasher.dart';
 
@@ -14,15 +15,20 @@ class ScreenConfig {
     required this.builder,
   });
 
-  /// Screen config for default screen, in this case it is [HomeScreen].
+  /// Screen config for default screen, in this case it is [SplashScreen].
   ScreenConfig.defaultScreen()
       : path = NavigationConstants.root,
         builder = (() => const SplashScreen());
 
-  /// Screen config for default screen, in this case it is [HomeScreen].
+  /// Screen config for the [HomeScreen].
   ScreenConfig.home()
       : path = NavigationConstants.home,
         builder = (() => const HomeScreen());
+
+  /// Screen config for the [SettingsScreen]
+  ScreenConfig.settings()
+      : path = NavigationConstants.settings,
+        builder = (() => const SettingsScreen());
 
   /// Path of the page, will be the url on web.
   final String path;

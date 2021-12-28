@@ -26,10 +26,6 @@ class HomeViewModel extends BaseViewModel {
   final List<bool> expandedLists =
       List<bool>.generate(TaskStatus.values.length, (_) => false);
 
-  /// Stores the visiblity of the animated lists.
-  final List<bool> visibleSections =
-      List<bool>.generate(TaskStatus.values.length, (_) => true);
-
   /// Stores the [AnimatedListModel] configurations of the animated lists.
   late final List<AnimatedListModel<Task>> listModels;
 
@@ -94,14 +90,6 @@ class HomeViewModel extends BaseViewModel {
   void setExpanded(TaskStatus status) {
     final int index = TaskStatus.values.indexOf(status);
     expandedLists[index] = !expandedLists[index];
-    notifyListeners();
-  }
-
-  /// Sets the visibility of a section.
-  // ignore: avoid_positional_boolean_parameters
-  void setSectionVisibility(TaskStatus status, bool value) {
-    final int index = TaskStatus.values.indexOf(status);
-    visibleSections[index] = value;
     notifyListeners();
   }
 

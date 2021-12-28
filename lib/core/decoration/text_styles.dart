@@ -22,12 +22,14 @@ class TextStyles {
 
   /// Custom text style for body texts in the login screen.
   /// Such as: "welcomeDescription", "RoundedButton" action text and so on.
-  TextStyle bodyStyle({Color? color, FontWeight? fontWeight}) => TextStyle(
-        fontSize: _context.responsiveSize * 7.5,
+  TextStyle bodyStyle({Color? color, FontWeight? fontWeight, double? height}) =>
+      TextStyle(
+        fontSize: _context.responsiveSize * 5.8,
         color: color ?? Colors.black.withOpacity(.8),
         fontWeight: fontWeight ?? FontWeight.w500,
-        wordSpacing: 2.8,
-        letterSpacing: 1.2,
+        wordSpacing: 2,
+        letterSpacing: .7,
+        height: height,
       );
 
   /// Custom text style for subbody texts in the login screen.
@@ -88,12 +90,18 @@ class TextStyles {
   /// Custom text style for subtitle/comparably smaller texts.
   /// Such as: "useEmailText"/"notHaveAnAccount" texts.
   TextStyle subtitleTextStyle(
-          {Color? color, FontWeight? fontWeight, TextDecoration? decoration}) =>
+          {Color? color,
+          FontWeight? fontWeight,
+          TextDecoration? decoration,
+          double? height}) =>
       TextStyle(
-        fontSize: _context.responsiveSize * 4.1,
+        fontSize: _context.responsiveSize * 3.2,
         color: color ?? Colors.black.withOpacity(.8),
         fontWeight: fontWeight ?? FontWeight.w400,
         decoration: decoration,
+        letterSpacing: .3,
+        wordSpacing: .9,
+        height: height,
       );
 
   /// Custom text style for dialog content.

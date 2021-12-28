@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../managers/navigation/navigation_manager.dart';
+import '../icons/base_icon.dart';
+import '../text/base_text.dart';
+
 /// Default App Bar extends [AppBar]
 /// with its required functions.
 class DefaultAppBar extends AppBar implements PreferredSizeWidget {
@@ -7,19 +11,24 @@ class DefaultAppBar extends AppBar implements PreferredSizeWidget {
   DefaultAppBar({
     this.size,
     this.color,
-    this.titleW,
-    this.leadingW,
-    this.titlePadding,
+    this.actionsList,
+    this.titleIcon,
+    this.titleText,
+    this.showBack = false,
     Key? key,
   }) : super(
           backgroundColor: color,
           automaticallyImplyLeading: false,
           centerTitle: false,
-          titleSpacing: titlePadding,
-          title: titleW,
-          leading: leadingW,
+          actions: _actions(actionsList),
+          title: _title(titleIcon, titleText, showBack),
+          titleSpacing: _horizontalPadding,
           key: key,
         );
+
+  /// Overrides the [preferredSize] field with a given height value [size].
+  @override
+  Size get preferredSize => Size.fromHeight(size ?? 100);
 
   /// Size of the app bar.
   final double? size;
@@ -27,25 +36,53 @@ class DefaultAppBar extends AppBar implements PreferredSizeWidget {
   /// Background color of the app bar.
   final Color? color;
 
-  /// Title of the app bar.
-  final Widget? titleW;
+  /// List of actions on the app bar.
+  final List<Widget>? actionsList;
 
-  /// Leading widget of the app bar.
-  final Widget? leadingW;
+  /// Icon of the title.
+  final IconData? titleIcon;
 
-  /// Horizontal padding for title.
-  final double? titlePadding;
+  /// Text of the title.
+  final String? titleText;
 
-  /// Overrides the [preferredSize] field with a given height value [size].
-  @override
-  Size get preferredSize => Size.fromHeight(size ?? 100);
+  /// Indicates whether to show a return back icon at top left.
+  final bool showBack;
+
+  static Widget _title(
+          IconData? titleIcon, String? titleText, bool showBackIcon) =>
+      Row(
+        children: <Widget>[
+          if (showBackIcon) _backButton,
+          if (titleIcon != null) SizedBaseIcon(titleIcon),
+          if (titleText != null) _titleTextWidget(titleText)
+        ],
+      );
+
+  static Widget _titleTextWidget(String titleText) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: BaseText(titleText, fontSizeFactor: 7),
+      );
+
+  static IconButton get _backButton => IconButton(
+        icon: const SizedBaseIcon(Icons.chevron_left_outlined),
+        splashRadius: 20,
+        onPressed: () => NavigationManager.instance.popRoute(),
+      );
+
+  static const double _horizontalPadding = 16;
+
+  static List<Widget>? _actions(List<Widget>? actionsList) =>
+      actionsList == null
+          ? null
+          : <Widget>[...actionsList, const SizedBox(width: _horizontalPadding)];
 
   /// Copies the given [DefaultAppBar] with the one we have.
-  DefaultAppBar copyWithSize(double size) => DefaultAppBar(
+  DefaultAppBar copyWithSize(double newSize) => DefaultAppBar(
         color: color,
-        titleW: titleW,
-        leadingW: leadingW,
-        titlePadding: titleSpacing,
-        size: size,
+        actionsList: actionsList,
+        size: newSize,
+        titleIcon: titleIcon,
+        titleText: titleText,
+        showBack: showBack,
       );
 }

@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:gamified_todo/core/helpers/equality_checkers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/extensions/date/date_time_extensions.dart';
 import '../../../core/extensions/enum/enum_extensions.dart';
+import '../../../core/helpers/equality_checkers.dart';
 import '../../../core/helpers/hasher.dart';
 import '../../constants/enums/task/task_enums_shelf.dart';
 import '../../managers/local-storage/hive_configs.dart';

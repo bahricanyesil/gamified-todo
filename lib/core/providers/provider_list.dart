@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../../features/home/view-model/home_view_model.dart';
+import '../../features/settings/view-model/settings_view_model.dart';
 import '../managers/navigation/navigation_manager.dart';
 import 'theme/theme_provider.dart';
 
@@ -20,6 +21,9 @@ class ProviderList {
     ),
     ChangeNotifierProvider<HomeViewModel>(
       create: (BuildContext context) => HomeViewModel(),
+    ),
+    ChangeNotifierProvider<SettingsViewModel>(
+      create: (BuildContext context) => SettingsViewModel(),
     ),
     ChangeNotifierProvider<NavigationManager>(
       create: (BuildContext context) => NavigationManager(),

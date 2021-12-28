@@ -8,16 +8,16 @@ import '../../../../../core/decoration/text_styles.dart';
 import '../../../../../core/extensions/color/color_extensions.dart';
 import '../../../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../../../core/extensions/date/date_time_extensions.dart';
-import '../../../../../core/theme/color/l_colors.dart';
 import '../../../../../core/widgets/text/text_widgets_shelf.dart';
 import '../../../../../product/constants/enums/task/priorities.dart';
 import '../../../../../product/constants/enums/task/task_status.dart';
 import '../../../../../product/extensions/task_extensions.dart';
+import '../../../constants/home_texts.dart';
 import '../../../utilities/listen_home_value.dart';
 import '../../../view-model/home_view_model.dart';
 
 /// Task item widget for animated lists.
-class TaskItem extends StatelessWidget with ListenHomeValue {
+class TaskItem extends StatelessWidget with ListenHomeValue, HomeTexts {
   /// Default constructor for [TaskItem].
   const TaskItem({
     required this.id,
@@ -74,16 +74,14 @@ class TaskItem extends StatelessWidget with ListenHomeValue {
         decoration: _boxDeco(context, color: Priorities.high.color),
         padding: context.rightPadding(Sizes.medHigh),
         alignment: Alignment.centerRight,
-        child: const BaseText('Open',
-            textAlign: TextAlign.start, color: AppColors.white),
+        child: const BaseText(HomeTexts.openTask, textAlign: TextAlign.start),
       );
 
   Container _background(BuildContext context) => Container(
         decoration: _boxDeco(context, color: Priorities.low.color),
         padding: context.leftPadding(Sizes.medHigh),
         alignment: Alignment.centerLeft,
-        child: const BaseText('Finish',
-            textAlign: TextAlign.end, color: AppColors.white),
+        child: const BaseText(HomeTexts.finishTask, textAlign: TextAlign.end),
       );
 
   BoxDecoration _boxDeco(BuildContext context, {Color? color}) => BoxDecoration(

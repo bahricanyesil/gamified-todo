@@ -41,6 +41,10 @@ abstract class ITheme {
         toggleableActiveColor: colors.highlightColor,
         buttonTheme: _buttonTheme,
         inputDecorationTheme: _inputDecoTheme,
+        iconTheme: _iconTheme,
+        primaryIconTheme: _iconTheme,
+        appBarTheme: _appBarTheme,
+        dividerTheme: _dividerThemeData,
       );
 
   ButtonThemeData get _buttonTheme => ButtonThemeData(
@@ -78,4 +82,14 @@ abstract class ITheme {
         borderSide: BorderSide(color: colors.colorScheme.error, width: 1.8),
         borderRadius: BorderRadii.extremeCircular,
       );
+
+  IconThemeData get _iconTheme => IconThemeData(
+        color: colors.colorScheme.primary,
+      );
+
+  AppBarTheme get _appBarTheme =>
+      AppBarTheme(titleTextStyle: textTheme.data.subtitle2);
+
+  DividerThemeData get _dividerThemeData =>
+      const DividerThemeData(color: AppColors.primaryColor, thickness: 1);
 }

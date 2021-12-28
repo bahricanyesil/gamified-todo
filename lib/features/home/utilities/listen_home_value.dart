@@ -24,9 +24,4 @@ mixin ListenHomeValue {
         (HomeViewModel model) => model.tasks.byStatus(status).length);
     return context.read<HomeViewModel>().tasks.byStatus(status);
   }
-
-  /// Retunrs the visibility status of the section.
-  bool listenVisibleSection(BuildContext context, TaskStatus status) =>
-      context.select<HomeViewModel, bool>((HomeViewModel model) =>
-          model.visibleSections[TaskStatus.values.indexOf(status)]);
 }

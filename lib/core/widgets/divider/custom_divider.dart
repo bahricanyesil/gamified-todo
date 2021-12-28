@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../extensions/context/context_extensions_shelf.dart';
+import '../../theme/color/l_colors.dart';
 
 /// Customized divider to use across the app.
 class CustomDivider extends Divider {
   /// Default constructor for [CustomDivider].
-  CustomDivider(BuildContext context, {Key? key})
+  const CustomDivider({Key? key})
       : super(
           key: key,
-          indent: context.width * 2,
-          endIndent: context.height * 2,
-          color: context.primaryDarkColor,
+          indent: 5,
+          endIndent: 5,
+          color: AppColors.primaryColor,
           thickness: 1,
         );
 }

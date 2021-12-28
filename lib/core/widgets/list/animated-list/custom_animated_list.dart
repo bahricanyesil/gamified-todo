@@ -23,7 +23,7 @@ class CustomAnimatedList<T> extends StatelessWidget {
         ? SizeTransition(
             sizeFactor: animation,
             child: Padding(
-              padding: EdgeInsets.only(bottom: context.responsiveSize * 4.4),
+              padding: EdgeInsets.only(bottom: context.height),
               child: animatedListModel.itemCallback(element),
             ),
           )

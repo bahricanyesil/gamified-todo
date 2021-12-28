@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../extensions/text-style/text_align_extensions.dart';
+
 import '../../decoration/text_styles.dart';
+import '../../theme/color/l_colors.dart';
 
 /// Base text with custom parameters
 /// Wraps [Text] with [FittedBox], and implements some stylings.
@@ -44,6 +47,7 @@ class BaseText extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FittedBox(
         fit: fit ?? BoxFit.scaleDown,
+        alignment: textAlign.alignment,
         child: Text(
           _text,
           style: _style(context),
@@ -59,9 +63,34 @@ class BaseText extends StatelessWidget {
       style ??
       TextStyles(context)
           .normalStyle(
-            color: color,
+            color: color ?? AppColors.white,
             fontSizeFactor: fontSizeFactor,
             fontWeight: fontWeight,
           )
           .merge(style);
+}
+
+/// [BaseText] with priamry color.
+class PrimaryBaseText extends BaseText {
+  /// Default constructor for [PrimaryBaseText].
+  const PrimaryBaseText(
+    String text, {
+    TextStyle? style,
+    TextAlign textAlign = TextAlign.center,
+    BoxFit? fit,
+    double? fontSizeFactor,
+    FontWeight? fontWeight,
+    int maxLength = 90000000,
+    Key? key,
+  }) : super(
+          text,
+          style: style,
+          textAlign: textAlign,
+          color: AppColors.primaryColor,
+          fit: fit,
+          fontSizeFactor: fontSizeFactor,
+          fontWeight: fontWeight,
+          maxLength: maxLength,
+          key: key,
+        );
 }
