@@ -1,21 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:gamified_todo/core/theme/color/l_colors.dart';
-import 'package:gamified_todo/core/widgets/list/custom_checkbox_tile.dart';
-import 'package:gamified_todo/core/widgets/text/text_widgets_shelf.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';
 import '../../../core/constants/enums/view-enums/sizes.dart';
 import '../../../core/decoration/text_styles.dart';
-import '../../../core/extensions/color/color_extensions.dart';
 import '../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../core/extensions/context/theme_extensions.dart';
 import '../../../core/widgets/app-bar/default_app_bar.dart';
 import '../../../core/widgets/divider/custom_divider.dart';
+import '../../../core/widgets/list/custom_checkbox_tile.dart';
 import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/constants/enums/settings_enums.dart';
 import '../../../product/constants/enums/task/task_status.dart';

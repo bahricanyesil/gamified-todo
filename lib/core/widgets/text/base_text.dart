@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../extensions/text-style/text_align_extensions.dart';
 
 import '../../decoration/text_styles.dart';
+import '../../extensions/text-style/text_align_extensions.dart';
 import '../../theme/color/l_colors.dart';
 
 /// Base text with custom parameters
