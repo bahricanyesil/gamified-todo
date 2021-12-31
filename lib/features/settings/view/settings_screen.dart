@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/core/widgets/text/colored-text/bullet_colored_text.dart';
+import 'package:gamified_todo/core/widgets/text/colored-text/colored_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';

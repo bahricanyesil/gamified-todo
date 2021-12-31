@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../decoration/text_styles.dart';
-import '../../extensions/color/color_extensions.dart';
 import '../../extensions/context/responsiveness_extensions.dart';
 import '../../extensions/context/theme_extensions.dart';
 import '../text/base_text.dart';
@@ -55,12 +54,11 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile> {
         ),
       );
 
-  Widget get _expanded => Expanded(
-        child: BaseText(
-          widget.text,
-          style: TextStyles(context).subBodyStyle(
-              color: value ? context.primaryColor.darken() : null),
-        ),
+  Widget get _expanded => BaseText(
+        widget.text,
+        textAlign: TextAlign.left,
+        style: TextStyles(context)
+            .subBodyStyle(color: value ? context.primaryColor : null),
       );
 
   void _changeValue(bool newValue) {

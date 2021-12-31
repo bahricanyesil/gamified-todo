@@ -25,6 +25,7 @@ class _SettingsItem extends StatelessWidget
         title: _title(context),
         subtitle: _subtitle(context),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        expandedAlignment: Alignment.centerLeft,
         children: _children(context),
       );
 
@@ -34,16 +35,20 @@ class _SettingsItem extends StatelessWidget
         return List<CustomCheckboxTile>.generate(
             TaskStatus.values.length, (int i) => _checkbox(i, context));
       case SettingsOptions.info:
-        return List<BaseText>.generate(
-          SettingsTexts.infoSentences.length,
-          (int i) => PrimaryBaseText(
-            SettingsTexts.infoSentences[i],
-            style: TextStyles(context).subtitleTextStyle(height: 2),
-            textAlign: TextAlign.start,
-          ),
-        );
+        return _infoTexts(context);
     }
   }
+
+  List<Widget> _infoTexts(BuildContext context) => List<Padding>.generate(
+        SettingsTexts.infoSentences.keys.length,
+        (int i) => Padding(
+          padding: context.horizontalPadding(Sizes.lowMed),
+          child: BulletColoredText(
+            text: SettingsTexts.infoSentences.keys.elementAt(i),
+            coloredTexts: SettingsTexts.infoSentences.values.elementAt(i),
+          ),
+        ),
+      );
 
   CustomCheckboxTile _checkbox(int i, BuildContext context) {
     final TaskStatus status = TaskStatus.values[i];

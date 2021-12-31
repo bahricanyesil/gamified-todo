@@ -89,13 +89,15 @@ class TextStyles {
 
   /// Custom text style for subtitle/comparably smaller texts.
   /// Such as: "useEmailText"/"notHaveAnAccount" texts.
-  TextStyle subtitleTextStyle(
-          {Color? color,
-          FontWeight? fontWeight,
-          TextDecoration? decoration,
-          double? height}) =>
+  TextStyle subtitleTextStyle({
+    Color? color,
+    double? fontSizeFactor,
+    FontWeight? fontWeight,
+    TextDecoration? decoration,
+    double? height,
+  }) =>
       TextStyle(
-        fontSize: _context.responsiveSize * 3.2,
+        fontSize: _context.responsiveSize * (fontSizeFactor ?? 3.2),
         color: color ?? Colors.black.withOpacity(.8),
         fontWeight: fontWeight ?? FontWeight.w400,
         decoration: decoration,
