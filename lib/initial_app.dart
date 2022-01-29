@@ -7,11 +7,14 @@ import 'core/providers/theme/theme_provider.dart';
 /// Material app widget of the app.
 class InitialApp extends StatelessWidget {
   /// Default constructor for [InitialApp] widget.
-  const InitialApp({Key? key}) : super(key: key);
+  const InitialApp({required this.appName, Key? key}) : super(key: key);
+
+  /// Name of the app.
+  final String appName;
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        title: 'Gamified To Do',
+        title: 'BitHolla',
         debugShowCheckedModeBanner: false,
         theme: context.watch<ThemeProvider>().currentTheme,
         routerDelegate: NavigationManager(),

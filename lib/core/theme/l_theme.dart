@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../constants/border/border_constants_shelf.dart';
 
 import 'color/l_colors.dart';
@@ -87,8 +88,19 @@ abstract class ITheme {
         color: colors.colorScheme.primary,
       );
 
-  AppBarTheme get _appBarTheme =>
-      AppBarTheme(titleTextStyle: textTheme.data.subtitle2);
+  AppBarTheme get _appBarTheme {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: colors.colorScheme.primary));
+    return AppBarTheme(
+      titleTextStyle: textTheme.data.subtitle2,
+      backgroundColor: colors.colorScheme.primary,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: colors.colorScheme.primary,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
+  }
 
   DividerThemeData get _dividerThemeData =>
       const DividerThemeData(color: AppColors.primaryColor, thickness: 1);

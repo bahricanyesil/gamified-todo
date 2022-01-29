@@ -7,6 +7,9 @@ enum SettingsOptions {
 
   /// Indicates the section that will give information about the app.
   info,
+
+  /// Indicates the section that will give information about the app.
+  socialInfo,
 }
 
 /// Extensions on [SettingsOptions].
@@ -18,6 +21,8 @@ extension StringSettingsValues on SettingsOptions {
         return 'Task Statuses';
       case SettingsOptions.info:
         return 'Info';
+      case SettingsOptions.socialInfo:
+        return 'Social Media Accounts';
     }
   }
 
@@ -28,6 +33,8 @@ extension StringSettingsValues on SettingsOptions {
         return 'They will be visible on home screen.';
       case SettingsOptions.info:
         return 'Confused about how to use app?';
+      case SettingsOptions.socialInfo:
+        return 'You can contact with me via these social media channels.';
     }
   }
 
@@ -38,6 +45,8 @@ extension StringSettingsValues on SettingsOptions {
         return Icons.grid_view_outlined;
       case SettingsOptions.info:
         return Icons.info_outline;
+      case SettingsOptions.socialInfo:
+        return Icons.contact_mail_outlined;
     }
   }
 }

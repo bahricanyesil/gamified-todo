@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/core/theme/color/l_colors.dart';
+import 'package:gamified_todo/core/widgets/buttons/default_icon_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/decoration/text_styles.dart';
@@ -33,18 +35,22 @@ class HomeScreen extends StatelessWidget
   Widget build(BuildContext context) => BaseView<HomeViewModel>(
         bodyBuilder: _bodyBuilder,
         appBar: DefaultAppBar(
-            titleIcon: Icons.checklist_outlined,
-            titleText: HomeTexts.homeScreenTitle,
-            actionsList: _appBarActions),
+          titleIcon: Icons.checklist_outlined,
+          titleText: HomeTexts.homeScreenTitle,
+          actionsList: _appBarActions(context),
+        ),
       );
 
-  List<Widget> get _appBarActions => <Widget>[
-        IconButton(
-          onPressed: () => NavigationManager.instance
-              .setNewRoutePath(ScreenConfig.settings()),
-          icon: const BaseIcon(Icons.settings_outlined),
-        )
+  List<Widget> _appBarActions(BuildContext context) => <Widget>[
+        _appBarIcon(Icons.add_outlined, ScreenConfig.createTask()),
+        SizedBox(width: context.width * 1.6),
+        _appBarIcon(Icons.settings_outlined, ScreenConfig.settings()),
       ];
+
+  Widget _appBarIcon(IconData icon, ScreenConfig screen) => DefaultIconButton(
+        onPressed: () => NavigationManager.instance.setNewRoutePath(screen),
+        icon: icon,
+      );
 
   Widget _bodyBuilder(BuildContext context) {
     final List<TasksSection> sections = HomeViewModel.tasksSections
@@ -53,7 +59,7 @@ class HomeScreen extends StatelessWidget
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: context.medWidth,
-        vertical: context.lowHeight,
+        vertical: context.extremeLowHeight,
       ),
       child: _listView(sections),
     );

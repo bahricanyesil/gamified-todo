@@ -30,6 +30,11 @@ class ScreenConfig {
       : path = NavigationConstants.settings,
         builder = (() => const SettingsScreen());
 
+  /// Screen config for the [SettingsScreen]
+  ScreenConfig.createTask()
+      : path = NavigationConstants.createTask,
+        builder = (() => const CreateTaskScreen());
+
   /// Path of the page, will be the url on web.
   final String path;
 

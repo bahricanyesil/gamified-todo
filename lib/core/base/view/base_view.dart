@@ -77,5 +77,5 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
       : widget.bodyBuilder(context);
 
   DefaultAppBar? get _appBar =>
-      widget.appBar?.copyWithSize(context.height * 5.5);
+      widget.appBar?.copyWithSize(context.height * 6.5);
 }

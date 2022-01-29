@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/features/task/view-model/create_task_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -24,6 +25,9 @@ class ProviderList {
     ),
     ChangeNotifierProvider<SettingsViewModel>(
       create: (BuildContext context) => SettingsViewModel(),
+    ),
+    ChangeNotifierProvider<CreateTaskViewModel>(
+      create: (BuildContext context) => CreateTaskViewModel(),
     ),
     ChangeNotifierProvider<NavigationManager>(
       create: (BuildContext context) => NavigationManager(),

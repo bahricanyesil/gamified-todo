@@ -7,7 +7,11 @@ class _SettingsItem extends StatelessWidget
 
   @override
   Widget build(BuildContext context) => Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+          highlightColor: context.primaryLightColor,
+          hoverColor: context.primaryLightColor,
+        ),
         child: ListTileTheme(
           contentPadding: EdgeInsets.zero,
           minLeadingWidth: 0,
@@ -20,7 +24,8 @@ class _SettingsItem extends StatelessWidget
   Widget _expansionTile(BuildContext context) => ExpansionTile(
         collapsedTextColor: context.primaryLightColor,
         collapsedIconColor: context.primaryLightColor,
-        tilePadding: EdgeInsets.symmetric(horizontal: context.width * 1.5),
+        tilePadding: context.horizontalPadding(Sizes.low),
+        childrenPadding: EdgeInsets.zero,
         leading: PrimaryBaseIcon(settings.icon, sizeFactor: 9),
         title: _title(context),
         subtitle: _subtitle(context),
@@ -36,6 +41,10 @@ class _SettingsItem extends StatelessWidget
             TaskStatus.values.length, (int i) => _checkbox(i, context));
       case SettingsOptions.info:
         return _infoTexts(context);
+      case SettingsOptions.socialInfo:
+        return _socialMedia(context);
+      default:
+        return <Widget>[];
     }
   }
 
@@ -57,6 +66,27 @@ class _SettingsItem extends StatelessWidget
       text: status.value,
       onTap: (bool value) => model.setSectionVisibility(status, value),
       initialValue: listenVisibleSection(context, status),
+    );
+  }
+
+  List<Widget> _socialMedia(BuildContext context) => <Widget>[
+        Row(
+          children: List<Widget>.generate(
+            SettingsTexts.socialMediaAccounts.length,
+            (int i) => _item(i, context),
+          ),
+        )
+      ];
+
+  Widget _item(int i, BuildContext context) {
+    final SocialMediaModel account = SettingsTexts.socialMediaAccounts[i];
+    return Expanded(
+      child: IconButton(
+        padding: context.allPadding(Sizes.lowMed),
+        onPressed: () async => launch(account.link),
+        icon: Image.asset(account.nameKey.iconPng),
+        splashRadius: 25,
+      ),
     );
   }
 
