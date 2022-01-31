@@ -14,7 +14,7 @@ class InitialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        title: 'BitHolla',
+        title: appName,
         debugShowCheckedModeBanner: false,
         theme: context.watch<ThemeProvider>().currentTheme,
         routerDelegate: NavigationManager(),

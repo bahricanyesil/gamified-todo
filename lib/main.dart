@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +24,6 @@ class _BeforeAppState extends State<_BeforeApp> {
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: ProviderList.providers,
-        child: const InitialApp(appName: 'BitHolla'),
+        child: const InitialApp(appName: 'Gamified-ToDo'),
       );
 }
