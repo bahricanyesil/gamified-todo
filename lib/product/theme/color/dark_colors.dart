@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/extensions/color/color_extensions.dart';
 import '../../../core/theme/color/l_colors.dart';
 
 /// Colors to use in dark theme.
@@ -9,14 +10,14 @@ class DarkColors extends IColors {
       : super(
           colorScheme: ColorScheme.fromSwatch(
             primaryColorDark: _primaryDark,
-            backgroundColor: AppColors.white,
+            backgroundColor: AppColors.darkGrey.darken(),
             errorColor: AppColors.error,
             cardColor: _primaryColor,
             accentColor: _accentColor,
             primarySwatch: const MaterialColor(_primary, _swatch),
           ),
           appBarColor: _primaryColor,
-          scaffoldBackgroundColor: AppColors.white,
+          scaffoldBackgroundColor: AppColors.darkGrey.darken(),
           brightness: Brightness.dark,
           disabledColor: _primaryDark,
           dividerColor: _primaryColor,
@@ -45,6 +46,6 @@ class DarkColors extends IColors {
     900: Color.fromRGBO(4, 131, 184, 1),
   };
 
-  static const Color _primaryLight = Color(0xff809fff);
-  static const Color _primaryDark = Color(0xff4d79ff);
+  static const Color _primaryLight = Color(0xff668cff);
+  static const Color _primaryDark = Color(0xff668aff);
 }

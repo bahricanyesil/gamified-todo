@@ -1,6 +1,6 @@
 part of '../../home_screen.dart';
 
-class _TasksSection extends StatelessWidget with ListenHomeValue {
+class _TasksSection extends StatelessWidget {
   const _TasksSection({required this.tasksSection, Key? key}) : super(key: key);
   final TasksSection tasksSection;
 
@@ -18,7 +18,7 @@ class _TasksSection extends StatelessWidget with ListenHomeValue {
       ];
 }
 
-class _TitleRow extends StatelessWidget with ListenHomeValue {
+class _TitleRow extends StatelessWidget {
   const _TitleRow({required this.section, Key? key}) : super(key: key);
   final TasksSection section;
 
@@ -39,21 +39,29 @@ class _TitleRow extends StatelessWidget with ListenHomeValue {
           context.sizedW(1.6),
           _lengthText(context),
           const Spacer(),
-          _icon(context, listenExpanded(context, section.status)),
+          _icon,
         ],
       );
 
-  Widget _lengthText(BuildContext context) => BaseText(
-        '(${listenStatusTasks(context, section.status).length})',
-        style: TextStyles(context)
-            .subBodyStyle(color: context.primaryLightColor, height: 1.8),
+  Widget _lengthText(BuildContext context) =>
+      SelectorHelper<int, HomeViewModel>().builder(
+        (_, HomeViewModel model) => model.tasks.byStatus(section.status).length,
+        (BuildContext context, int tasksListLength, _) => BaseText(
+          '($tasksListLength)',
+          style: TextStyles(context)
+              .subBodyStyle(color: context.primaryLightColor, height: 1.8),
+        ),
       );
 
-  Widget _icon(BuildContext context, bool isExpanded) => BaseIcon(
-        isExpanded ? Icons.arrow_drop_down_sharp : Icons.arrow_right_sharp,
-        color:
-            isExpanded ? context.primaryLightColor : context.primaryDarkColor,
-        sizeFactor: 11,
+  Widget get _icon => SelectorHelper<bool, HomeViewModel>().builder(
+        (_, HomeViewModel model) =>
+            model.expandedLists[TaskStatus.values.indexOf(section.status)],
+        (BuildContext context, bool isExpanded, _) => BaseIcon(
+          isExpanded ? Icons.arrow_drop_down_sharp : Icons.arrow_right_sharp,
+          color:
+              isExpanded ? context.primaryLightColor : context.primaryDarkColor,
+          sizeFactor: 11,
+        ),
       );
 }
 
@@ -65,8 +73,7 @@ class _AnimatedTaskList extends StatefulWidget {
   __AnimatedTaskListState createState() => __AnimatedTaskListState();
 }
 
-class __AnimatedTaskListState extends State<_AnimatedTaskList>
-    with ListenHomeValue {
+class __AnimatedTaskListState extends State<_AnimatedTaskList> {
   bool isExpanded = false;
   int itemCount = 2;
   Timer? _timer;
@@ -74,8 +81,12 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList>
 
   @override
   Widget build(BuildContext context) {
-    tasks = listenStatusTasks(context, widget.status);
-    isExpanded = listenExpanded(context, widget.status);
+    tasks = SelectorHelper<List<Task>, HomeViewModel>().listenValue(
+        (HomeViewModel model) => model.tasks.byStatus(widget.status), context);
+    isExpanded = SelectorHelper<bool, HomeViewModel>().listenValue(
+        (HomeViewModel model) =>
+            model.expandedLists[TaskStatus.values.indexOf(widget.status)],
+        context);
     _startTimer(isExpanded);
     return AnimatedContainer(
       duration: Duration(milliseconds: itemCount * (isExpanded ? 160 : 64)),

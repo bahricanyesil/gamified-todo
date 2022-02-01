@@ -28,7 +28,7 @@ class NotFittedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        text.useCorrectEllipsis,
+        text.useCorrectEllipsis.hyphenate,
         style: TextStyles(context).subBodyStyle().merge(style),
         textAlign: textAlign,
         overflow: TextOverflow.ellipsis,

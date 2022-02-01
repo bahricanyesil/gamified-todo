@@ -7,21 +7,21 @@ class BorderRadii {
 
   /// Low-Medium circular border.
   static const BorderRadius lowMedCircular =
-      BorderRadius.all(Radius.circular(18));
+      BorderRadius.all(Radius.circular(14));
 
   /// Medium circular border.
   static const BorderRadius mediumCircular =
-      BorderRadius.all(Radius.circular(25));
+      BorderRadius.all(Radius.circular(18));
 
   /// Medium-High circular border.
   static const BorderRadius medHighCircular =
-      BorderRadius.all(Radius.circular(50));
+      BorderRadius.all(Radius.circular(23));
 
   /// High circular border.
   static const BorderRadius highCircular =
-      BorderRadius.all(Radius.circular(75));
+      BorderRadius.all(Radius.circular(26));
 
   /// Extreme circular border.
   static const BorderRadius extremeCircular =
-      BorderRadius.all(Radius.circular(100));
+      BorderRadius.all(Radius.circular(30));
 }

@@ -22,13 +22,20 @@ class Task with HiveObjectMixin, EqualityCheckers {
     required this.priority,
     required this.content,
     required this.groupId,
-  })  : id = const Uuid().v4(),
-        createdAt = DateTime.now(),
-        updatedAt = DateTime.now(),
-        dueDate = DateTime.now(),
-        status = TaskStatus.open,
-        awardIds = <String>[],
-        awardOfIds = <String>[];
+    DateTime? dueDate,
+    TaskStatus? taskStatus,
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<String>? awardIds,
+    List<String>? awardOfIds,
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now(),
+        dueDate = dueDate ?? DateTime.now(),
+        status = taskStatus ?? TaskStatus.open,
+        awardIds = awardIds ?? <String>[],
+        awardOfIds = awardOfIds ?? <String>[];
 
   /// Mock object, dummy data for [Task].
   Task.mock({
@@ -51,6 +58,32 @@ class Task with HiveObjectMixin, EqualityCheckers {
         dueDate = DateTime.now().add(Duration(days: Random().nextInt(20))),
         awardIds = awardIds ?? <String>[],
         awardOfIds = awardOfIds ?? <String>[];
+
+  /// Copies the [Task].
+  Task copyWith({
+    Priorities? priority,
+    String? content,
+    TaskStatus? taskStatus,
+    DateTime? dueDate,
+    String? groupId,
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<String>? awardIds,
+    List<String>? awardOfIds,
+  }) =>
+      Task(
+        id: id ?? this.id,
+        priority: priority ?? this.priority,
+        content: content ?? this.content,
+        groupId: groupId ?? this.groupId,
+        dueDate: dueDate ?? this.dueDate,
+        taskStatus: taskStatus ?? status,
+        awardIds: awardIds ?? this.awardIds,
+        awardOfIds: awardOfIds ?? this.awardOfIds,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   /// Priority of the task.
   @HiveField(0)
@@ -93,11 +126,8 @@ class Task with HiveObjectMixin, EqualityCheckers {
   final List<String> awardIds;
 
   @override
-  String toString() => """
-      $content\nPriority: ${priority.value}
-      \nCreated on: ${createdAt.dm}
-      \nDue Date: ${dueDate.dm}
-      \nStatus: ${status.value}""";
+  String toString() =>
+      """$content\nPriority: ${priority.value}\nCreated on: ${createdAt.dm}\nDue Date: ${dueDate.dm}\nStatus: ${status.value}""";
 
   @override
   bool operator ==(Object other) {

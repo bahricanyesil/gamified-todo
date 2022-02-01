@@ -5,7 +5,7 @@ import '../../../models/group/group.dart';
 import '../hive_configs.dart';
 
 /// Local storage manager for the groups.
-class GroupsLocalManager extends ILocalManager<Group, String> {
+class GroupsLocalManager extends ILocalManager<String, Group> {
   /// Factory constructor for singleton structure.
   factory GroupsLocalManager() => _instance;
   GroupsLocalManager._();

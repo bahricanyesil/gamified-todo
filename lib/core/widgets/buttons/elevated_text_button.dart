@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../extensions/context/responsiveness_extensions.dart';
+import '../../helpers/material_state_helpers.dart';
 import '../text/base_text.dart';
 
 /// Custom elevated button specific to text widgets.
-class ElevatedTextButton extends StatelessWidget {
+class ElevatedTextButton extends StatelessWidget with MaterialStateHelpers {
   /// Default constructor for [ElevatedTextButton].
   const ElevatedTextButton({
     required this.text,
@@ -22,14 +23,11 @@ class ElevatedTextButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          padding: _all<EdgeInsets>(
+          padding: all<EdgeInsets>(
             EdgeInsets.symmetric(
                 horizontal: context.width * 4, vertical: context.height),
           ),
         ),
         child: BaseText(text),
       );
-
-  MaterialStateProperty<T> _all<T>(T value) =>
-      MaterialStateProperty.all<T>(value);
 }

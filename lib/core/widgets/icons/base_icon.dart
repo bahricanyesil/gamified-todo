@@ -47,8 +47,7 @@ class BaseIcon extends StatelessWidget {
         color: color ?? AppColors.white,
       );
 
-  EdgeInsets _getPadding(BuildContext context) =>
-      padding ?? EdgeInsets.symmetric(horizontal: context.width * .8);
+  EdgeInsets _getPadding(BuildContext context) => padding ?? EdgeInsets.zero;
 }
 
 /// [BaseIcon] with primary color.

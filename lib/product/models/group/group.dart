@@ -1,7 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/extensions/date/date_time_extensions.dart';
 import '../../../core/helpers/hasher.dart';
 import '../../managers/local-storage/hive_configs.dart';
 
@@ -15,9 +14,12 @@ class Group with HiveObjectMixin {
   /// Overrides [toString], [hashCode] methods and [==] operator.
   Group({
     required this.title,
-  })  : id = const Uuid().v4(),
-        createdAt = DateTime.now(),
-        updatedAt = DateTime.now();
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 
   /// Mock object, dummy data for [Group].
   Group.mock({
@@ -26,6 +28,14 @@ class Group with HiveObjectMixin {
         createdAt = DateTime.now(),
         updatedAt = DateTime.now(),
         title = title ?? "Sports";
+
+  /// Copies the [Group].
+  Group copyWith({String? title}) => Group(
+        title: title ?? this.title,
+        createdAt: createdAt,
+        id: id,
+        updatedAt: updatedAt,
+      );
 
   /// Unique id of the group.
   @HiveField(0)
@@ -44,9 +54,7 @@ class Group with HiveObjectMixin {
   String title;
 
   @override
-  String toString() => """
-      Task Group Title: $title 
-      \nCreated on: ${createdAt.dm}""";
+  String toString() => title;
 
   @override
   bool operator ==(Object other) {

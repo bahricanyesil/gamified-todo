@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/enums/view-enums/sizes.dart';
@@ -19,7 +20,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actionsList = const <Widget>[],
     this.titleIcon,
     this.titleText,
-    this.showBack = false,
+    this.showBack,
     this.textStyle,
     Key? key,
   }) : super(key: key);
@@ -40,7 +41,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? titleText;
 
   /// Indicates whether to show a return back icon at top left.
-  final bool showBack;
+  final bool? showBack;
 
   /// Style of the title text.
   final TextStyle? textStyle;
@@ -73,10 +74,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: context.horizontalPadding(Sizes.med),
           child: Row(
             children: <Widget>[
-              if (showBack) _backButton(context),
+              if (showBack ?? !kIsWeb) _backButton(context),
               if (titleIcon != null)
                 BaseIcon(titleIcon!, sizeFactor: 8, color: AppColors.white),
-              SizedBox(width: context.responsiveSize * 2),
+              context.sizedW(2),
               if (titleText != null) Expanded(child: _titleTextWidget(context)),
               ...actionsList,
             ],

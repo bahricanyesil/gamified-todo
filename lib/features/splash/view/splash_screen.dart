@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/enums/settings-enums/login_status.dart';
+import '../../../core/constants/enums/settings-enums/settings_storage_keys.dart';
 import '../../../core/constants/enums/view-enums/sizes.dart';
 import '../../../core/extensions/context/responsiveness_extensions.dart';
+import '../../../core/extensions/string/type_conversion_extensions.dart';
 import '../../../core/widgets/widgets_shelf.dart';
+import '../../../product/managers/local-storage/groups/groups_local_manager.dart';
+import '../../../product/managers/local-storage/settings/settings_local_manager.dart';
+import '../../../product/managers/local-storage/tasks/tasks_local_manager.dart';
+import '../../../product/models/group/group.dart';
 import '../../home/view/home_screen.dart';
 import '../constants/splash_texts.dart';
 
@@ -35,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> with SplashTexts {
     if (snapshot.hasData && !_retrying) {
       return const HomeScreen();
     } else if (snapshot.hasError && !_retrying) {
-      return _ErrorScreen(onPressed: _onRetry);
+      return _ErrorScreen(error: snapshot.error, onPressed: _onRetry);
     }
     return const LoadingIndicator();
   }
@@ -45,10 +52,35 @@ class _SplashScreenState extends State<SplashScreen> with SplashTexts {
     setState(() => _retrying = true);
   }
 
-  Future<bool> _initializeApp() async => false;
+  Future<bool> _initializeApp() async {
+    await _initializeStorage();
+    return false;
+  }
 
   Future<bool> _retryInitialization() async {
-    _retrying = false;
-    return true;
+    final bool res = await _initializeApp();
+    setState(() => _retrying = false);
+    return res;
+  }
+
+  Future<void> _initializeStorage() async {
+    final GroupsLocalManager groupsStorage = GroupsLocalManager.instance;
+    await groupsStorage.initStorage();
+    await TasksLocalManager.instance.initStorage();
+    final SettingsLocalManager settingsStorage = SettingsLocalManager.instance;
+    const SettingsStorageKeys loginKey = SettingsStorageKeys.loginStatus;
+    final LoginStatus? loginStatus =
+        settingsStorage.get(loginKey).toEnum<LoginStatus>(LoginStatus.values);
+    if ((loginStatus ?? LoginStatus.first) == LoginStatus.first) {
+      final List<Group> defaultGroups = <Group>[
+        Group(title: 'Self-Care'),
+        Group(title: 'Sport'),
+        Group(title: 'Self-Development'),
+        Group(title: 'General Knowledge')
+      ];
+      await groupsStorage.putItems(
+          defaultGroups.map((Group g) => g.id).toList(), defaultGroups);
+      await settingsStorage.set(loginKey, LoginStatus.normal.name);
+    }
   }
 }
