@@ -13,6 +13,7 @@ class CircledText extends StatelessWidget {
     this.textStyle,
     this.paddingFactor = 1,
     this.margin,
+    this.sizeFactor = 11,
     Key? key,
   })  : assert(text != null || textWidget != null,
             'You should either provide a text or a custom text widget.'),
@@ -36,12 +37,16 @@ class CircledText extends StatelessWidget {
   /// Margin around the widget.
   final EdgeInsets? margin;
 
+  /// Size factor.
+  final double sizeFactor;
+
   @override
   Widget build(BuildContext context) => Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(context.responsiveSize * paddingFactor),
         margin: margin ?? context.horizontalPadding(Sizes.lowMed),
         decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        width: context.responsiveSize * sizeFactor,
         child: textWidget ??
             BaseText(
               text!,

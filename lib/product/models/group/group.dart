@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/base/model/base_model.dart';
 import '../../../core/helpers/hasher.dart';
 import '../../managers/local-storage/hive_configs.dart';
 
@@ -9,7 +10,7 @@ part 'group.g.dart';
 @HiveType(typeId: HiveConfigs.groups)
 
 /// [Group] model is to store the information about a group.
-class Group with HiveObjectMixin {
+class Group extends BaseModel<Group> with HiveObjectMixin {
   /// Default constructor for [Group].
   /// Overrides [toString], [hashCode] methods and [==] operator.
   Group({
@@ -20,6 +21,13 @@ class Group with HiveObjectMixin {
   })  : id = id ?? const Uuid().v4(),
         createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
+
+  factory Group.fromJson(Map<String, dynamic> json) => Group(
+        title: BaseModel.getWithDefault(json['title'], ''),
+        createdAt: BaseModel.getWithDefault(json['created_at'], DateTime.now()),
+        updatedAt: BaseModel.getWithDefault(json['updated_at'], DateTime.now()),
+        id: BaseModel.getWithDefault(json['id'], ''),
+      );
 
   /// Mock object, dummy data for [Group].
   Group.mock({
@@ -34,7 +42,7 @@ class Group with HiveObjectMixin {
         title: title ?? this.title,
         createdAt: createdAt,
         id: id,
-        updatedAt: updatedAt,
+        updatedAt: DateTime.now(),
       );
 
   /// Unique id of the group.
@@ -76,4 +84,15 @@ class Group with HiveObjectMixin {
         title,
         id,
       ]);
+
+  @override
+  Group fromJson(Map<String, dynamic> json) => Group.fromJson(json);
+
+  @override
+  Map<String, dynamic> get toJson => <String, dynamic>{
+        'title': title,
+        'id': id,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+      };
 }

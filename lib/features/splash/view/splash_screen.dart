@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/product/constants/enums/task/task_enums_shelf.dart';
 
 import '../../../core/constants/enums/settings-enums/login_status.dart';
 import '../../../core/constants/enums/settings-enums/settings_storage_keys.dart';
@@ -6,10 +7,12 @@ import '../../../core/constants/enums/view-enums/sizes.dart';
 import '../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../core/extensions/string/type_conversion_extensions.dart';
 import '../../../core/widgets/widgets_shelf.dart';
+import '../../../product/constants/enums/task/priorities.dart';
 import '../../../product/managers/local-storage/groups/groups_local_manager.dart';
 import '../../../product/managers/local-storage/settings/settings_local_manager.dart';
 import '../../../product/managers/local-storage/tasks/tasks_local_manager.dart';
 import '../../../product/models/group/group.dart';
+import '../../../product/models/task/task.dart';
 import '../../home/view/home_screen.dart';
 import '../constants/splash_texts.dart';
 
@@ -65,22 +68,53 @@ class _SplashScreenState extends State<SplashScreen> with SplashTexts {
 
   Future<void> _initializeStorage() async {
     final GroupsLocalManager groupsStorage = GroupsLocalManager.instance;
+    final TasksLocalManager tasksStorage = TasksLocalManager.instance;
     await groupsStorage.initStorage();
-    await TasksLocalManager.instance.initStorage();
+    await tasksStorage.initStorage();
     final SettingsLocalManager settingsStorage = SettingsLocalManager.instance;
     const SettingsStorageKeys loginKey = SettingsStorageKeys.loginStatus;
     final LoginStatus? loginStatus =
         settingsStorage.get(loginKey).toEnum<LoginStatus>(LoginStatus.values);
-    if ((loginStatus ?? LoginStatus.first) == LoginStatus.first) {
-      final List<Group> defaultGroups = <Group>[
-        Group(title: 'Self-Care'),
-        Group(title: 'Sport'),
-        Group(title: 'Self-Development'),
-        Group(title: 'General Knowledge')
-      ];
-      await groupsStorage.putItems(
-          defaultGroups.map((Group g) => g.id).toList(), defaultGroups);
-      await settingsStorage.set(loginKey, LoginStatus.normal.name);
-    }
+    await tasksStorage.clearAll();
+    await groupsStorage.clearAll();
+    // TODO (bahrican): Fix
+    // if ((loginStatus ?? LoginStatus.first) == LoginStatus.first) {
+    final List<Group> defaultGroups = <Group>[
+      Group(title: 'Self-Care'),
+      Group(title: 'Sport'),
+      Group(title: 'Self-Development'),
+      Group(title: 'Emotional'),
+    ];
+    await groupsStorage.putItems(
+        defaultGroups.map((Group g) => g.id).toList(), defaultGroups);
+    final List<Task> defaultTasks = <Task>[
+      Task(
+        priority: Priorities.medium,
+        content: 'Read "When Nietzsche Wept"',
+        groupId: defaultGroups[2].id,
+      ),
+      Task(
+        priority: Priorities.high,
+        content: 'Walk at least 40 mins',
+        groupId: defaultGroups[1].id,
+      ),
+      Task(
+        priority: Priorities.high,
+        content: 'Brush your teeth at morning',
+        groupId: defaultGroups[0].id,
+        taskStatus: TaskStatus.active,
+      ),
+      Task(
+        priority: Priorities.high,
+        content: 'Be happy',
+        groupId: defaultGroups[3].id,
+        taskStatus: TaskStatus.pastDue,
+        dueDate: DateTime.now().subtract(const Duration(days: 1)),
+      ),
+    ];
+    await tasksStorage.putItems(
+        defaultTasks.map((Task t) => t.id).toList(), defaultTasks);
+    await settingsStorage.addOrUpdate(loginKey, LoginStatus.normal.name);
+    // }
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/border/border_constants_shelf.dart';
 import '../../../constants/enums/enums_shelf.dart';
-import '../../../decoration/input_decoration.dart';
 import '../../../extensions/context/responsiveness_extensions.dart';
 import '../../../extensions/context/theme_extensions.dart';
 import '../../list/custom_checkbox_tile.dart';
+import '../../text-field/custom_text_field.dart';
 import '../../text/base_text.dart';
 
 /// A choose dialog with multiple options.
@@ -131,10 +131,12 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
 
   Widget _getSearchForm() => Padding(
         padding: context.bottomPadding(Sizes.low),
-        child: TextField(
-          onChanged: (String val) => setState(() => searchText = val),
-          decoration: InputDeco(context).normalDeco(hintText: 'Search'),
-          style: context.headline5,
+        child: CustomTextField(
+          onChanged: (String? val) {
+            if (val == null) return;
+            setState(() => searchText = val);
+          },
+          hintText: 'Search',
         ),
       );
 

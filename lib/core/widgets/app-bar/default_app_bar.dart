@@ -6,7 +6,7 @@ import '../../extensions/context/responsiveness_extensions.dart';
 import '../../extensions/context/theme_extensions.dart';
 import '../../managers/navigation/navigation_manager.dart';
 import '../../theme/color/l_colors.dart';
-import '../buttons/default_icon_button.dart';
+import '../buttons/icon/base_icon_button.dart';
 import '../icons/base_icon.dart';
 import '../text/base_text.dart';
 
@@ -57,7 +57,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _backButton(BuildContext context) => FittedBox(
         fit: BoxFit.scaleDown,
-        child: DefaultIconButton(
+        child: BaseIconButton(
           onPressed: () => NavigationManager.instance.popRoute(),
           icon: Icons.chevron_left_outlined,
           color: AppColors.white,
@@ -71,7 +71,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) => SafeArea(
         child: Container(
           color: context.primaryColor,
-          padding: context.horizontalPadding(Sizes.med),
+          padding: context.horizontalPadding(Sizes.lowMed),
           child: Row(
             children: <Widget>[
               if (showBack ?? !kIsWeb) _backButton(context),

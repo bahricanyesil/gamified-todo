@@ -24,6 +24,6 @@ class _BeforeAppState extends State<_BeforeApp> {
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: ProviderList.providers,
-        child: const InitialApp(appName: 'BitHolla'),
+        child: const InitialApp(appName: 'Gamified To-Do'),
       );
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/decoration/button/button_styles.dart';
-import '../../../core/extensions/extensions_shelf.dart';
-import '../../../core/widgets/widgets_shelf.dart';
-import '../../constants/constants_shelf.dart';
-import '../../decoration/text_styles.dart';
-import '../../theme/color/l_colors.dart';
+import '../../../decoration/button/button_styles.dart';
+import '../../../extensions/extensions_shelf.dart';
+import '../../widgets_shelf.dart';
+import '../../../constants/constants_shelf.dart';
+import '../../../decoration/text_styles.dart';
+import '../../../theme/color/l_colors.dart';
 
 /// Customized dropdown button to open a choose dialog.
 class CustomDropdownButton<T> extends StatelessWidget {

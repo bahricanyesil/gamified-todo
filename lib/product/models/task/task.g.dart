@@ -6,24 +6,26 @@ part of 'task.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-/// Task Adapter
 class TaskAdapter extends TypeAdapter<Task> {
   @override
   final int typeId = 0;
 
   @override
   Task read(BinaryReader reader) {
-    final int numOfFields = reader.readByte();
-    final Map<int, dynamic> fields = <int, dynamic>{
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Task(
-      priority: fields[0] as Priorities,
       content: fields[1] as String,
       groupId: fields[7] as String,
-    )
-      ..status = fields[5] as TaskStatus
-      ..dueDate = fields[6] as DateTime;
+      dueDate: fields[6] as DateTime?,
+      id: fields[2] as String?,
+      createdAt: fields[3] as DateTime?,
+      updatedAt: fields[4] as DateTime?,
+      awardIds: (fields[9] as List?)?.cast<String>(),
+      awardOfIds: (fields[8] as List?)?.cast<String>(),
+    ).._status = fields[5] as String;
   }
 
   @override
@@ -31,7 +33,7 @@ class TaskAdapter extends TypeAdapter<Task> {
     writer
       ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.priority)
+      ..write(obj._priority)
       ..writeByte(1)
       ..write(obj.content)
       ..writeByte(2)
@@ -41,7 +43,7 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(4)
       ..write(obj.updatedAt)
       ..writeByte(5)
-      ..write(obj.status)
+      ..write(obj._status)
       ..writeByte(6)
       ..write(obj.dueDate)
       ..writeByte(7)

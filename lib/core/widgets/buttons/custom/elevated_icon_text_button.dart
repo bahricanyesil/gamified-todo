@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/widgets/widgets_shelf.dart';
 
-import '../../extensions/context/responsiveness_extensions.dart';
-import '../../helpers/material_state_helpers.dart';
-import '../text/base_text.dart';
+import '../../../extensions/context/responsiveness_extensions.dart';
+import '../../../helpers/material_state_helpers.dart';
+import '../../widgets_shelf.dart';
 
 /// Returns an elevated button with both text and icon.
 class ElevatedIconTextButton extends StatelessWidget with MaterialStateHelpers {
@@ -40,7 +39,7 @@ class ElevatedIconTextButton extends StatelessWidget with MaterialStateHelpers {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           BaseIcon(icon),
-          SizedBox(width: context.width * 1.6),
+          context.sizedW(1.6),
           BaseText(text),
         ],
       );

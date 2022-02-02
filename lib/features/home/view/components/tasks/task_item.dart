@@ -138,15 +138,15 @@ class _Subtitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => NotFittedText(
-        _creationDate(context).dm,
+        _dueDate(context).dm,
         textAlign: TextAlign.start,
         style: TextStyles(context).subtitleTextStyle(),
       );
 
-  DateTime _creationDate(BuildContext context) =>
+  DateTime _dueDate(BuildContext context) =>
       SelectorHelper<DateTime, HomeViewModel>().listenValue(
         (HomeViewModel value) =>
-            value.tasks.byId(id)?.createdAt ?? DateTime.now(),
+            value.tasks.byId(id)?.dueDate ?? DateTime.now(),
         context,
       );
 }

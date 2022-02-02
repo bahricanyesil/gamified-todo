@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/constants/border/border_radii.dart';
-import 'package:gamified_todo/core/extensions/color/color_extensions.dart';
-import 'package:gamified_todo/core/extensions/context/theme_extensions.dart';
-import 'package:gamified_todo/core/helpers/color_helpers.dart';
-import 'package:gamified_todo/core/theme/color/l_colors.dart';
-import 'package:gamified_todo/core/widgets/text/circled_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';
 import '../../../core/constants/enums/view-enums/sizes.dart';
+import '../../../core/decoration/input_decoration.dart';
+import '../../../core/decoration/text_styles.dart';
+import '../../../core/extensions/color/color_extensions.dart';
 import '../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../core/helpers/selector_helper.dart';
+import '../../../core/theme/color/l_colors.dart';
+import '../../../core/widgets/text/circled_text.dart';
 import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/models/group/group.dart';
+import '../../../product/models/task/task.dart';
+import '../../home/view-model/home_view_model.dart';
 import '../constants/groups_texts.dart';
 import '../view-model/groups_view_model.dart';
 
@@ -38,11 +39,12 @@ class GroupsScreen extends StatelessWidget with GroupsTexts {
                   BoxConstraints.loose(Size.fromHeight(context.height * 73)),
               child: const _GroupsList(),
             ),
-            SizedBox(height: context.height * 2),
+            context.sizedH(2),
             ElevatedIconTextButton(
               text: 'Add a Group',
               icon: Icons.add_outlined,
-              onPressed: context.read<GroupsViewModel>().addGroup,
+              onPressed: () =>
+                  context.read<GroupsViewModel>().addGroup('New Group'),
             ),
           ],
         ),
@@ -68,8 +70,9 @@ class _GroupsList extends StatelessWidget with GroupsTexts {
 
   Widget _listenGroup(int i) =>
       SelectorHelper<Group, GroupsViewModel>().builder(
-        (_, GroupsViewModel model) => model.groups[i],
+        (_, GroupsViewModel model) => model.group(i),
         _selectorChildBuilder,
+        shouldRebuild: (Group pre, Group next) => pre.id != next.id,
       );
 
   Widget _selectorChildBuilder(BuildContext context, Group group, _) => Padding(

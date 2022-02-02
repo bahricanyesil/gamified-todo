@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -24,25 +23,25 @@ class ProviderList {
 
   static final List<SingleChildWidget> _viewModels = <SingleChildWidget>[
     ChangeNotifierProvider<HomeViewModel>(
-      create: (BuildContext context) => HomeViewModel(),
+      create: (_) => HomeViewModel(),
     ),
     ChangeNotifierProvider<SettingsViewModel>(
-      create: (BuildContext context) => SettingsViewModel(),
+      create: (_) => SettingsViewModel(),
     ),
     ChangeNotifierProvider<CreateTaskViewModel>(
-      create: (BuildContext context) => CreateTaskViewModel(),
+      create: (_) => CreateTaskViewModel(),
     ),
     ChangeNotifierProvider<GroupsViewModel>(
-      create: (BuildContext context) => GroupsViewModel(),
+      create: (_) => GroupsViewModel(),
     ),
   ];
 
   static final List<SingleChildWidget> _functionals = <SingleChildWidget>[
     ChangeNotifierProvider<NavigationManager>(
-      create: (BuildContext context) => NavigationManager(),
+      create: (_) => NavigationManager(),
     ),
     ChangeNotifierProvider<ThemeProvider>(
-      create: (BuildContext context) => ThemeProvider(),
+      create: (_) => ThemeProvider(),
     ),
   ];
 }

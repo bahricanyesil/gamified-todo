@@ -70,4 +70,20 @@ class InputDeco {
           color: color ?? _context.primaryLightColor,
         ),
       );
+
+  /// Returns underlined input decoration.
+  InputDecoration underlinedDeco({double paddingFactor = 1, Color? color}) =>
+      InputDecoration(
+        isDense: true,
+        border: _underlinedBorder(color),
+        enabledBorder: _underlinedBorder(color),
+        focusedBorder: _underlinedBorder(color),
+        contentPadding: EdgeInsets.symmetric(
+            vertical: _context.responsiveSize * paddingFactor),
+      );
+
+  UnderlineInputBorder _underlinedBorder(Color? color) => UnderlineInputBorder(
+        borderRadius: BorderRadius.zero,
+        borderSide: BorderSide(width: 1.5, color: color ?? Colors.black),
+      );
 }

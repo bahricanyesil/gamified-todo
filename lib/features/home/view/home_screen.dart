@@ -38,13 +38,13 @@ class HomeScreen extends StatelessWidget with HomeTexts {
 
   List<Widget> _appBarActions(BuildContext context) => <Widget>[
         _appBarIcon(Icons.add_outlined, ScreenConfig.createTask()),
-        context.sizedW(2.5),
+        context.sizedW(1),
         _appBarIcon(Icons.list_outlined, ScreenConfig.groups()),
-        context.sizedW(2.5),
+        context.sizedW(1),
         _appBarIcon(Icons.settings_outlined, ScreenConfig.settings()),
       ];
 
-  Widget _appBarIcon(IconData icon, ScreenConfig screen) => DefaultIconButton(
+  Widget _appBarIcon(IconData icon, ScreenConfig screen) => BaseIconButton(
         onPressed: () => NavigationManager.instance.setNewRoutePath(screen),
         icon: icon,
       );

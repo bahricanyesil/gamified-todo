@@ -3,6 +3,7 @@ export 'buttons/buttons_shelf.dart';
 export 'date-picker/custom_date_picker.dart';
 export 'dialogs/dialog_builder.dart';
 export 'divider/custom_divider.dart';
+export 'expansion-tile/custom_expansion_tile.dart';
 export 'icons/base_icon.dart';
 export 'indicators/loading_indicator.dart';
 export 'list/list_shelf.dart';

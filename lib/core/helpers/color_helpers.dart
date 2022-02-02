@@ -11,11 +11,10 @@ mixin ColorHelpers {
   /// Returns a light random color.
   Color get lightRandomColor {
     final List<String> letters = 'ABCDEF'.split('');
-    String color = '0xff';
+    final StringBuffer buffer = StringBuffer('0xff');
     for (int i = 0; i < 6; i++) {
-      color += letters[(math.Random().nextInt(letters.length)).floor()];
+      buffer.write(letters[(math.Random().nextInt(letters.length)).floor()]);
     }
-    return Color(int.parse(color)).darken(.04);
-    // .withOpacity(.85);
+    return Color(int.parse(buffer.toString())).darken(.04);
   }
 }

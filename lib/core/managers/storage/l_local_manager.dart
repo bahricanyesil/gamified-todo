@@ -30,8 +30,17 @@ abstract class ILocalManager<R, T> {
   /// Gets the element from the box with the corresponding key.
   T? get(R key) => _box?.get(_key(key));
 
-  /// Sets the element in the box with the corresponding key.
-  Future<void> set(R key, T item) async => await _box?.put(_key(key), item);
+  /// Adds an element to the box with the corresponding key.
+  Future<void> addOrUpdate(R key, T item) async =>
+      await _box?.put(_key(key), item);
+
+  /// Updates the element in the box with the corresponding key.
+  Future<bool> update(R key, T item) async {
+    final bool exists = containsKey(key);
+    if (!exists) return false;
+    await _box?.put(_key(key), item);
+    return true;
+  }
 
   /// Adds multiple items at one shot with auto-increment keys.
   Future<void> addItems(List<T> items) async => await _box?.addAll(items);
@@ -52,6 +61,9 @@ abstract class ILocalManager<R, T> {
 
   /// Checks whether the given key exists in the box.
   bool containsKey(R key) => _box?.containsKey(_key(key)) ?? false;
+
+  /// Returns all keys.
+  List<dynamic> get keys => _box?.keys.toList() ?? <dynamic>[];
 
   String _key(R key) {
     if (key is Enum) {

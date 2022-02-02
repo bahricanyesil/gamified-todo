@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/enums/view-enums/sizes.dart';
-import '../../extensions/context/responsiveness_extensions.dart';
-import '../text/base_text.dart';
-import 'custom_dropdown_button.dart';
+import '../../../constants/enums/view-enums/sizes.dart';
+import '../../../extensions/context/responsiveness_extensions.dart';
+import '../../text/base_text.dart';
+import '../custom/custom_dropdown_button.dart';
 
 /// Button with a text on top.
 class TitledButton<T> extends StatelessWidget {

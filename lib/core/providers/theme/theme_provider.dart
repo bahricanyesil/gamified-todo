@@ -39,7 +39,7 @@ class ThemeProvider extends ChangeNotifier {
     _assignTheme(themeEnum);
     _themeEnum = themeEnum;
     await SettingsLocalManager.instance
-        .set(SettingsStorageKeys.appTheme, _themeEnum.name);
+        .addOrUpdate(SettingsStorageKeys.appTheme, _themeEnum.name);
     notifyListeners();
   }
 

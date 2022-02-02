@@ -83,7 +83,7 @@ class TextStyles {
   /// Custom text style for text form field texts.
   /// Such as: "CustomTextFormField"/"ObscuredTextFormFields" texts.
   TextStyle textFormStyle({Color? color}) => TextStyle(
-        fontSize: _context.responsiveSize * 6,
+        fontSize: _context.responsiveSize * 5.8,
         color: color ?? Theme.of(_context).primaryColor,
         fontWeight: FontWeight.w400,
         wordSpacing: 1.1,

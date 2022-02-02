@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../extensions/context/responsiveness_extensions.dart';
-import '../../helpers/material_state_helpers.dart';
-import '../text/base_text.dart';
+import '../../../extensions/context/responsiveness_extensions.dart';
+import '../../../helpers/material_state_helpers.dart';
+import '../../text/base_text.dart';
 
 /// Custom elevated button specific to text widgets.
 class ElevatedTextButton extends StatelessWidget with MaterialStateHelpers {
