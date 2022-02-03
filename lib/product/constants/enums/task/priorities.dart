@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/color/l_colors.dart';
+import '../../../../core/extensions/color/color_extensions.dart';
 import '../../../../core/widgets/widgets_shelf.dart';
 
 /// Determines the priorities of the tasks.
@@ -23,7 +24,7 @@ extension PriorityExtensions on Priorities {
       case Priorities.low:
         return AppColors.lowPriority;
       case Priorities.medium:
-        return AppColors.medPriority;
+        return AppColors.medPriority.darken(.1);
       case Priorities.high:
         return AppColors.highPriority;
     }

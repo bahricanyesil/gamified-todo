@@ -2,4 +2,7 @@
 enum SettingsStorageKeys {
   /// App theme enum key
   appTheme,
+
+  /// Login status.
+  loginStatus,
 }

@@ -11,4 +11,7 @@ mixin NavigationConstants {
 
   /// Create Task screen path configuration.
   static const String createTask = '/create-task';
+
+  /// Groups screen path configuration.
+  static const String groups = '/groups';
 }

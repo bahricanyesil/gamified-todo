@@ -4,7 +4,6 @@ import '../../../product/managers/local-storage/settings/settings_local_manager.
 import '../../../product/theme/dark_theme.dart';
 import '../../constants/enums/settings-enums/app_themes.dart';
 import '../../constants/enums/settings-enums/settings_storage_keys.dart';
-import '../../extensions/enum/enum_extensions.dart';
 import '../../extensions/string/type_conversion_extensions.dart';
 
 /// Provider of theme, manages theme actions.
@@ -24,7 +23,7 @@ class ThemeProvider extends ChangeNotifier {
   void _getStoredTheme() {
     final AppThemes? storedTheme = SettingsLocalManager.instance
         .get(SettingsStorageKeys.appTheme)
-        ?.toEnum<AppThemes>(AppThemes.values);
+        .toEnum<AppThemes>(AppThemes.values);
     if (storedTheme != null) _themeEnum = storedTheme;
     _assignTheme(_themeEnum);
   }
@@ -40,7 +39,7 @@ class ThemeProvider extends ChangeNotifier {
     _assignTheme(themeEnum);
     _themeEnum = themeEnum;
     await SettingsLocalManager.instance
-        .set(SettingsStorageKeys.appTheme, _themeEnum.value);
+        .addOrUpdate(SettingsStorageKeys.appTheme, _themeEnum.name);
     notifyListeners();
   }
 

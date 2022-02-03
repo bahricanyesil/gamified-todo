@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/extensions/date/date_time_extensions.dart';
+import '../../../core/base/model/base_model.dart';
 import '../../../core/helpers/hasher.dart';
 import '../../managers/local-storage/hive_configs.dart';
 
@@ -10,14 +10,24 @@ part 'group.g.dart';
 @HiveType(typeId: HiveConfigs.groups)
 
 /// [Group] model is to store the information about a group.
-class Group with HiveObjectMixin {
+class Group extends BaseModel<Group> with HiveObjectMixin {
   /// Default constructor for [Group].
   /// Overrides [toString], [hashCode] methods and [==] operator.
   Group({
     required this.title,
-  })  : id = const Uuid().v4(),
-        createdAt = DateTime.now(),
-        updatedAt = DateTime.now();
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
+
+  factory Group.fromJson(Map<String, dynamic> json) => Group(
+        title: BaseModel.getWithDefault(json['title'], ''),
+        createdAt: BaseModel.getWithDefault(json['created_at'], DateTime.now()),
+        updatedAt: BaseModel.getWithDefault(json['updated_at'], DateTime.now()),
+        id: BaseModel.getWithDefault(json['id'], ''),
+      );
 
   /// Mock object, dummy data for [Group].
   Group.mock({
@@ -26,6 +36,14 @@ class Group with HiveObjectMixin {
         createdAt = DateTime.now(),
         updatedAt = DateTime.now(),
         title = title ?? "Sports";
+
+  /// Copies the [Group].
+  Group copyWith({String? title}) => Group(
+        title: title ?? this.title,
+        createdAt: createdAt,
+        id: id,
+        updatedAt: DateTime.now(),
+      );
 
   /// Unique id of the group.
   @HiveField(0)
@@ -44,9 +62,7 @@ class Group with HiveObjectMixin {
   String title;
 
   @override
-  String toString() => """
-      Task Group Title: $title 
-      \nCreated on: ${createdAt.dm}""";
+  String toString() => title;
 
   @override
   bool operator ==(Object other) {
@@ -68,4 +84,15 @@ class Group with HiveObjectMixin {
         title,
         id,
       ]);
+
+  @override
+  Group fromJson(Map<String, dynamic> json) => Group.fromJson(json);
+
+  @override
+  Map<String, dynamic> get toJson => <String, dynamic>{
+        'title': title,
+        'id': id,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+      };
 }

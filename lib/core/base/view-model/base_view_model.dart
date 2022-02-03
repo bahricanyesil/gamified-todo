@@ -1,6 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
 import '../../constants/enums/view-enums/view_states.dart';
 import '../../managers/navigation/navigation_manager.dart';
 
@@ -22,6 +23,11 @@ abstract class BaseViewModel extends ChangeNotifier {
   /// Custom init method to call before the initialization process is completed.
   FutureOr<void> init();
 
+  /// Custom dipose method to call before the dispose.
+  FutureOr<void> customDispose() {}
+
+  @mustCallSuper
+  @nonVirtual
   Future<void> _init() async {
     await init();
     if (_viewState == ViewStates.disposed) return;
@@ -30,7 +36,12 @@ abstract class BaseViewModel extends ChangeNotifier {
   }
 
   /// Locally dispose the view and sets the [_viewState] property.
-  void disposeLocal() => _viewState = ViewStates.disposed;
+  @mustCallSuper
+  @nonVirtual
+  Future<void> disposeLocal() async {
+    await customDispose();
+    _viewState = ViewStates.disposed;
+  }
 
   /// Reloads the state.
   void reloadState() {

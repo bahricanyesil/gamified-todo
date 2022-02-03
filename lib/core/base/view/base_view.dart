@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../constants/enums/view-enums/view_states.dart';
 import '../../extensions/context/responsiveness_extensions.dart';
-import '../../widgets/app-bar/default_app_bar.dart';
+import '../../helpers/selector_helper.dart';
 import '../../widgets/widgets_shelf.dart';
 import '../view-model/base_view_model.dart';
 
@@ -61,21 +61,26 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
   @override
   Widget build(BuildContext context) {
     model = context.read<T>();
-    return Scaffold(
-      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-      appBar: _appBar,
-      body: _safeAreadChild,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+        appBar: _appBar,
+        body: widget.safeArea ? SafeArea(child: _child) : _child,
+      ),
     );
   }
 
-  Widget get _safeAreadChild =>
-      widget.safeArea ? SafeArea(child: _child) : _child;
-
-  Widget get _child => context.select<T, ViewStates>((T p) => p.state) ==
-          ViewStates.uninitialized
-      ? const Center(child: LoadingIndicator())
-      : widget.bodyBuilder(context);
-
   DefaultAppBar? get _appBar =>
       widget.appBar?.copyWithSize(context.height * 6.5);
+
+  Widget get _child => SelectorHelper<ViewStates, T>().builder(
+        (BuildContext context, T localModel) => localModel.state,
+        _selectorBuilder,
+      );
+
+  Widget _selectorBuilder(BuildContext context, ViewStates val, _) =>
+      val == ViewStates.uninitialized
+          ? const Center(child: LoadingIndicator())
+          : widget.bodyBuilder(context);
 }

@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../extensions/color/color_extensions.dart';
+import '../../../constants/enums/view-enums/sizes.dart';
+import '../../../extensions/color/color_extensions.dart';
 
-import '../../extensions/context/responsiveness_extensions.dart';
-import '../../extensions/context/theme_extensions.dart';
-import '../icons/base_icon.dart';
+import '../../../extensions/context/responsiveness_extensions.dart';
+import '../../../extensions/context/theme_extensions.dart';
+import '../../icons/base_icon.dart';
 
 /// Customized [IconButton].
-class DefaultIconButton extends StatelessWidget {
-  /// Default constructor for [DefaultIconButton].
-  const DefaultIconButton({
+class BaseIconButton extends StatelessWidget {
+  /// Default constructor for [BaseIconButton].
+  const BaseIconButton({
     required this.onPressed,
     required this.icon,
     this.color,
     this.highlightColor,
     this.hoverColor,
+    this.padding,
     Key? key,
   }) : super(key: key);
 
@@ -32,6 +34,9 @@ class DefaultIconButton extends StatelessWidget {
   /// Custom hoverColor for the icon button.
   final Color? hoverColor;
 
+  /// Padding around the icon.
+  final EdgeInsets? padding;
+
   @override
   Widget build(BuildContext context) => Material(
         color: Colors.transparent,
@@ -40,7 +45,7 @@ class DefaultIconButton extends StatelessWidget {
         child: IconButton(
           icon: BaseIcon(icon, color: color),
           splashRadius: context.responsiveSize * 9,
-          padding: EdgeInsets.zero,
+          padding: padding ?? context.allPadding(Sizes.extremeLow),
           highlightColor: highlightColor ?? context.primaryLightColor.lighten(),
           constraints: const BoxConstraints(),
           iconSize: context.responsiveSize * 9,

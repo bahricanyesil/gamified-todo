@@ -1,7 +1,6 @@
 part of '../settings_screen.dart';
 
-class _SettingsItem extends StatelessWidget
-    with SettingsTexts, ListenSettingsValue {
+class _SettingsItem extends StatelessWidget with SettingsTexts {
   const _SettingsItem({required this.settings, Key? key}) : super(key: key);
   final SettingsOptions settings;
 
@@ -37,7 +36,7 @@ class _SettingsItem extends StatelessWidget
   List<Widget> _children(BuildContext context) {
     switch (settings) {
       case SettingsOptions.visibleTaskSections:
-        return List<CustomCheckboxTile>.generate(
+        return List<Widget>.generate(
             TaskStatus.values.length, (int i) => _checkbox(i, context));
       case SettingsOptions.info:
         return _infoTexts(context);
@@ -59,13 +58,17 @@ class _SettingsItem extends StatelessWidget
         ),
       );
 
-  CustomCheckboxTile _checkbox(int i, BuildContext context) {
+  Widget _checkbox(int i, BuildContext context) {
     final TaskStatus status = TaskStatus.values[i];
     final SettingsViewModel model = context.read<SettingsViewModel>();
-    return CustomCheckboxTile(
-      text: status.value,
-      onTap: (bool value) => model.setSectionVisibility(status, value),
-      initialValue: listenVisibleSection(context, status),
+    return SelectorHelper<bool, SettingsViewModel>().builder(
+      (_, SettingsViewModel model) =>
+          model.visibleSections[TaskStatus.values.indexOf(status)],
+      (BuildContext context, bool val, _) => CustomCheckboxTile(
+        text: status.name,
+        onTap: (bool newValue) => model.setSectionVisibility(status, newValue),
+        initialValue: val,
+      ),
     );
   }
 
@@ -84,7 +87,8 @@ class _SettingsItem extends StatelessWidget
       child: IconButton(
         padding: context.allPadding(Sizes.lowMed),
         onPressed: () async => launch(account.link),
-        icon: Image.asset(account.nameKey.iconPng),
+        icon: Image.asset(account.nameKey.iconPng,
+            color: account.nameKey == 'github' ? AppColors.white : null),
         splashRadius: 25,
       ),
     );

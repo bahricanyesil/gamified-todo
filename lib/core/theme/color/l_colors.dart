@@ -72,8 +72,11 @@ class AppColors {
   /// White color.
   static const Color white = Color(0xfff5f5f5);
 
+  /// White color.
+  static const Color black = Color(0xff0d0d0d);
+
   /// Green color.
-  static const Color green = Color(0xff7bed8d);
+  static const Color green = Color(0xff00b33c);
 
   /// Medium grey color.
   static const Color mediumGrey = Color(0xffa6bcd0);
@@ -97,7 +100,7 @@ class AppColors {
   static const Color highPriority = Color(0xfff47174);
 
   /// Medium prioritized task color.
-  static const Color medPriority = Color(0xffeaea7b);
+  static const Color medPriority = Color(0xffe7e765);
 
   /// Low prioritized task color.
   static const Color lowPriority = Color(0xffacd1af);

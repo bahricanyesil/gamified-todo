@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../decoration/text_styles.dart';
+import '../../extensions/string/string_util_extensions.dart';
 import '../../extensions/text-style/text_align_extensions.dart';
 import '../../theme/color/l_colors.dart';
 
@@ -17,6 +18,8 @@ class BaseText extends StatelessWidget {
     this.fontSizeFactor,
     this.fontWeight,
     this.maxLength = 90000000,
+    this.flatText = true,
+    this.hyphenate = true,
     Key? key,
   }) : super(key: key);
 
@@ -35,7 +38,7 @@ class BaseText extends StatelessWidget {
   /// Custom box fit option for [FittedBox], default is [BoxFit.scaleDown].
   final BoxFit? fit;
 
-  /// Custom font size factor.
+  /// Custom font size factor, default is 6.
   final double? fontSizeFactor;
 
   /// Custom font weight.
@@ -44,30 +47,36 @@ class BaseText extends StatelessWidget {
   /// Maximum length for the task.
   final int maxLength;
 
+  /// Whether the given text is directly a text or to be translated.
+  final bool flatText;
+
+  /// Determines whether to hyphenate.
+  final bool hyphenate;
+
   @override
   Widget build(BuildContext context) => FittedBox(
         fit: fit ?? BoxFit.scaleDown,
         alignment: textAlign.alignment,
         child: Text(
           _text,
-          style: _style(context),
+          style: _defaultStyle(context).merge(style),
           textAlign: textAlign,
           overflow: TextOverflow.clip,
         ),
       );
 
-  String get _text =>
-      text.length > maxLength ? text.substring(0, maxLength) : text;
+  String get _text {
+    final String clippedText =
+        text.length > maxLength ? text.substring(0, maxLength) : text;
+    return hyphenate ? clippedText.hyphenate : clippedText;
+  }
 
-  TextStyle _style(BuildContext context) =>
-      style ??
-      TextStyles(context)
-          .normalStyle(
-            color: color ?? AppColors.white,
-            fontSizeFactor: fontSizeFactor,
-            fontWeight: fontWeight,
-          )
-          .merge(style);
+  TextStyle _defaultStyle(BuildContext context) =>
+      TextStyles(context).normalStyle(
+        color: color ?? AppColors.white,
+        fontSizeFactor: fontSizeFactor,
+        fontWeight: fontWeight,
+      );
 }
 
 /// [BaseText] with priamry color.

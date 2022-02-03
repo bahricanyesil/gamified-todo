@@ -5,7 +5,7 @@ import '../../../../product/models/task/task.dart';
 import '../hive_configs.dart';
 
 /// Local storage manager for the tasks.
-class TasksLocalManager extends ILocalManager<Task, String> {
+class TasksLocalManager extends ILocalManager<String, Task> {
   /// Factory constructor for singleton structure.
   factory TasksLocalManager() => _instance;
   TasksLocalManager._();

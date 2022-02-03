@@ -6,20 +6,22 @@ part of 'group.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-/// Group Adapter
 class GroupAdapter extends TypeAdapter<Group> {
   @override
   final int typeId = 1;
 
   @override
   Group read(BinaryReader reader) {
-    final int numOfFields = reader.readByte();
-    final Map<int, dynamic> fields = <int, dynamic>{
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Group(
       title: fields[3] as String,
-    )..updatedAt = fields[2] as DateTime;
+      id: fields[0] as String?,
+      createdAt: fields[1] as DateTime?,
+      updatedAt: fields[2] as DateTime?,
+    );
   }
 
   @override

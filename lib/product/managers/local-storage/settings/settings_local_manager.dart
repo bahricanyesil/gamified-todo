@@ -1,7 +1,7 @@
 import '../../../../core/managers/storage/l_local_manager.dart';
 
 /// Local storage manager for the settings.
-class SettingsLocalManager extends ILocalManager<String, Enum> {
+class SettingsLocalManager extends ILocalManager<Enum, String> {
   /// Factory constructor for singleton structure.
   factory SettingsLocalManager() => _instance;
   SettingsLocalManager._();

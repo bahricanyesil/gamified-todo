@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/core/helpers/completer_helper.dart';
 
 import '../../../core/base/view-model/base_view_model.dart';
 import '../../../core/widgets/list/animated-list/models/animated_list_model.dart';
@@ -11,8 +14,10 @@ import '../view/ui-models/tasks_section_title.dart';
 
 /// View model to manaage the data on home screen.
 class HomeViewModel extends BaseViewModel {
+  late final TasksLocalManager _localManager;
+
   /// All created tasks.
-  List<Task> tasks = <Task>[];
+  List<Task> _tasks = <Task>[];
 
   /// List of tasks section titles.
   static const List<TasksSection> tasksSections = <TasksSection>[
@@ -29,28 +34,28 @@ class HomeViewModel extends BaseViewModel {
   /// Stores the [AnimatedListModel] configurations of the animated lists.
   late final List<AnimatedListModel<Task>> listModels;
 
-  /// Local manager instance for tasks.
-  late final TasksLocalManager tasksLocalManager;
+  /// Returns all tasks.
+  List<Task> get tasks => _tasks;
+
+  late Completer<void> _completer;
 
   @override
   Future<void> init() async {
-    tasksLocalManager = TasksLocalManager();
-    await tasksLocalManager.initStorage();
-    tasks = tasksLocalManager.allValues();
-
-    // Mocking
-    tasks = _mockList;
-
-    tasks.sort((Task a, Task b) => a > b);
+    _localManager = TasksLocalManager.instance;
+    _completer = Completer<void>();
+    _tasks = _localManager.allValues();
+    _tasks.sort((Task a, Task b) => a > b);
     listModels = List<AnimatedListModel<Task>>.generate(
         TaskStatus.values.length, _animatedModelBuilder);
   }
 
-  List<Task> get _mockList => List<Task>.generate(
-      30, (int index) => Task.mock(content: 'YEAAYYY YEAY YYY $index'));
+  @override
+  Future<void> customDispose() async {
+    if (!_completer.isCompleted) await _completer.future;
+  }
 
   AnimatedListModel<Task> _animatedModelBuilder(int index) {
-    final List<Task> statusTasks = tasks.byStatus(TaskStatus.values[index]);
+    final List<Task> statusTasks = _tasks.byStatus(TaskStatus.values[index]);
     return AnimatedListModel<Task>(
       listKey: GlobalKey<AnimatedListState>(debugLabel: index.toString()),
       items: statusTasks,
@@ -61,15 +66,20 @@ class HomeViewModel extends BaseViewModel {
 
   /// Updates the status of a task in the list.
   void updateTaskStatus(String id, TaskStatus newStatus) {
-    final Task? task = tasks.byId(id);
-    if (task != null && task.status != newStatus) {
-      final int removedIndex = tasks.byStatus(task.status).indexById(id);
+    final int index = _tasks.indexWhere((Task t) => t.id == id);
+    if (index == -1) return;
+    final Task task = _tasks[index];
+    if (task.status != newStatus) {
+      final int removedIndex = _tasks.byStatus(task.status).indexById(id);
       animatedListModel(task.status).removeAt(removedIndex);
-      task.status = newStatus;
+      task.setStatus(newStatus);
       final int insertedIndex =
-          tasks.byStatus(newStatus).findInsertIndex(task.priority);
+          _tasks.byStatus(newStatus).findInsertIndex(task.priority);
       animatedListModel(newStatus).insert(insertedIndex, task);
       if (insertedIndex > 1) expandedLists[_statusIndex(newStatus)] = true;
+      _tasks[index] = task.copyWith(taskStatus: newStatus);
+      _completer =
+          CompleterHelper.wrapCompleter<void>(_updateLocal(_tasks[index]));
       notifyListeners();
     }
   }
@@ -96,4 +106,17 @@ class HomeViewModel extends BaseViewModel {
   /// Returns the corresponding [AnimatedListModel] for the status.
   AnimatedListModel<Task> animatedListModel(TaskStatus status) =>
       listModels[TaskStatus.values.indexOf(status)];
+
+  /// Returns all of the tasks with the given id.
+  List<Task> getByGroupId(String id) =>
+      _tasks.where((Task t) => t.groupId == id).toList();
+
+  /// Adds a new task to the list.
+  void addTask(Task task) {
+    _tasks.add(task);
+    notifyListeners();
+  }
+
+  Future<void> _updateLocal(Task newTask) async =>
+      _localManager.addOrUpdate(newTask.id, newTask);
 }

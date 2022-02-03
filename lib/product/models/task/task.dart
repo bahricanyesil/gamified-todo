@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/extensions/date/date_time_extensions.dart';
-import '../../../core/extensions/enum/enum_extensions.dart';
+import '../../../core/extensions/string/type_conversion_extensions.dart';
 import '../../../core/helpers/equality_checkers.dart';
 import '../../../core/helpers/hasher.dart';
 import '../../constants/enums/task/task_enums_shelf.dart';
@@ -19,21 +19,29 @@ class Task with HiveObjectMixin, EqualityCheckers {
   /// Default constructor for [Task].
   /// Overrides [toString], [hashCode] methods and [==] operator.
   Task({
-    required this.priority,
     required this.content,
     required this.groupId,
-  })  : id = const Uuid().v4(),
-        createdAt = DateTime.now(),
-        updatedAt = DateTime.now(),
-        dueDate = DateTime.now(),
-        status = TaskStatus.open,
-        awardIds = <String>[],
-        awardOfIds = <String>[];
+    Priorities? priority,
+    DateTime? dueDate,
+    TaskStatus? taskStatus,
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<String>? awardIds,
+    List<String>? awardOfIds,
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now(),
+        dueDate = dueDate ?? DateTime.now(),
+        _priority = (priority ?? Priorities.medium).name,
+        _status = (taskStatus ?? TaskStatus.open).name,
+        awardIds = awardIds ?? <String>[],
+        awardOfIds = awardOfIds ?? <String>[];
 
   /// Mock object, dummy data for [Task].
   Task.mock({
-    Priorities? priority,
-    TaskStatus? status,
+    Priorities? newPriority,
+    TaskStatus? taskStatus,
     String? groupId,
     String? content,
     List<String>? awardIds,
@@ -41,10 +49,12 @@ class Task with HiveObjectMixin, EqualityCheckers {
   })  : id = const Uuid().v4(),
         content = content ?? 'This is a great task.',
         groupId = groupId ?? '1',
-        priority = priority ??
-            Priorities.values[Random().nextInt(Priorities.values.length)],
-        status = status ??
-            TaskStatus.values[Random().nextInt(TaskStatus.values.length)],
+        _priority = (newPriority ??
+                Priorities.values[Random().nextInt(Priorities.values.length)])
+            .name,
+        _status = (taskStatus ??
+                TaskStatus.values[Random().nextInt(TaskStatus.values.length)])
+            .name,
         createdAt =
             DateTime.now().subtract(Duration(days: Random().nextInt(20))),
         updatedAt = DateTime.now(),
@@ -52,9 +62,35 @@ class Task with HiveObjectMixin, EqualityCheckers {
         awardIds = awardIds ?? <String>[],
         awardOfIds = awardOfIds ?? <String>[];
 
+  /// Copies the [Task].
+  Task copyWith({
+    Priorities? newPriority,
+    String? content,
+    TaskStatus? taskStatus,
+    DateTime? dueDate,
+    String? groupId,
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<String>? awardIds,
+    List<String>? awardOfIds,
+  }) =>
+      Task(
+        id: id ?? this.id,
+        priority: newPriority ?? priority,
+        content: content ?? this.content,
+        groupId: groupId ?? this.groupId,
+        dueDate: dueDate ?? this.dueDate,
+        taskStatus: taskStatus ?? status,
+        awardIds: awardIds ?? this.awardIds,
+        awardOfIds: awardOfIds ?? this.awardOfIds,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: DateTime.now(),
+      );
+
   /// Priority of the task.
   @HiveField(0)
-  Priorities priority;
+  String _priority;
 
   /// Content of the task.
   @HiveField(1)
@@ -74,7 +110,7 @@ class Task with HiveObjectMixin, EqualityCheckers {
 
   /// Status of the task. Refer to [TaskStatus] enum.
   @HiveField(5)
-  TaskStatus status;
+  String _status;
 
   /// Planned due date of the task.
   @HiveField(6)
@@ -93,23 +129,20 @@ class Task with HiveObjectMixin, EqualityCheckers {
   final List<String> awardIds;
 
   @override
-  String toString() => """
-      $content\nPriority: ${priority.value}
-      \nCreated on: ${createdAt.dm}
-      \nDue Date: ${dueDate.dm}
-      \nStatus: ${status.value}""";
+  String toString() =>
+      """$content\nPriority: $priority\nCreated on: ${createdAt.dm}\nDue Date: ${dueDate.dm}\nStatus: $status""";
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
     return other is Task &&
-        other.priority.value == priority.value &&
+        other.priority == priority &&
         other.content == content &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt &&
         other.dueDate == dueDate &&
-        other.status.value == status.value &&
+        other.status == status &&
         other.groupId == groupId &&
         listsEqual(awardIds, other.awardIds) &&
         listsEqual(awardOfIds, other.awardOfIds) &&
@@ -120,8 +153,8 @@ class Task with HiveObjectMixin, EqualityCheckers {
   int operator >(Task other) {
     if (this == other) return 0;
     final List<Priorities> taskPriorities = Priorities.values.ordered;
-    if (taskPriorities.indexOf(other.priority) <
-        taskPriorities.indexOf(priority)) {
+    if (taskPriorities.indexOf(priority) <
+        taskPriorities.indexOf(other.priority)) {
       return 1;
     }
     return -1;
@@ -131,17 +164,24 @@ class Task with HiveObjectMixin, EqualityCheckers {
   /// Quiver package link: https://pub.dev/packages/quiver
   @override
   int get hashCode => Hasher.getHashCode(<String>[
-        priority.value,
+        priority.name,
         content,
         createdAt.toIso8601String(),
         updatedAt.toIso8601String(),
         dueDate.toIso8601String(),
-        status.value,
+        status.name,
         groupId,
         awardIds.toString(),
         awardOfIds.toString(),
         id,
       ]);
+
+  /// Returns the priority of the task.
+  Priorities get priority =>
+      _priority.toEnum(Priorities.values) ?? Priorities.medium;
+
+  /// Returns the priority of the task.
+  TaskStatus get status => _status.toEnum(TaskStatus.values) ?? TaskStatus.open;
 
   /// Gets the award status of the task to determine whether it is an award.
   TaskAwardStatus get awardStatus {
@@ -150,5 +190,15 @@ class Task with HiveObjectMixin, EqualityCheckers {
     if (award && todo) return TaskAwardStatus.both;
     if (award && !todo) return TaskAwardStatus.award;
     return TaskAwardStatus.toDo;
+  }
+
+  /// Sets the status of the task.
+  void setStatus(TaskStatus newStatus) {
+    _status = newStatus.name;
+  }
+
+  /// Sets the priority of the task.
+  void setPriority(Priorities newPriority) {
+    _priority = newPriority.name;
   }
 }

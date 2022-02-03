@@ -1,2 +1,3 @@
-# gamified-todo-app
-Gamified Todo App
+# Gamified To-Do App
+
+Gamified To-Do App

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../features/screens_shelf.dart';
-import '../../../features/settings/view/settings_screen.dart';
 import '../../constants/navigation/navigation_constants.dart';
 import '../../helpers/hasher.dart';
 
@@ -34,6 +33,11 @@ class ScreenConfig {
   ScreenConfig.createTask()
       : path = NavigationConstants.createTask,
         builder = (() => const CreateTaskScreen());
+
+  /// Screen config for the [SettingsScreen]
+  ScreenConfig.groups()
+      : path = NavigationConstants.groups,
+        builder = (() => const GroupsScreen());
 
   /// Path of the page, will be the url on web.
   final String path;
