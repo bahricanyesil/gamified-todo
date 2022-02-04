@@ -9,10 +9,9 @@ import '../../../core/extensions/color/color_extensions.dart';
 import '../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../core/helpers/selector_helper.dart';
 import '../../../core/theme/color/l_colors.dart';
-import '../../../core/widgets/text/circled_text.dart';
 import '../../../core/widgets/widgets_shelf.dart';
-import '../../../product/models/group/group.dart';
-import '../../../product/models/task/task.dart';
+import '../../../product/constants/enums/task/task_status.dart';
+import '../../../product/models/models_shelf.dart';
 import '../../home/view-model/home_view_model.dart';
 import '../constants/groups_texts.dart';
 import '../view-model/groups_view_model.dart';
@@ -36,7 +35,7 @@ class GroupsScreen extends StatelessWidget with GroupsTexts {
           children: <Widget>[
             ConstrainedBox(
               constraints:
-                  BoxConstraints.loose(Size.fromHeight(context.height * 73)),
+                  BoxConstraints.loose(Size.fromHeight(context.height * 70)),
               child: const _GroupsList(),
             ),
             context.sizedH(2),

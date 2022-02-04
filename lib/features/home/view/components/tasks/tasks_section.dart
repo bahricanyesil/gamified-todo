@@ -96,7 +96,7 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList> {
         context);
     _startTimer(isExpanded);
     return AnimatedContainer(
-      duration: Duration(milliseconds: itemCount * (isExpanded ? 160 : 64)),
+      duration: Duration(milliseconds: itemCount * (isExpanded ? 140 : 64)),
       child: CustomAnimatedList<Task>(animatedListModel: _animatedModel),
     );
   }
@@ -113,7 +113,7 @@ class __AnimatedTaskListState extends State<_AnimatedTaskList> {
 
   void _restart(int diff) {
     if (diff > 0 && _timer == null) {
-      final int interval = itemCount * (isExpanded ? 80 : 32) ~/ diff;
+      final int interval = itemCount * (isExpanded ? 70 : 32) ~/ diff;
       itemCount = isExpanded ? itemCount + 1 : itemCount - 1;
       _timer = Timer.periodic(Duration(milliseconds: interval), _timerCallback);
     }

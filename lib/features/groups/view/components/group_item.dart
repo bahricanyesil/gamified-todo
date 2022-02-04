@@ -80,24 +80,56 @@ class _ExpansionChildren extends StatelessWidget {
   const _ExpansionChildren({required this.groupId, Key? key}) : super(key: key);
   final String groupId;
   @override
-  Widget build(BuildContext context) {
-    final List<Task> tasks = SelectorHelper<List<Task>, HomeViewModel>()
-        .listenValue(
-            (HomeViewModel model) => model.getByGroupId(groupId), context);
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: tasks.length,
-      itemBuilder: (BuildContext context, int i) => Padding(
-        padding: _expansionChildPadding(i, context),
-        child: BulletText(
+  Widget build(BuildContext context) => ListView.builder(
+        shrinkWrap: true,
+        itemCount: TaskStatus.values.length,
+        itemBuilder: _listItemBuilder,
+        physics: const NeverScrollableScrollPhysics(),
+      );
+
+  Widget _listItemBuilder(BuildContext context, int i) {
+    final TaskStatus status = TaskStatus.values[i];
+    return SelectorHelper<bool, HomeViewModel>().builder(
+      (_, HomeViewModel model) =>
+          model.getByGroupIdAndStatus(groupId, status).isNotEmpty,
+      (BuildContext context, bool isNotEmpty, _) =>
+          _listItem(context, isNotEmpty, i),
+    );
+  }
+
+  Widget _listItem(BuildContext context, bool isNotEmpty, int i) {
+    final TaskStatus status = TaskStatus.values[i];
+    return isNotEmpty
+        ? Padding(
+            padding: _expansionChildPadding(i, context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                BaseText(status.value, color: Colors.black, underline: true),
+                context.sizedH(.6),
+                SelectorHelper<List<Task>, HomeViewModel>().builder(
+                  (_, HomeViewModel model) =>
+                      model.getByGroupIdAndStatus(groupId, status),
+                  _statusTasksBuilder,
+                )
+              ],
+            ),
+          )
+        : Container();
+  }
+
+  Widget _statusTasksBuilder(_, List<Task> tasks, __) => ListView.builder(
+        shrinkWrap: true,
+        itemCount: tasks.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int i) => BulletText(
           tasks[i].content,
           color: Colors.black,
           textAlign: TextAlign.start,
           fontSizeFactor: 4.8,
         ),
-      ),
-    );
-  }
+      );
 
   EdgeInsets _expansionChildPadding(int i, BuildContext context) =>
       EdgeInsets.symmetric(

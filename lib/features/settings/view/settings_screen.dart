@@ -8,6 +8,7 @@ import '../../../core/decoration/text_styles.dart';
 import '../../../core/extensions/extensions_shelf.dart';
 import '../../../core/helpers/selector_helper.dart';
 import '../../../core/theme/color/l_colors.dart';
+import '../../../core/widgets/picker/number_picker.dart';
 import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/constants/enums/settings_enums.dart';
 import '../../../product/constants/enums/task/task_status.dart';
@@ -15,6 +16,8 @@ import '../constants/settings_texts.dart';
 import '../view-model/settings_view_model.dart';
 
 part 'components/settings_item.dart';
+part 'components/social_media.dart';
+part 'components/task_delete_interval.dart';
 
 /// Settings settings of the app.
 /// User can set the visible task sections and

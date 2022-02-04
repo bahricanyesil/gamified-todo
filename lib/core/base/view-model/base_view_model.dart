@@ -1,15 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../../constants/enums/view-enums/view_states.dart';
+import '../../helpers/completer_helper.dart';
 import '../../managers/navigation/navigation_manager.dart';
 
 /// Base view model class to create customized view models extending this.
 abstract class BaseViewModel extends ChangeNotifier {
   /// Default constructor of [BaseViewModel].
   BaseViewModel() {
-    _init();
+    _initCompleter = CompleterHelper.wrapCompleter<void>(_init());
   }
 
   ViewStates _viewState = ViewStates.uninitialized;
@@ -26,13 +28,22 @@ abstract class BaseViewModel extends ChangeNotifier {
   /// Custom dipose method to call before the dispose.
   FutureOr<void> customDispose() {}
 
+  late Completer<void> _initCompleter = Completer<void>();
+
+  /// Completer to use for unawaited async function.
+  late Completer<void> completer;
+
+  /// Returns the init completer.
+  Completer<void> get initCompleter => _initCompleter;
+
   @mustCallSuper
   @nonVirtual
   Future<void> _init() async {
+    completer = Completer<void>();
     await init();
     if (_viewState == ViewStates.disposed) return;
     _viewState = ViewStates.loaded;
-    notifyListeners();
+    reloadState();
   }
 
   /// Locally dispose the view and sets the [_viewState] property.
@@ -40,6 +51,7 @@ abstract class BaseViewModel extends ChangeNotifier {
   @nonVirtual
   Future<void> disposeLocal() async {
     await customDispose();
+    if (!completer.isCompleted) await completer.future;
     _viewState = ViewStates.disposed;
   }
 
@@ -60,12 +72,12 @@ abstract class BaseViewModel extends ChangeNotifier {
       case ViewStates.loaded:
         _viewState = ViewStates.loading;
         break;
-      // ignore: no_default_cases
       default:
-        // Do Nothing
         break;
     }
-
-    if (_viewState != ViewStates.disposed) notifyListeners();
+    reloadState();
   }
+
+  /// Returns whether the state is initialized.
+  bool get isInitialized => state != ViewStates.uninitialized;
 }

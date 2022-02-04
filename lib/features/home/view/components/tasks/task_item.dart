@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/widgets/menu/focused-menu/focused_menu.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/border/border_radii.dart';
@@ -10,8 +9,9 @@ import '../../../../../core/extensions/color/color_extensions.dart';
 import '../../../../../core/extensions/context/responsiveness_extensions.dart';
 import '../../../../../core/extensions/date/date_time_extensions.dart';
 import '../../../../../core/helpers/selector_helper.dart';
-import '../../../../../core/widgets/text/circled_text.dart';
-import '../../../../../core/widgets/text/text_widgets_shelf.dart';
+import '../../../../../core/theme/color/l_colors.dart';
+import '../../../../../core/widgets/menu/focused-menu/focused_menu.dart';
+import '../../../../../core/widgets/widgets_shelf.dart';
 import '../../../../../product/constants/enums/task/priorities.dart';
 import '../../../../../product/constants/enums/task/task_status.dart';
 import '../../../../../product/extensions/task_extensions.dart';
@@ -35,8 +35,9 @@ class TaskItem extends StatelessWidget with HomeTexts {
 
   @override
   Widget build(BuildContext context) => FocusedMenu(
-        onPressed: () => print('PRESS'),
-        menuItems: const <FocusedMenuItem>[],
+        onPressed: () => context.read<HomeViewModel>().navigateToTask(id),
+        scrollPhysics: const NeverScrollableScrollPhysics(),
+        menuItems: _menuOptions(context),
         child: SelectorHelper<Priorities, HomeViewModel>().builder(
           (_, HomeViewModel model) =>
               model.tasks.byId(id)?.priority ?? Priorities.medium,
@@ -45,6 +46,29 @@ class TaskItem extends StatelessWidget with HomeTexts {
           child: isRemoved ? _customListTile(context) : _dismissible(context),
         ),
       );
+
+  List<FocusedMenuItem> _menuOptions(BuildContext context) {
+    const List<String> titles = HomeViewModel.menuItemTitles;
+    const List<IconData> icons = HomeViewModel.menuItemIcons;
+    return List<FocusedMenuItem>.generate(
+      titles.length,
+      (int i) => FocusedMenuItem(
+        onPressed: () async => _onMenuItemPressed(i, context),
+        title: BaseText(titles[i], color: i == 1 ? AppColors.error : null),
+        leadingIcon: BaseIcon(icons[i], color: i == 1 ? AppColors.error : null),
+      ),
+    );
+  }
+
+  Future<void> _onMenuItemPressed(int i, BuildContext context) async {
+    final HomeViewModel model = context.read<HomeViewModel>();
+    switch (i) {
+      case 0:
+        return model.navigateToTask(id);
+      case 1:
+        return model.delete(context, id);
+    }
+  }
 
   Widget _mainBoxDeco(Priorities priority, Widget? child) => DecoratedBox(
         decoration: BoxDecoration(

@@ -27,7 +27,7 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
   final VoidCallback? customDispose;
 
   /// Custom init state method to call on init state.
-  final VoidCallback? customInitState;
+  final Function(T model)? customInitState;
 
   /// Custom app bar.
   final DefaultAppBar? appBar;
@@ -44,12 +44,6 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
 
 class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
   late T model = context.read<T>();
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.customInitState != null) widget.customInitState!();
-  }
 
   @override
   void dispose() {
@@ -79,8 +73,11 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
         _selectorBuilder,
       );
 
-  Widget _selectorBuilder(BuildContext context, ViewStates val, _) =>
-      val == ViewStates.uninitialized
-          ? const Center(child: LoadingIndicator())
-          : widget.bodyBuilder(context);
+  Widget _selectorBuilder(BuildContext context, ViewStates val, _) {
+    if (val == ViewStates.uninitialized) {
+      return const Center(child: LoadingIndicator());
+    }
+    if (widget.customInitState != null) widget.customInitState!(model);
+    return widget.bodyBuilder(context);
+  }
 }

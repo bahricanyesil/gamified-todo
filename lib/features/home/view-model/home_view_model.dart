@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/helpers/completer_helper.dart';
 
 import '../../../core/base/view-model/base_view_model.dart';
-import '../../../core/widgets/list/animated-list/models/animated_list_model.dart';
+import '../../../core/constants/constants_shelf.dart';
+import '../../../core/helpers/completer_helper.dart';
+import '../../../core/managers/navigation/navigation_shelf.dart';
+import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/constants/enums/task/task_enums_shelf.dart';
 import '../../../product/extensions/task_extensions.dart';
+import '../../../product/managers/local-storage/settings/settings_local_manager.dart';
 import '../../../product/managers/local-storage/tasks/tasks_local_manager.dart';
 import '../../../product/models/task/task.dart';
 import '../view/components/tasks/task_item.dart';
@@ -15,6 +18,7 @@ import '../view/ui-models/tasks_section_title.dart';
 /// View model to manaage the data on home screen.
 class HomeViewModel extends BaseViewModel {
   late final TasksLocalManager _localManager;
+  late final SettingsLocalManager _settingsLocalManager;
 
   /// All created tasks.
   List<Task> _tasks = <Task>[];
@@ -27,6 +31,15 @@ class HomeViewModel extends BaseViewModel {
     TasksSection(title: 'Past Due Tasks', status: TaskStatus.pastDue),
   ];
 
+  /// Titles of the menu items.
+  static const List<String> menuItemTitles = <String>['Edit', 'Delete'];
+
+  /// Icons of the menu items.
+  static const List<IconData> menuItemIcons = <IconData>[
+    Icons.edit_outlined,
+    Icons.delete_outline,
+  ];
+
   /// Stores the expansion status of the animated lists.
   final List<bool> expandedLists =
       List<bool>.generate(TaskStatus.values.length, (_) => false);
@@ -37,21 +50,34 @@ class HomeViewModel extends BaseViewModel {
   /// Returns all tasks.
   List<Task> get tasks => _tasks;
 
-  late Completer<void> _completer;
-
   @override
   Future<void> init() async {
     _localManager = TasksLocalManager.instance;
-    _completer = Completer<void>();
+    _settingsLocalManager = SettingsLocalManager.instance;
+    await _localManager.initStorage();
+    await _settingsLocalManager.initStorage();
+    final String daysText =
+        _settingsLocalManager.get(SettingsStorageKeys.deleteInterval) ?? '3';
+    final int days = int.tryParse(daysText) ?? 3;
     _tasks = _localManager.allValues();
-    _tasks.sort((Task a, Task b) => a > b);
+    _tasks = _tasks
+        .where((Task t) =>
+            t.dueDate.isAfter(DateTime.now().subtract(Duration(days: days))))
+        .toList();
+    _tasks.sort((Task a, Task b) => b > a);
+    completer = CompleterHelper.wrapCompleter<void>(_deleteOldTasks(days));
     listModels = List<AnimatedListModel<Task>>.generate(
         TaskStatus.values.length, _animatedModelBuilder);
   }
 
-  @override
-  Future<void> customDispose() async {
-    if (!_completer.isCompleted) await _completer.future;
+  Future<void> _deleteOldTasks(int days) async {
+    final List<Task> allValues = _localManager.allValues();
+    for (final Task t in allValues) {
+      final DateTime limitDate = DateTime.now().subtract(Duration(days: days));
+      if (t.dueDate.isBefore(limitDate)) {
+        await _localManager.removeItem(t.id);
+      }
+    }
   }
 
   AnimatedListModel<Task> _animatedModelBuilder(int index) {
@@ -70,15 +96,11 @@ class HomeViewModel extends BaseViewModel {
     if (index == -1) return;
     final Task task = _tasks[index];
     if (task.status != newStatus) {
-      final int removedIndex = _tasks.byStatus(task.status).indexById(id);
-      animatedListModel(task.status).removeAt(removedIndex);
+      _removeItemFromList(task);
       task.setStatus(newStatus);
-      final int insertedIndex =
-          _tasks.byStatus(newStatus).findInsertIndex(task.priority);
-      animatedListModel(newStatus).insert(insertedIndex, task);
-      if (insertedIndex > 1) expandedLists[_statusIndex(newStatus)] = true;
+      _addItemToList(task);
       _tasks[index] = task.copyWith(taskStatus: newStatus);
-      _completer =
+      completer =
           CompleterHelper.wrapCompleter<void>(_updateLocal(_tasks[index]));
       notifyListeners();
     }
@@ -107,16 +129,72 @@ class HomeViewModel extends BaseViewModel {
   AnimatedListModel<Task> animatedListModel(TaskStatus status) =>
       listModels[TaskStatus.values.indexOf(status)];
 
-  /// Returns all of the tasks with the given id.
+  /// Returns all of the tasks with the given group id.
   List<Task> getByGroupId(String id) =>
       _tasks.where((Task t) => t.groupId == id).toList();
+
+  /// Returns all of the tasks with the given group id and status.
+  List<Task> getByGroupIdAndStatus(String id, TaskStatus status) =>
+      _tasks.where((Task t) => t.groupId == id && t.status == status).toList();
+
+  /// Returns all of the visible tasks with the given id.
+  List<Task> getVisibleByGroupId(String id, List<TaskStatus> visibleStatuses) {
+    final List<Task> visibleTasks = _tasks
+        .where(
+            (Task t) => visibleStatuses.contains(t.status) && t.groupId == id)
+        .toList();
+    return visibleTasks;
+  }
 
   /// Adds a new task to the list.
   void addTask(Task task) {
     _tasks.add(task);
+    _addItemToList(task);
+    notifyListeners();
+  }
+
+  /// Updates a task.
+  void updateTask(String id, Task newTask) {
+    final int index = _tasks.indexWhere((Task t) => t.id == id);
+    if (index == -1) return;
+    _tasks[index] = newTask;
     notifyListeners();
   }
 
   Future<void> _updateLocal(Task newTask) async =>
       _localManager.addOrUpdate(newTask.id, newTask);
+
+  /// Navigates to the corresponding task screen.
+  void navigateToTask(String id) =>
+      NavigationManager.instance.setNewRoutePath(ScreenConfig.task(id: id));
+
+  /// Asks for confirmation and deletes the task.
+  Future<void> delete(BuildContext context, String id) async {
+    await DialogBuilder(context)
+        .deleteDialog(deleteAction: () => _deleteItem(id));
+  }
+
+  void _deleteItem(String id) {
+    final int index = _tasks.indexWhere((Task t) => t.id == id);
+    if (index != -1) {
+      _removeItemFromList(_tasks[index]);
+      _tasks.removeAt(index);
+      completer = CompleterHelper.wrapCompleter<void>(_removeLocal(id));
+      notifyListeners();
+    }
+  }
+
+  void _removeItemFromList(Task task) {
+    final int removedIndex = _tasks.byStatus(task.status).indexById(task.id);
+    animatedListModel(task.status).removeAt(removedIndex);
+  }
+
+  void _addItemToList(Task task) {
+    final int insertedIndex =
+        _tasks.byStatus(task.status).findInsertIndex(task.priority);
+    animatedListModel(task.status).insert(insertedIndex, task);
+    if (insertedIndex > 1) expandedLists[_statusIndex(task.status)] = true;
+  }
+
+  Future<void> _removeLocal(String id) async => _localManager.removeItem(id);
 }

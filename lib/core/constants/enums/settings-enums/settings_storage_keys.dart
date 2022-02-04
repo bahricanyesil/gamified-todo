@@ -5,4 +5,10 @@ enum SettingsStorageKeys {
 
   /// Login status.
   loginStatus,
+
+  /// Stores the visibility status of the task sections.
+  sectionStatus,
+
+  /// Time interval to delete tasks.
+  deleteInterval,
 }

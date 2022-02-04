@@ -14,6 +14,7 @@ class CustomDatePicker extends StatelessWidget {
   const CustomDatePicker({
     required this.callback,
     required this.selectedDate,
+    this.initialDate,
     Key? key,
   }) : super(key: key);
 
@@ -22,6 +23,9 @@ class CustomDatePicker extends StatelessWidget {
 
   /// Selected date.
   final DateTime selectedDate;
+
+  /// Initial selectable date.
+  final DateTime? initialDate;
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
@@ -45,7 +49,7 @@ class CustomDatePicker extends StatelessWidget {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: now,
+      firstDate: _firstDate(now),
       lastDate: now.add(const Duration(days: 365 * 20)),
       builder: (BuildContext context, Widget? child) => Theme(
         data: _data(context),
@@ -53,6 +57,12 @@ class CustomDatePicker extends StatelessWidget {
       ),
     );
     await callback(picked);
+  }
+
+  DateTime _firstDate(DateTime now) {
+    if (initialDate == null) return now;
+    if (initialDate!.isBefore(now)) return initialDate!;
+    return now;
   }
 
   ThemeData _data(BuildContext context) => context.theme.copyWith(

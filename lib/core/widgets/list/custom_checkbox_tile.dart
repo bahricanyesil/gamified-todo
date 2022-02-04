@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../decoration/text_styles.dart';
+import '../../extensions/color/color_extensions.dart';
 import '../../extensions/context/responsiveness_extensions.dart';
 import '../../extensions/context/theme_extensions.dart';
+import '../../helpers/material_state_helpers.dart';
+import '../../providers/theme/theme_provider.dart';
+import '../../theme/color/l_colors.dart';
 import '../text/base_text.dart';
 
 /// Callback of the checkbox.
@@ -31,7 +36,8 @@ class CustomCheckboxTile extends StatefulWidget {
   State<CustomCheckboxTile> createState() => _CustomCheckboxTileState();
 }
 
-class _CustomCheckboxTileState extends State<CustomCheckboxTile> {
+class _CustomCheckboxTileState extends State<CustomCheckboxTile>
+    with MaterialStateHelpers {
   late bool value = widget.initialValue;
 
   @override
@@ -46,11 +52,16 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile> {
   Widget get _checkbox => ConstrainedBox(
         constraints:
             BoxConstraints.loose(Size.fromHeight(context.height * 4.5)),
-        child: Checkbox(
-          value: value,
-          onChanged: (bool? newValue) {
-            if (newValue != null) _changeValue(newValue);
-          },
+        child: Theme(
+          data: context.read<ThemeProvider>().currentTheme.copyWith(
+                unselectedWidgetColor: AppColors.white.darken(.1),
+              ),
+          child: Checkbox(
+            value: value,
+            onChanged: (bool? newValue) {
+              if (newValue != null) _changeValue(newValue);
+            },
+          ),
         ),
       );
 

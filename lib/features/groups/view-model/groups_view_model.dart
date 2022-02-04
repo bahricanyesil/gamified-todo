@@ -25,10 +25,14 @@ class GroupsViewModel extends BaseViewModel {
   /// Returns the corresponding group for given index.
   Group group(int i) => _groups[i].group;
 
-  late Completer<void> _completer;
-
   /// Returns all groups.
-  List<_GroupComplexModel> get groups => _groups;
+  List<Group> get groups {
+    final List<Group> allGroups = <Group>[];
+    for (final _GroupComplexModel model in _groups) {
+      allGroups.add(model.group);
+    }
+    return allGroups;
+  }
 
   @override
   Future<void> init() async {
@@ -40,7 +44,6 @@ class GroupsViewModel extends BaseViewModel {
       return _GroupComplexModel(group,
           controller: TextEditingController(text: group.title));
     });
-    _completer = Completer<void>();
   }
 
   @override
@@ -48,7 +51,6 @@ class GroupsViewModel extends BaseViewModel {
     for (int i = 0; i < _groups.length; i++) {
       _groups[i].isExpanded = false;
     }
-    if (!_completer.isCompleted) await _completer.future;
   }
 
   /// Adds a new group with the given properties.
@@ -56,7 +58,7 @@ class GroupsViewModel extends BaseViewModel {
     final Group newGroup = Group(title: title);
     _groups.add(_GroupComplexModel(newGroup,
         controller: TextEditingController(text: 'New Group')));
-    _completer = CompleterHelper.wrapCompleter<void>(_addLocal(newGroup));
+    completer = CompleterHelper.wrapCompleter<void>(_addLocal(newGroup));
     notifyListeners();
   }
 
@@ -66,7 +68,7 @@ class GroupsViewModel extends BaseViewModel {
         _groups.indexWhere((_GroupComplexModel g) => g.group.id == id);
     if (index != -1) {
       _groups.removeAt(index);
-      _completer = CompleterHelper.wrapCompleter<void>(_removeLocal(id));
+      completer = CompleterHelper.wrapCompleter<void>(_removeLocal(id));
       notifyListeners();
     }
   }
@@ -78,7 +80,7 @@ class GroupsViewModel extends BaseViewModel {
     if (i == -1) return;
     _groups[i].group =
         _groups[i].group.copyWith(title: _groups[i].controller.text);
-    _completer = CompleterHelper.wrapCompleter<void>(_updateLocal(i));
+    completer = CompleterHelper.wrapCompleter<void>(_updateLocal(i));
     notifyListeners();
   }
 

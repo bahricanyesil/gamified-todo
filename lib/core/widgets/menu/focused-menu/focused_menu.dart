@@ -1,12 +1,15 @@
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/constants/border/border_radii.dart';
-import 'package:gamified_todo/core/extensions/context/responsiveness_extensions.dart';
-import 'package:gamified_todo/core/theme/color/l_colors.dart';
-import '../../../constants/durations/durations.dart';
 
-part 'focused_menu_item_model.dart';
+import 'package:flutter/material.dart';
+
+import '../../../constants/border/border_radii.dart';
+import '../../../constants/durations/durations.dart';
+import '../../../extensions/color/color_extensions.dart';
+import '../../../extensions/context/responsiveness_extensions.dart';
+import '../../../theme/color/l_colors.dart';
+
 part 'focused_menu_details.dart';
+part 'focused_menu_item_model.dart';
 
 /// Customized focused menu.
 /// Implemented according to the implementation of:
@@ -27,10 +30,11 @@ class FocusedMenu extends StatefulWidget {
     this.bottomOffsetHeight,
     this.menuOffset,
     this.openWithTap = false,
+    this.scrollPhysics,
     Key? key,
   }) : super(key: key);
 
-  /// Child to show that will be tappable.
+  // TODO(bahrican): Fix
   final Widget child;
   final double? menuItemExtent;
   final double? menuWidth;
@@ -44,6 +48,7 @@ class FocusedMenu extends StatefulWidget {
   final double? bottomOffsetHeight;
   final double? menuOffset;
   final bool openWithTap;
+  final ScrollPhysics? scrollPhysics;
 
   @override
   _FocusedMenuState createState() => _FocusedMenuState();
@@ -97,6 +102,7 @@ class _FocusedMenuState extends State<FocusedMenu> {
           animateMenu: widget.animateMenuItems ?? true,
           bottomOffsetHeight: widget.bottomOffsetHeight ?? 0,
           menuOffset: widget.menuOffset ?? 0,
+          scrollingPhysics: widget.scrollPhysics,
           child: widget.child,
         ),
       );

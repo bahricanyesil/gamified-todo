@@ -21,8 +21,8 @@ class CustomRouteInfoParser extends RouteInformationParser<ScreenConfig> {
         return ScreenConfig.home();
       case NavigationConstants.settings:
         return ScreenConfig.settings();
-      case NavigationConstants.createTask:
-        return ScreenConfig.createTask();
+      case NavigationConstants.task:
+        return ScreenConfig.task();
     }
 
     return defaultScreen;

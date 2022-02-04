@@ -30,5 +30,5 @@ extension TaskListExtensions on List<Task> {
   /// Gets the list of [Task] by filtering according to status.
   List<Task> byStatus(TaskStatus status) =>
       where((Task element) => element.status == status).toList()
-        ..sort((Task a, Task b) => a > b);
+        ..sort((Task a, Task b) => b > a);
 }

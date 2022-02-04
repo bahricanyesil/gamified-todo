@@ -29,12 +29,12 @@ class ScreenConfig {
       : path = NavigationConstants.settings,
         builder = (() => const SettingsScreen());
 
-  /// Screen config for the [SettingsScreen]
-  ScreenConfig.createTask()
-      : path = NavigationConstants.createTask,
-        builder = (() => const CreateTaskScreen());
+  /// Screen config for the [TaskScreen].
+  ScreenConfig.task({String? id})
+      : path = NavigationConstants.task,
+        builder = (() => TaskScreen(id: id));
 
-  /// Screen config for the [SettingsScreen]
+  /// Screen config for the [GroupsScreen]
   ScreenConfig.groups()
       : path = NavigationConstants.groups,
         builder = (() => const GroupsScreen());

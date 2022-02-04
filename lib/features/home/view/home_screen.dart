@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget with HomeTexts {
       );
 
   List<Widget> _appBarActions(BuildContext context) => <Widget>[
-        _appBarIcon(Icons.add_outlined, ScreenConfig.createTask()),
+        _appBarIcon(Icons.add_outlined, ScreenConfig.task()),
         context.sizedW(1),
         _appBarIcon(Icons.list_outlined, ScreenConfig.groups()),
         context.sizedW(1),
@@ -61,8 +61,7 @@ class HomeScreen extends StatelessWidget with HomeTexts {
   Widget get _listView =>
       SelectorHelper<List<TasksSection>, SettingsViewModel>().builder(
         (_, SettingsViewModel model) => HomeViewModel.tasksSections
-            .where((TasksSection s) =>
-                model.visibleSections[HomeViewModel.tasksSections.indexOf(s)])
+            .where((TasksSection s) => model.visibleStatuses.contains(s.status))
             .toList(),
         (_, List<TasksSection> sections, __) => ListView.separated(
           shrinkWrap: true,

@@ -10,6 +10,7 @@ class ElevatedTextButton extends StatelessWidget with MaterialStateHelpers {
   const ElevatedTextButton({
     required this.text,
     required this.onPressed,
+    this.backgroundColor,
     Key? key,
   }) : super(key: key);
 
@@ -18,6 +19,9 @@ class ElevatedTextButton extends StatelessWidget with MaterialStateHelpers {
 
   /// Text that will be displayed on the button.
   final String text;
+
+  /// Backgroundcolor of the button.
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
@@ -29,6 +33,7 @@ class ElevatedTextButton extends StatelessWidget with MaterialStateHelpers {
               vertical: context.responsiveSize * 5,
             ),
           ),
+          backgroundColor: all<Color?>(backgroundColor),
         ),
         child: BaseText(text),
       );

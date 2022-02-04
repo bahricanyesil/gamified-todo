@@ -9,8 +9,8 @@ mixin NavigationConstants {
   /// Settings screen path configuration.
   static const String settings = '/settings';
 
-  /// Create Task screen path configuration.
-  static const String createTask = '/create-task';
+  /// Task screen path configuration.
+  static const String task = '/task';
 
   /// Groups screen path configuration.
   static const String groups = '/groups';

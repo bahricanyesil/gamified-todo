@@ -53,7 +53,7 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // TODO:
+    // TODO(bahrican): fix.
     getSearchResults();
   }
 

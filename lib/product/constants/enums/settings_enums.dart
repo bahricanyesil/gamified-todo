@@ -5,6 +5,9 @@ enum SettingsOptions {
   /// Indicates the key value for storing and retrieving visible task sections.
   visibleTaskSections,
 
+  /// Interval of task delete.
+  taskDeleteInterval,
+
   /// Indicates the section that will give information about the app.
   info,
 
@@ -23,6 +26,8 @@ extension StringSettingsValues on SettingsOptions {
         return 'Info';
       case SettingsOptions.socialInfo:
         return 'Social Media Accounts';
+      case SettingsOptions.taskDeleteInterval:
+        return 'Task Delete Interval';
     }
   }
 
@@ -35,6 +40,8 @@ extension StringSettingsValues on SettingsOptions {
         return 'Confused about how to use app?';
       case SettingsOptions.socialInfo:
         return 'You can contact with me via these social media channels.';
+      case SettingsOptions.taskDeleteInterval:
+        return 'You can adjust the interval for task deletion.';
     }
   }
 
@@ -47,6 +54,8 @@ extension StringSettingsValues on SettingsOptions {
         return Icons.info_outline;
       case SettingsOptions.socialInfo:
         return Icons.contact_mail_outlined;
+      case SettingsOptions.taskDeleteInterval:
+        return Icons.lock_clock;
     }
   }
 }

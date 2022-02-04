@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../decoration/text_styles.dart';
 import '../../extensions/string/string_util_extensions.dart';
+import '../../extensions/text-style/decoration_extensions.dart';
 import '../../extensions/text-style/text_align_extensions.dart';
 import '../../theme/color/l_colors.dart';
 
@@ -20,6 +21,7 @@ class BaseText extends StatelessWidget {
     this.maxLength = 90000000,
     this.flatText = true,
     this.hyphenate = true,
+    this.underline = false,
     Key? key,
   }) : super(key: key);
 
@@ -53,13 +55,16 @@ class BaseText extends StatelessWidget {
   /// Determines whether to hyphenate.
   final bool hyphenate;
 
+  /// Determines whether to underline.
+  final bool underline;
+
   @override
   Widget build(BuildContext context) => FittedBox(
         fit: fit ?? BoxFit.scaleDown,
         alignment: textAlign.alignment,
         child: Text(
           _text,
-          style: _defaultStyle(context).merge(style),
+          style: underline ? _style(context).underline() : _style(context),
           textAlign: textAlign,
           overflow: TextOverflow.clip,
         ),
@@ -70,6 +75,8 @@ class BaseText extends StatelessWidget {
         text.length > maxLength ? text.substring(0, maxLength) : text;
     return hyphenate ? clippedText.hyphenate : clippedText;
   }
+
+  TextStyle _style(BuildContext context) => _defaultStyle(context).merge(style);
 
   TextStyle _defaultStyle(BuildContext context) =>
       TextStyles(context).normalStyle(

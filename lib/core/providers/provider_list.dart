@@ -4,7 +4,8 @@ import 'package:provider/single_child_widget.dart';
 import '../../features/groups/view-model/groups_view_model.dart';
 import '../../features/home/view-model/home_view_model.dart';
 import '../../features/settings/view-model/settings_view_model.dart';
-import '../../features/task/view-model/create_task_view_model.dart';
+import '../../features/splash/view-model/splash_view_model.dart';
+import '../../features/task/view-model/task_view_model.dart';
 import '../managers/navigation/navigation_manager.dart';
 import 'theme/theme_provider.dart';
 
@@ -22,14 +23,17 @@ class ProviderList {
   ];
 
   static final List<SingleChildWidget> _viewModels = <SingleChildWidget>[
+    ChangeNotifierProvider<SplashViewModel>(
+      create: (_) => SplashViewModel(),
+    ),
     ChangeNotifierProvider<HomeViewModel>(
       create: (_) => HomeViewModel(),
     ),
     ChangeNotifierProvider<SettingsViewModel>(
       create: (_) => SettingsViewModel(),
     ),
-    ChangeNotifierProvider<CreateTaskViewModel>(
-      create: (_) => CreateTaskViewModel(),
+    ChangeNotifierProvider<TaskViewModel>(
+      create: (_) => TaskViewModel(),
     ),
     ChangeNotifierProvider<GroupsViewModel>(
       create: (_) => GroupsViewModel(),

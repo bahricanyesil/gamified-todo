@@ -8,6 +8,7 @@ class FocusedMenuItem {
     required this.onPressed,
     this.backgroundColor,
     this.trailingIcon,
+    this.leadingIcon,
   });
 
   /// Title of the item.
@@ -20,5 +21,8 @@ class FocusedMenuItem {
   Color? backgroundColor;
 
   /// Trailing icon.
-  Icon? trailingIcon;
+  Widget? trailingIcon;
+
+  /// Leading icon.
+  Widget? leadingIcon;
 }

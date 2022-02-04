@@ -41,7 +41,9 @@ class _SettingsItem extends StatelessWidget with SettingsTexts {
       case SettingsOptions.info:
         return _infoTexts(context);
       case SettingsOptions.socialInfo:
-        return _socialMedia(context);
+        return <Widget>[const _SocialMedia()];
+      case SettingsOptions.taskDeleteInterval:
+        return <Widget>[const _TaskDeleteInterval()];
       default:
         return <Widget>[];
     }
@@ -63,33 +65,11 @@ class _SettingsItem extends StatelessWidget with SettingsTexts {
     final SettingsViewModel model = context.read<SettingsViewModel>();
     return SelectorHelper<bool, SettingsViewModel>().builder(
       (_, SettingsViewModel model) =>
-          model.visibleSections[TaskStatus.values.indexOf(status)],
+          model.sectionVisibility(TaskStatus.values[i]),
       (BuildContext context, bool val, _) => CustomCheckboxTile(
-        text: status.name,
+        text: status.value,
         onTap: (bool newValue) => model.setSectionVisibility(status, newValue),
         initialValue: val,
-      ),
-    );
-  }
-
-  List<Widget> _socialMedia(BuildContext context) => <Widget>[
-        Row(
-          children: List<Widget>.generate(
-            SettingsTexts.socialMediaAccounts.length,
-            (int i) => _item(i, context),
-          ),
-        )
-      ];
-
-  Widget _item(int i, BuildContext context) {
-    final SocialMediaModel account = SettingsTexts.socialMediaAccounts[i];
-    return Expanded(
-      child: IconButton(
-        padding: context.allPadding(Sizes.lowMed),
-        onPressed: () async => launch(account.link),
-        icon: Image.asset(account.nameKey.iconPng,
-            color: account.nameKey == 'github' ? AppColors.white : null),
-        splashRadius: 25,
       ),
     );
   }

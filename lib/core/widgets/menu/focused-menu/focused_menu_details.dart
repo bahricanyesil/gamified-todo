@@ -14,6 +14,7 @@ class _FocusedMenuDetails extends StatelessWidget {
     required this.menuWidth,
     required this.bottomOffsetHeight,
     required this.menuOffset,
+    this.scrollingPhysics,
     Key? key,
   }) : super(key: key);
 
@@ -29,23 +30,24 @@ class _FocusedMenuDetails extends StatelessWidget {
   final double? blurSize;
   final double? menuWidth;
   final Color? blurBackgroundColor;
+  final ScrollPhysics? scrollingPhysics;
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final double maxMenuHeight = context.height * 42;
+    final double listHeight =
+        menuItems.length * (itemExtent ?? context.height * 6);
 
-    final double maxMenuHeight = size.height * 0.45;
-    final double listHeight = menuItems.length * (itemExtent ?? 50);
-
-    final double maxMenuWidth = menuWidth ?? (size.width * 0.70);
+    final double maxMenuWidth = menuWidth ?? (context.width * 35);
     final double menuHeight =
         listHeight < maxMenuHeight ? listHeight : maxMenuHeight;
 
-    final double leftOffset = (childOffset.dx + maxMenuWidth) < size.width
-        ? childOffset.dx
-        : (childOffset.dx - maxMenuWidth + childSize.width);
+    final double leftOffset =
+        (childOffset.dx + maxMenuWidth) < context.maxPossibleWidth
+            ? childOffset.dx
+            : (childOffset.dx - maxMenuWidth + childSize.width);
     final double topOffset = (childOffset.dy + menuHeight + childSize.height) <
-            size.height - bottomOffsetHeight
+            context.maxPossibleHeight - bottomOffsetHeight
         ? childOffset.dy + childSize.height + menuOffset
         : childOffset.dy - menuHeight - menuOffset;
 
@@ -57,7 +59,7 @@ class _FocusedMenuDetails extends StatelessWidget {
           _background(context),
           Positioned(
             top: topOffset,
-            left: leftOffset,
+            right: leftOffset,
             child: _tweenAnimationBuilder(maxMenuWidth, menuHeight),
           ),
           Positioned(
@@ -93,7 +95,7 @@ class _FocusedMenuDetails extends StatelessWidget {
   Widget get _menuList => ListView.builder(
         itemCount: menuItems.length,
         padding: EdgeInsets.zero,
-        physics: const BouncingScrollPhysics(),
+        physics: scrollingPhysics ?? const BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           final FocusedMenuItem item = menuItems[index];
           if (animateMenu) {
@@ -124,7 +126,7 @@ class _FocusedMenuDetails extends StatelessWidget {
               ImageFilter.blur(sigmaX: blurSize ?? 4, sigmaY: blurSize ?? 4),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: (blurBackgroundColor ?? AppColors.black).withOpacity(0.8),
+              color: (blurBackgroundColor ?? AppColors.black).withOpacity(.4),
             ),
           ),
         ),
@@ -133,10 +135,14 @@ class _FocusedMenuDetails extends StatelessWidget {
   BoxDecoration get _boxDeco =>
       menuBoxDecoration ??
       BoxDecoration(
-        color: Colors.grey.shade200,
+        color: AppColors.black.lighten(.4),
         borderRadius: BorderRadii.lowCircular,
         boxShadow: const <BoxShadow>[
-          BoxShadow(color: Colors.black38, blurRadius: 10, spreadRadius: 1),
+          BoxShadow(
+            color: AppColors.black,
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
         ],
       );
 }
@@ -159,8 +165,8 @@ class _ListItem extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(bottom: 1),
-          color: item.backgroundColor ?? Colors.white,
-          height: itemExtent ?? 50.0,
+          color: item.backgroundColor ?? AppColors.black.lighten(.12),
+          height: itemExtent ?? context.height * 6,
           child: _containerPadding(context, item),
         ),
       );
@@ -168,14 +174,15 @@ class _ListItem extends StatelessWidget {
   Widget _containerPadding(BuildContext context, FocusedMenuItem item) =>
       Padding(
         padding: EdgeInsets.symmetric(
-          vertical: context.height * 2,
+          vertical: context.height * 1.7,
           horizontal: context.width * 3,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            if (item.leadingIcon != null) item.leadingIcon!,
+            context.sizedW(2),
             item.title,
-            if (item.trailingIcon != null) ...<Widget>[item.trailingIcon!]
+            if (item.trailingIcon != null) item.trailingIcon!
           ],
         ),
       );

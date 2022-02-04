@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Collection of texts in the Create Task Screen.
-mixin CreateTaskTexts on StatelessWidget {
+/// Collection of texts in the Task Screen.
+mixin TaskTexts on StatelessWidget {
   /// Title of the screen.
   static const String title = 'Create a Task';
 
