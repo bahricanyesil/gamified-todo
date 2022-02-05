@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../constants/constants_shelf.dart';
 
-import '../../../constants/enums/view-enums/sizes.dart';
 import '../../../extensions/context/responsiveness_extensions.dart';
 import '../../text/base_text.dart';
 import '../custom/custom_dropdown_button.dart';
@@ -17,6 +17,8 @@ class TitledButton<T> extends StatelessWidget {
     this.customButton,
     this.autoSizeText = true,
     this.buttonWidth,
+    this.icon,
+    this.dialogType = ChooseDialogTypes.single,
     Key? key,
   })  : assert(
             customButton != null ||
@@ -51,6 +53,12 @@ class TitledButton<T> extends StatelessWidget {
   /// Custom width for the button.
   final double? buttonWidth;
 
+  /// Custom icon at the beginning of the button.
+  final IconData? icon;
+
+  /// Type of the choose dialog.
+  final ChooseDialogTypes dialogType;
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,6 +78,8 @@ class TitledButton<T> extends StatelessWidget {
               callback: callback!,
               autoSize: autoSizeText,
               buttonWidth: buttonWidth,
+              type: dialogType,
+              icon: icon,
             ),
         ],
       );

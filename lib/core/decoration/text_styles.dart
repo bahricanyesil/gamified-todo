@@ -35,18 +35,19 @@ class TextStyles {
 
   /// Custom text style for body texts in the login screen.
   /// Such as: "welcomeDescription", "RoundedButton" action text and so on.
-  TextStyle bodyStyle(
-          {Color? color,
-          FontWeight? fontWeight,
-          double? height,
-          double? fontSizeFactor}) =>
+  TextStyle bodyStyle({
+    Color? color,
+    FontWeight? fontWeight,
+    double? height,
+    double? fontSizeFactor,
+  }) =>
       TextStyle(
         fontSize: _context.responsiveSize * (fontSizeFactor ?? 5.6),
         color: color ?? _color,
         fontWeight: fontWeight ?? FontWeight.w400,
         wordSpacing: 1.3,
         letterSpacing: .4,
-        height: height,
+        height: height ?? 1.3,
       );
 
   /// Custom text style for subbody texts in the login screen.
@@ -82,8 +83,9 @@ class TextStyles {
 
   /// Custom text style for text form field texts.
   /// Such as: "CustomTextFormField"/"ObscuredTextFormFields" texts.
-  TextStyle textFormStyle({Color? color}) => TextStyle(
-        fontSize: _context.responsiveSize * 5.8,
+  TextStyle textFormStyle({Color? color, double fontSizeFactor = 5.8}) =>
+      TextStyle(
+        fontSize: _context.responsiveSize * fontSizeFactor,
         color: color ?? Theme.of(_context).primaryColor,
         fontWeight: FontWeight.w400,
         wordSpacing: 1.1,

@@ -59,6 +59,16 @@ class TaskViewModel extends BaseViewModel {
 
   late Task? _editTask;
 
+  List<Task> _awardOfTasks = <Task>[];
+
+  /// Returns the list of tasks which are this task is award of.
+  List<Task> get awardOfTasks => _awardOfTasks;
+
+  List<Task> _awardsTasks = <Task>[];
+
+  /// Returns the list of tasks which are the award of this task.
+  List<Task> get awardsTasks => _awardsTasks;
+
   @override
   Future<void> init() async {
     _localManager = TasksLocalManager.instance;
@@ -72,6 +82,7 @@ class TaskViewModel extends BaseViewModel {
   @override
   Future<void> customDispose() async {
     if (!isCreate) _setDefaultValues();
+    _screenType = ScreenType.create;
   }
 
   void _setDefaultValues() {
@@ -93,6 +104,8 @@ class TaskViewModel extends BaseViewModel {
           _groups.firstWhereOrNull((Group g) => g.id == task.groupId) ??
               _selectedGroup;
       _priority = task.priority;
+      _awardOfTasks = _localManager.getMultiple(task.awardOfIds);
+      _awardsTasks = _localManager.getMultiple(task.awardIds);
       _editTask = task;
     }
   }
@@ -101,6 +114,18 @@ class TaskViewModel extends BaseViewModel {
   void onPriorityChoose(List<Priorities> newPriority) {
     if (newPriority.isEmpty || newPriority[0] == _priority) return;
     _priority = newPriority[0];
+    notifyListeners();
+  }
+
+  /// Callback to call on award of tasks choose.
+  void onAwardOfChoose(List<Task> awardOfTasks) {
+    _awardOfTasks = awardOfTasks;
+    notifyListeners();
+  }
+
+  /// Callback to call on award tasks choose.
+  void onAwardsChoose(List<Task> awardTasks) {
+    _awardsTasks = awardTasks;
     notifyListeners();
   }
 
@@ -121,12 +146,16 @@ class TaskViewModel extends BaseViewModel {
   /// Creates a task.
   void action(HomeViewModel model) {
     late final Task newTask;
+    final List<String> awardOfIds = _ids(_awardOfTasks);
+    final List<String> awardsIds = _ids(_awardsTasks);
     if (isCreate) {
       newTask = Task(
         content: _contentController.text,
         groupId: _selectedGroup.id,
         dueDate: _dueDate,
         priority: _priority,
+        awardOfIds: awardOfIds,
+        awardIds: awardsIds,
       );
       model.addTask(newTask);
       _setDefaultValues();
@@ -136,6 +165,8 @@ class TaskViewModel extends BaseViewModel {
         groupId: _selectedGroup.id,
         dueDate: _dueDate,
         newPriority: _priority,
+        awardOfIds: awardOfIds,
+        awardIds: awardsIds,
       );
       model.updateTask(newTask.id, newTask);
     }
@@ -143,9 +174,25 @@ class TaskViewModel extends BaseViewModel {
     navigationManager.popRoute();
   }
 
+  List<String> _ids(List<Task> tasks) {
+    final List<String> ids = <String>[];
+    for (final Task t in tasks) {
+      ids.add(t.id);
+    }
+    return ids;
+  }
+
   Future<void> _localAction(Task newTask) async =>
       _localManager.addOrUpdate(newTask.id, newTask);
 
   /// Determines whether the screen is in create status.
   bool get isCreate => screenType == ScreenType.create;
+
+  /// Deletes the task.
+  Future<void> delete(BuildContext context) async {
+    if (_editTask == null) return;
+    final bool? isDeleted =
+        await context.read<HomeViewModel>().delete(context, _editTask!.id);
+    if (isDeleted ?? false) await navigationManager.popRoute();
+  }
 }

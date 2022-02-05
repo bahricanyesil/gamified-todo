@@ -16,6 +16,7 @@ class BaseIconButton extends StatelessWidget {
     this.highlightColor,
     this.hoverColor,
     this.padding,
+    this.margin,
     Key? key,
   }) : super(key: key);
 
@@ -37,20 +38,27 @@ class BaseIconButton extends StatelessWidget {
   /// Padding around the icon.
   final EdgeInsets? padding;
 
+  /// Margin around the icon.
+  final EdgeInsets? margin;
+
   @override
-  Widget build(BuildContext context) => Material(
-        color: Colors.transparent,
-        shape: const CircleBorder(),
-        clipBehavior: Clip.hardEdge,
-        child: IconButton(
-          icon: BaseIcon(icon, color: color),
-          splashRadius: context.responsiveSize * 9,
-          padding: padding ?? context.allPadding(Sizes.extremeLow),
-          highlightColor: highlightColor ?? context.primaryLightColor.lighten(),
-          constraints: const BoxConstraints(),
-          iconSize: context.responsiveSize * 9,
-          onPressed: onPressed,
-          hoverColor: hoverColor ?? context.primaryColor.lighten(.05),
+  Widget build(BuildContext context) => Padding(
+        padding: margin ?? EdgeInsets.zero,
+        child: Material(
+          color: Colors.transparent,
+          shape: const CircleBorder(),
+          clipBehavior: Clip.hardEdge,
+          child: IconButton(
+            icon: BaseIcon(icon, color: color),
+            splashRadius: context.responsiveSize * 9,
+            padding: padding ?? context.allPadding(Sizes.extremeLow),
+            highlightColor:
+                highlightColor ?? context.primaryLightColor.lighten(),
+            constraints: const BoxConstraints(),
+            iconSize: context.responsiveSize * 9,
+            onPressed: onPressed,
+            hoverColor: hoverColor ?? context.primaryColor.lighten(.05),
+          ),
         ),
       );
 }

@@ -30,6 +30,17 @@ abstract class ILocalManager<R, T> {
   /// Gets the element from the box with the corresponding key.
   T? get(R key) => _box?.get(_key(key));
 
+  /// Gets the all elements for the given key set.
+  List<T> getMultiple(List<R> keys) {
+    final List<T> items = <T>[];
+    for (final R key in keys) {
+      final T? item = _box?.get(_key(key));
+      if (item == null) continue;
+      items.add(item);
+    }
+    return items;
+  }
+
   /// Adds an element to the box with the corresponding key.
   Future<void> addOrUpdate(R key, T item) async =>
       await _box?.put(_key(key), item);

@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/border/border_constants_shelf.dart';
 import '../../../constants/enums/enums_shelf.dart';
+import '../../../decoration/input_decoration.dart';
+import '../../../decoration/text_styles.dart';
 import '../../../extensions/context/responsiveness_extensions.dart';
-import '../../../extensions/context/theme_extensions.dart';
+import '../../../theme/color/l_colors.dart';
 import '../../list/custom_checkbox_tile.dart';
-import '../../text-field/custom_text_field.dart';
-import '../../text/base_text.dart';
+
+/// Item selection callback definiton.
+typedef ItemSelection<T> = void Function(List<T> items);
 
 /// A choose dialog with multiple options.
 class MultipleChooseDialog<T> extends StatefulWidget {
   /// Default constructor of [MultipleChooseDialog].
   const MultipleChooseDialog({
     required this.elements,
-    required this.title,
     this.enableSearch = false,
     this.initialSelecteds,
+    this.onValueChanged,
     Key? key,
   }) : super(key: key);
-
-  /// Title of the dialog.
-  final String title;
 
   /// All possible elements.
   final List<T> elements;
@@ -31,6 +30,9 @@ class MultipleChooseDialog<T> extends StatefulWidget {
   /// Initial selected values.
   final List<T>? initialSelecteds;
 
+  /// Callback to notify parent on value changes.
+  final ItemSelection<T>? onValueChanged;
+
   @override
   _MultipleChooseDialogState<T> createState() =>
       _MultipleChooseDialogState<T>();
@@ -38,112 +40,90 @@ class MultipleChooseDialog<T> extends StatefulWidget {
 
 class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
   String searchText = '';
-  List<T> selectedItems = <T>[];
-  List<T> localList = <T>[];
+  List<T> _selectedItems = <T>[];
+  List<T> _searchedList = <T>[];
+  late double _itemHeight;
+  late double _maxMenuHeight;
 
   @override
   void initState() {
     super.initState();
-    localList = widget.elements;
+    _searchedList = widget.elements;
     if ((widget.initialSelecteds ?? <T>[]).isNotEmpty) {
-      selectedItems = widget.initialSelecteds!.toSet().toList();
+      _selectedItems = widget.initialSelecteds!.toSet().toList();
     }
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // TODO(bahrican): fix.
-    getSearchResults();
+  Widget build(BuildContext context) {
+    _maxMenuHeight = context.height * 60;
+    _itemHeight = context.height * 5;
+    final double _menuHeight = _itemHeight * _searchedList.length;
+    return SizedBox(
+      width: context.width * 80,
+      height: (_menuHeight > _maxMenuHeight ? _maxMenuHeight : _menuHeight) +
+          (widget.enableSearch ? context.height * 8 : 0),
+      child: widget.enableSearch
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _searchForm,
+                Expanded(child: _itemList),
+              ],
+            )
+          : _itemList,
+    );
   }
 
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: context.verticalPadding(Sizes.lowMed),
-        child: AlertDialog(
-          title: BaseText(widget.title),
-          shape: ShapedBorders.roundedLowMed,
-          backgroundColor: context.primaryLightColor,
-          contentPadding: context.allPadding(Sizes.low),
-          actionsPadding: context.allPadding(Sizes.low),
-          content: getContent(),
-          actions: <Widget>[_getActionButton()],
-        ),
-      );
-
-  void getSearchResults() {
-    localList = widget.elements
+  void getSearchResults(String val) {
+    searchText = val;
+    _searchedList = widget.elements
         .where((T e) =>
             e.toString().toLowerCase().startsWith(searchText.toLowerCase()))
         .toList();
   }
 
-  Widget getContent() => SizedBox(
-        width: context.width * 22,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (widget.enableSearch) _getSearchForm(),
-            Expanded(child: _getList()),
-          ],
-        ),
-      );
-
-  Widget _getActionButton() => TextButton(
-        onPressed: () {
-          final List<T> distinctSelectedTexts = selectedItems.toSet().toList();
-          Navigator.of(context).pop(distinctSelectedTexts);
-        },
-        child: const BaseText(
-          'OK',
-          // style: context.headline5.copyWith(color: context.primaryColor),
-        ),
-      );
-
-  Widget _getList() => ListView.builder(
+  Widget get _itemList => ListView.builder(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: localList.length,
-        itemBuilder: _getSheetElement,
+        itemCount: _searchedList.length,
+        padding: EdgeInsets.zero,
+        itemBuilder: _sheetElement,
       );
 
-  Widget _getSheetElement(BuildContext context, int index) => Padding(
-        padding: EdgeInsets.only(top: context.height),
-        child: Row(
-          children: <Widget>[
-            _getRadio(index),
-            context.sizedW(.5),
-            _getGestureDetector(index),
-          ],
+  Widget _sheetElement(BuildContext context, int index) => Padding(
+        padding: EdgeInsets.only(top: context.height * (index == 0 ? 1.5 : .4)),
+        child: CustomCheckboxTile(
+          key: UniqueKey(),
+          initialValue: _selectedItems.contains(_searchedList[index]),
+          onTap: (bool? val) => _chooseItem(index),
+          text: _searchedList[index].toString(),
+          color: AppColors.black,
         ),
       );
 
-  Widget _getRadio(int index) => CustomCheckboxTile(
-        text: 'ads',
-        initialValue: selectedItems.contains(localList[index]),
-        onTap: (bool? val) => _chooseItem(index),
-      );
-
-  Widget _getGestureDetector(int index) => GestureDetector(
-        onTap: () => _chooseItem(index),
-        child: BaseText(localList[index].toString()),
-      );
-
-  Widget _getSearchForm() => Padding(
-        padding: context.bottomPadding(Sizes.low),
-        child: CustomTextField(
-          onChanged: (String? val) {
-            if (val == null) return;
-            setState(() => searchText = val);
-          },
-          hintText: 'Search',
+  Widget get _searchForm => Padding(
+        padding: context.allPadding(Sizes.low).copyWith(bottom: context.height),
+        child: Material(
+          color: Colors.transparent,
+          child: TextField(
+            style: TextStyles(context).textFormStyle(color: AppColors.black),
+            decoration: InputDeco(context).underlinedDeco(hintText: 'Search'),
+            onChanged: (String? val) {
+              if (val == null) return;
+              setState(() => getSearchResults(val));
+            },
+          ),
         ),
       );
 
   void _chooseItem(int index) {
-    selectedItems.contains(localList[index])
-        ? selectedItems.remove(localList[index])
-        : selectedItems.add(localList[index]);
+    _selectedItems.contains(_searchedList[index])
+        ? _selectedItems.remove(_searchedList[index])
+        : _selectedItems.add(_searchedList[index]);
+    if (widget.onValueChanged != null) {
+      widget.onValueChanged!(_selectedItems.toSet().toList());
+    }
     setState(() {});
   }
 }

@@ -129,8 +129,7 @@ class Task with HiveObjectMixin, EqualityCheckers {
   final List<String> awardIds;
 
   @override
-  String toString() =>
-      """$content\nPriority: $priority\nCreated on: ${createdAt.dm}\nDue Date: ${dueDate.dm}\nStatus: $status""";
+  String toString() => content;
 
   @override
   bool operator ==(Object other) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/core/widgets/widgets_shelf.dart';
 import 'package:provider/provider.dart';
 
 import '../../decoration/text_styles.dart';
@@ -8,10 +9,8 @@ import '../../extensions/context/theme_extensions.dart';
 import '../../helpers/material_state_helpers.dart';
 import '../../providers/theme/theme_provider.dart';
 import '../../theme/color/l_colors.dart';
+import '../dialogs/choose/custom_checkbox.dart';
 import '../text/base_text.dart';
-
-/// Callback of the checkbox.
-typedef CheckboxCallback = void Function(bool);
 
 /// Customized [Checkbox] with a leading text.
 class CustomCheckboxTile extends StatefulWidget {
@@ -20,6 +19,7 @@ class CustomCheckboxTile extends StatefulWidget {
     required this.onTap,
     required this.text,
     this.initialValue = false,
+    this.color,
     Key? key,
   }) : super(key: key);
 
@@ -31,6 +31,9 @@ class CustomCheckboxTile extends StatefulWidget {
 
   /// Text will be shown beside of the checkbox.
   final String text;
+
+  /// Main color of the checkbox and text.
+  final Color? color;
 
   @override
   State<CustomCheckboxTile> createState() => _CustomCheckboxTileState();
@@ -45,7 +48,7 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile>
         onTap: () => _changeValue(!value),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[_checkbox, _expanded],
+          children: <Widget>[_checkbox, Expanded(child: _text)],
         ),
       );
 
@@ -54,22 +57,27 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile>
             BoxConstraints.loose(Size.fromHeight(context.height * 4.5)),
         child: Theme(
           data: context.read<ThemeProvider>().currentTheme.copyWith(
-                unselectedWidgetColor: AppColors.white.darken(.1),
+                unselectedWidgetColor:
+                    widget.color ?? AppColors.white.darken(.1),
               ),
-          child: Checkbox(
-            value: value,
-            onChanged: (bool? newValue) {
-              if (newValue != null) _changeValue(newValue);
-            },
+          child: Material(
+            color: Colors.transparent,
+            child: Checkbox(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              value: value,
+              onChanged: (bool? newValue) {
+                if (newValue != null) _changeValue(newValue);
+              },
+            ),
           ),
         ),
       );
 
-  Widget get _expanded => BaseText(
+  Widget get _text => NotFittedText(
         widget.text,
         textAlign: TextAlign.left,
         style: TextStyles(context)
-            .subBodyStyle(color: value ? context.primaryColor : null),
+            .subBodyStyle(color: value ? context.primaryColor : widget.color),
       );
 
   void _changeValue(bool newValue) {

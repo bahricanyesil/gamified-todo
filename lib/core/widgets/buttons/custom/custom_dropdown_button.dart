@@ -10,7 +10,7 @@ import '../../widgets_shelf.dart';
 /// Customized dropdown button to open a choose dialog.
 class CustomDropdownButton<T> extends StatelessWidget {
   /// Default constructor for [DropdownButton].
-  CustomDropdownButton({
+  const CustomDropdownButton({
     required this.title,
     required this.values,
     required this.initialValues,
@@ -18,10 +18,9 @@ class CustomDropdownButton<T> extends StatelessWidget {
     this.type = ChooseDialogTypes.single,
     this.autoSize = true,
     this.buttonWidth,
+    this.icon,
     Key? key,
-  })  : assert(
-            initialValues.isNotEmpty, 'Initial values list cannot be empty.'),
-        super(key: key);
+  }) : super(key: key);
 
   /// Title to show in the dialog.
   final String title;
@@ -44,9 +43,12 @@ class CustomDropdownButton<T> extends StatelessWidget {
   /// Width of the button.
   final double? buttonWidth;
 
+  /// Custom icon at the beginning of the button.
+  final IconData? icon;
+
   @override
   Widget build(BuildContext context) {
-    final String value = _getInitialValue(initialValues[0]);
+    final String value = _findValue;
     return ElevatedButton(
       style: ButtonStyles(context).roundedStyle(
         padding: context.horizontalPadding(Sizes.med),
@@ -56,26 +58,57 @@ class CustomDropdownButton<T> extends StatelessWidget {
         ),
       ),
       onPressed: () async => _onPressed(context),
-      child: autoSize
-          ? BaseText(value)
-          : Text(
-              value.hyphenate,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyles(context).normalStyle(color: AppColors.white),
-            ),
+      child: _child(context, value),
     );
   }
 
+  Widget _child(BuildContext context, String value) {
+    if (icon != null) {
+      return Row(
+        children: <Widget>[
+          BaseIcon(icon!, sizeFactor: 7.5),
+          context.sizedW(3),
+          Expanded(child: _textWidget(context, value)),
+        ],
+      );
+    }
+    return _textWidget(context, value);
+  }
+
+  Widget _textWidget(BuildContext context, String value) => autoSize
+      ? BaseText(value)
+      : Text(
+          value.hyphenate,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyles(context).normalStyle(color: AppColors.white),
+        );
+
   Future<void> _onPressed(BuildContext context) async {
     if (type == ChooseDialogTypes.single) {
+      final T? initialValue =
+          initialValues.isNotEmpty ? initialValues[0] : null;
       await DialogBuilder(context)
-          .singleSelectDialog(title, values, initialValues[0])
+          .singleSelectDialog(title, values, initialValue)
           .then((T? val) => callback(<T>[if (val != null) val]));
     } else {
       await DialogBuilder(context)
           .multipleSelectDialog(title, values, initialValues)
           .then(callback);
     }
+  }
+
+  String get _findValue {
+    if (initialValues.isNotEmpty) {
+      if (type == ChooseDialogTypes.multiple) {
+        final StringBuffer buffer = StringBuffer(initialValues[0].toString());
+        for (int i = 1; i < initialValues.length; i++) {
+          buffer.write(', ${initialValues[i]}');
+        }
+        return buffer.toString();
+      }
+      return _getInitialValue(initialValues[0]);
+    }
+    return title;
   }
 
   String _getInitialValue(T initialValue) {

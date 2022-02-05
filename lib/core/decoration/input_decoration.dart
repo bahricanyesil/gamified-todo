@@ -28,6 +28,7 @@ class InputDeco {
     Color? fillColor,
     Color? hoverColor,
     bool showLabel = false,
+    BorderRadius? borderRadius,
   }) =>
       InputDecoration(
         contentPadding: contentPadding ??
@@ -43,10 +44,14 @@ class InputDeco {
         labelStyle: showLabel ? TextStyles(_context).hintTextStyle() : null,
         errorMaxLines: 1,
         errorStyle: TextStyles(_context).errorTextStyle(),
-        enabledBorder: _getOutlineBorder(widthFactor: .4),
-        focusedBorder: _getOutlineBorder(),
-        focusedErrorBorder: _getOutlineBorder(),
-        errorBorder: _getOutlineBorder(widthFactor: .4),
+        enabledBorder: _getOutlineBorder(borderRadius, widthFactor: .4),
+        focusedBorder: _getOutlineBorder(
+          borderRadius,
+        ),
+        focusedErrorBorder: _getOutlineBorder(
+          borderRadius,
+        ),
+        errorBorder: _getOutlineBorder(borderRadius, widthFactor: .4),
         prefixIcon: prefixWidget ?? _getPrefixIcon(prefixIcon),
         filled: true,
       );
@@ -61,10 +66,10 @@ class InputDeco {
 
   /// Default function returns [OutlineInputBorder] with some common values.
   /// Takes [color] and [widthFactor] as parameters to specialize each border.
-  OutlineInputBorder _getOutlineBorder(
+  OutlineInputBorder _getOutlineBorder(BorderRadius? borderRadius,
           {Color? color, double widthFactor = .62}) =>
       OutlineInputBorder(
-        borderRadius: BorderRadii.medHighCircular,
+        borderRadius: borderRadius ?? BorderRadii.medHighCircular,
         borderSide: BorderSide(
           width: _context.responsiveSize * widthFactor,
           color: color ?? _context.primaryLightColor,
@@ -72,9 +77,13 @@ class InputDeco {
       );
 
   /// Returns underlined input decoration.
-  InputDecoration underlinedDeco({double paddingFactor = 1, Color? color}) =>
+  InputDecoration underlinedDeco(
+          {String? hintText, double paddingFactor = 1, Color? color}) =>
       InputDecoration(
         isDense: true,
+        hintText: hintText,
+        hintStyle: TextStyles(_context)
+            .textFormStyle(color: AppColors.black, fontSizeFactor: 5.4),
         border: _underlinedBorder(color),
         enabledBorder: _underlinedBorder(color),
         focusedBorder: _underlinedBorder(color),

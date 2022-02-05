@@ -31,6 +31,8 @@ class FocusedMenu extends StatefulWidget {
     this.menuOffset,
     this.openWithTap = false,
     this.scrollPhysics,
+    this.highlightColor,
+    this.borderRadius,
     Key? key,
   }) : super(key: key);
 
@@ -49,6 +51,8 @@ class FocusedMenu extends StatefulWidget {
   final double? menuOffset;
   final bool openWithTap;
   final ScrollPhysics? scrollPhysics;
+  final Color? highlightColor;
+  final BorderRadius? borderRadius;
 
   @override
   _FocusedMenuState createState() => _FocusedMenuState();
@@ -60,7 +64,7 @@ class _FocusedMenuState extends State<FocusedMenu> {
   late Size childSize = Size.fromHeight(context.height * 5);
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
+  Widget build(BuildContext context) => InkWell(
         key: containerKey,
         onTap: () async {
           widget.onPressed();
@@ -69,6 +73,9 @@ class _FocusedMenuState extends State<FocusedMenu> {
         onLongPress: () async {
           if (!widget.openWithTap) await openMenu(context);
         },
+        splashFactory: InkRipple.splashFactory,
+        highlightColor: widget.highlightColor ?? Colors.transparent,
+        borderRadius: widget.borderRadius ?? BorderRadii.lowCircular,
         child: widget.child,
       );
 

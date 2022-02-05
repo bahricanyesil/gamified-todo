@@ -34,17 +34,27 @@ class TaskItem extends StatelessWidget with HomeTexts {
   final bool isRemoved;
 
   @override
-  Widget build(BuildContext context) => FocusedMenu(
-        onPressed: () => context.read<HomeViewModel>().navigateToTask(id),
-        scrollPhysics: const NeverScrollableScrollPhysics(),
-        menuItems: _menuOptions(context),
-        child: SelectorHelper<Priorities, HomeViewModel>().builder(
-          (_, HomeViewModel model) =>
-              model.tasks.byId(id)?.priority ?? Priorities.medium,
-          (BuildContext context, Priorities priority, Widget? child) =>
-              _mainBoxDeco(priority, child),
-          child: isRemoved ? _customListTile(context) : _dismissible(context),
+  Widget build(BuildContext context) =>
+      SelectorHelper<Priorities, HomeViewModel>().builder(
+        (_, HomeViewModel model) =>
+            model.tasks.byId(id)?.priority ?? Priorities.medium,
+        (BuildContext context, Priorities priority, _) => FocusedMenu(
+          onPressed: () => context.read<HomeViewModel>().navigateToTask(id),
+          scrollPhysics: const NeverScrollableScrollPhysics(),
+          menuItems: _menuOptions(context),
+          highlightColor: priority.color,
+          child: _wrapperDeco(
+              isRemoved ? _customListTile(context) : _dismissible(context),
+              priority),
         ),
+      );
+
+  Widget _wrapperDeco(Widget child, Priorities priority) => DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: priority.color.darken(.3), width: 1.2),
+          borderRadius: BorderRadii.lowCircular,
+        ),
+        child: child,
       );
 
   List<FocusedMenuItem> _menuOptions(BuildContext context) {
@@ -52,11 +62,15 @@ class TaskItem extends StatelessWidget with HomeTexts {
     const List<IconData> icons = HomeViewModel.menuItemIcons;
     return List<FocusedMenuItem>.generate(
       titles.length,
-      (int i) => FocusedMenuItem(
-        onPressed: () async => _onMenuItemPressed(i, context),
-        title: BaseText(titles[i], color: i == 1 ? AppColors.error : null),
-        leadingIcon: BaseIcon(icons[i], color: i == 1 ? AppColors.error : null),
-      ),
+      (int i) {
+        final bool isDelete = i == titles.length - 1;
+        return FocusedMenuItem(
+          onPressed: () async => _onMenuItemPressed(i, context),
+          title: BaseText(titles[i], color: isDelete ? AppColors.error : null),
+          leadingIcon:
+              BaseIcon(icons[i], color: isDelete ? AppColors.error : null),
+        );
+      },
     );
   }
 
@@ -64,19 +78,16 @@ class TaskItem extends StatelessWidget with HomeTexts {
     final HomeViewModel model = context.read<HomeViewModel>();
     switch (i) {
       case 0:
-        return model.navigateToTask(id);
+        model.updateTaskStatus(id, TaskStatus.finished);
+        break;
       case 1:
-        return model.delete(context, id);
+        return model.navigateToTask(id);
+      case 2:
+        await model.delete(context, id);
+        break;
+      default:
     }
   }
-
-  Widget _mainBoxDeco(Priorities priority, Widget? child) => DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: priority.color.darken(.3), width: 1.2),
-          borderRadius: BorderRadii.lowCircular,
-        ),
-        child: child,
-      );
 
   Widget _dismissible(BuildContext context) => Dismissible(
         key: UniqueKey(),
@@ -131,7 +142,7 @@ class TaskItem extends StatelessWidget with HomeTexts {
         decoration: _boxDeco(Priorities.low.color),
         padding: context.leftPadding(Sizes.medHigh),
         alignment: Alignment.centerLeft,
-        child: const BaseText(HomeTexts.finishTask, textAlign: TextAlign.end),
+        child: const BaseText(HomeTexts.activeTask, textAlign: TextAlign.end),
       );
 
   BoxDecoration _boxDeco(Color color) => BoxDecoration(

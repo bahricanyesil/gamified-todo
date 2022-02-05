@@ -25,7 +25,7 @@ extension ScreenTypeHelpers on ScreenType {
   IconData get icon {
     switch (this) {
       case ScreenType.create:
-        return Icons.flag_outlined;
+        return Icons.add_outlined;
       case ScreenType.edit:
         return Icons.edit_outlined;
     }

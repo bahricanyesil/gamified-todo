@@ -5,7 +5,7 @@ import '../../../decoration/text_styles.dart';
 import '../../../extensions/context/context_extensions_shelf.dart';
 import '../../../extensions/string/type_conversion_extensions.dart';
 import '../../divider/custom_divider.dart';
-import '../../text/base_text.dart';
+import '../../widgets_shelf.dart';
 
 /// A choose dialog with single option.
 class SingleChooseDialog<T> extends StatelessWidget {
@@ -30,7 +30,7 @@ class SingleChooseDialog<T> extends StatelessWidget {
   Widget build(BuildContext context) => SimpleDialog(
         shape: ShapedBorders.roundedMedium,
         backgroundColor: context.canvasColor,
-        title: BaseText(title,
+        title: NotFittedText(title,
             style: TextStyles(context)
                 .bodyStyle(color: context.primaryLightColor)),
         children: _getDialogChildren(elements, context),
@@ -58,7 +58,7 @@ class SingleChooseDialog<T> extends StatelessWidget {
 
   Widget _dialogChild(BuildContext context, T element) => SizedBox(
         width: context.responsiveSize * 70,
-        child: BaseText(
+        child: NotFittedText(
           _value(element),
           style:
               TextStyles(context).subBodyStyle(color: _color(element, context)),

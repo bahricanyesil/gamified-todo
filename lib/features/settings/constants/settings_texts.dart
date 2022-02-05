@@ -10,8 +10,9 @@ mixin SettingsTexts on StatelessWidget {
     'Numbers from 1 to 3 represents the priorities of the tasks.': <String>[],
     """There are three priorities:\n\t\t\t1- Urgent\n\t\t\t2- Normal\n\t\t\t3- Nonurgent""":
         <String>['Urgent', 'Normal', 'Nonurgent'],
-    'Colors (red-yellow-green-blue) represents the status of the tasks.':
-        <String>['red-yellow-green-blue'],
+    'Colors (red-yellow-green) represents the status of the tasks.': <String>[
+      'red-yellow-green'
+    ],
     """There are four task status:
     1- Active Tasks: Represented with blue color and a person who runs. These are the tasks that you've started but not yet finished.
     2- Open Tasks: Respresented with yellow color and a clock. These are the tasks that you've created but not yet started.

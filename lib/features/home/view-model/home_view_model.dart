@@ -32,10 +32,15 @@ class HomeViewModel extends BaseViewModel {
   ];
 
   /// Titles of the menu items.
-  static const List<String> menuItemTitles = <String>['Edit', 'Delete'];
+  static const List<String> menuItemTitles = <String>[
+    'Finish',
+    'Edit',
+    'Delete'
+  ];
 
   /// Icons of the menu items.
   static const List<IconData> menuItemIcons = <IconData>[
+    Icons.flag_outlined,
     Icons.edit_outlined,
     Icons.delete_outline,
   ];
@@ -65,6 +70,13 @@ class HomeViewModel extends BaseViewModel {
             t.dueDate.isAfter(DateTime.now().subtract(Duration(days: days))))
         .toList();
     _tasks.sort((Task a, Task b) => b > a);
+    for (int i = 0; i < _tasks.length; i++) {
+      if (_tasks[i].dueDate.isBefore(DateTime.now())) {
+        _tasks[i].setStatus(TaskStatus.pastDue);
+        completer =
+            CompleterHelper.wrapCompleter<void>(_updateLocal(_tasks[i]));
+      }
+    }
     completer = CompleterHelper.wrapCompleter<void>(_deleteOldTasks(days));
     listModels = List<AnimatedListModel<Task>>.generate(
         TaskStatus.values.length, _animatedModelBuilder);
@@ -91,7 +103,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   /// Updates the status of a task in the list.
-  void updateTaskStatus(String id, TaskStatus newStatus) {
+  void updateTaskStatus(String id, TaskStatus newStatus, {bool notify = true}) {
     final int index = _tasks.indexWhere((Task t) => t.id == id);
     if (index == -1) return;
     final Task task = _tasks[index];
@@ -102,14 +114,22 @@ class HomeViewModel extends BaseViewModel {
       _tasks[index] = task.copyWith(taskStatus: newStatus);
       completer =
           CompleterHelper.wrapCompleter<void>(_updateLocal(_tasks[index]));
-      notifyListeners();
+      if (newStatus == TaskStatus.finished) {
+        final List<String> awardOfIds = task.awardIds;
+        for (final String id in awardOfIds) {
+          final int otherIndex = _tasks.indexWhere((Task t) => t.id == id);
+          if (otherIndex == -1) continue;
+          updateTaskStatus(id, TaskStatus.active, notify: false);
+        }
+      }
+      if (notify) notifyListeners();
     }
   }
 
   /// Used as the callback of confirmation on dismiss on a taks.
   Future<bool> confirmDismiss(DismissDirection direction, String id) async {
     if (direction == DismissDirection.startToEnd) {
-      updateTaskStatus(id, TaskStatus.finished);
+      updateTaskStatus(id, TaskStatus.active);
     } else if (direction == DismissDirection.endToStart) {
       updateTaskStatus(id, TaskStatus.open);
     }
@@ -169,10 +189,8 @@ class HomeViewModel extends BaseViewModel {
       NavigationManager.instance.setNewRoutePath(ScreenConfig.task(id: id));
 
   /// Asks for confirmation and deletes the task.
-  Future<void> delete(BuildContext context, String id) async {
-    await DialogBuilder(context)
-        .deleteDialog(deleteAction: () => _deleteItem(id));
-  }
+  Future<bool?> delete(BuildContext context, String id) async =>
+      DialogBuilder(context).deleteDialog(deleteAction: () => _deleteItem(id));
 
   void _deleteItem(String id) {
     final int index = _tasks.indexWhere((Task t) => t.id == id);

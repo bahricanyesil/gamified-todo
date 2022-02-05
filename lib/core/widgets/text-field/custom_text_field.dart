@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/core/constants/border/border_radii.dart';
 
 import '../../constants/enums/view-enums/sizes.dart';
 import '../../decoration/input_decoration.dart';
@@ -18,6 +19,8 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.onChanged,
     this.contentPadding,
+    this.borderRadius = BorderRadii.medHighCircular,
+    this.inputDeco,
     Key? key,
   }) : super(key: key);
 
@@ -39,20 +42,31 @@ class CustomTextField extends StatelessWidget {
   /// Padding around the text of the text field.
   final EdgeInsets? contentPadding;
 
+  /// Border radius of the text field.
+  final BorderRadius borderRadius;
+
+  /// Custom input deco.
+  final InputDecoration? inputDeco;
+
   @override
   Widget build(BuildContext context) => Padding(
         padding: padding ?? context.horizontalPadding(Sizes.medHigh),
-        child: TextField(
-          controller: controller,
-          decoration: InputDeco(context).normalDeco(
-            fillColor: context.primaryLightColor.lighten(.15),
-            hintText: hintText,
-            contentPadding: contentPadding,
+        child: Material(
+          borderRadius: borderRadius,
+          child: TextField(
+            controller: controller,
+            decoration: inputDeco ??
+                InputDeco(context).normalDeco(
+                  fillColor: context.primaryLightColor.lighten(.15),
+                  hintText: hintText,
+                  contentPadding: contentPadding,
+                  borderRadius: borderRadius,
+                ),
+            onChanged: onChanged,
+            style: TextStyles(context).bodyStyle(color: AppColors.black),
+            maxLength: maxLength,
+            maxLines: null,
           ),
-          onChanged: onChanged,
-          style: TextStyles(context).bodyStyle(color: AppColors.black),
-          maxLength: maxLength,
-          maxLines: null,
         ),
       );
 }

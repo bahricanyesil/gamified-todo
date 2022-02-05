@@ -22,4 +22,16 @@ mixin TaskTexts on StatelessWidget {
 
   /// Group dialog title.
   static const String groupDialogTitle = 'Choose a Group';
+
+  /// Award of tasks.
+  static const String awardOfTitle = 'Award of Tasks:';
+
+  /// Award of dialog title.
+  static const String awardOfDialogTitle = 'Choose the tasks';
+
+  /// Awards to tasks.
+  static const String awardsTitle = 'Awards to This Task:';
+
+  /// Awards to dialog title.
+  static const String awardsDialogTitle = 'Choose the tasks';
 }

@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-
-import '../view/home_screen.dart';
-
-/// Collection of texts in the [HomeScreen].
-mixin HomeTexts on StatelessWidget {
+/// Collection of texts in the Home Screen.
+mixin HomeTexts {
   /// Title above the list of tasks.
   static const String tasksTitle = 'Tasks';
 
@@ -15,4 +11,7 @@ mixin HomeTexts on StatelessWidget {
 
   /// Represents the CTA for finishing a task.
   static const String finishTask = 'Finish';
+
+  /// Represents the CTA for making active a task.
+  static const String activeTask = 'Activate';
 }

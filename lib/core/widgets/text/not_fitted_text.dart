@@ -10,7 +10,7 @@ class NotFittedText extends StatelessWidget {
     this.text, {
     this.style,
     this.textAlign = TextAlign.center,
-    this.maxLines = 1,
+    this.maxLines = 2,
     Key? key,
   }) : super(key: key);
 

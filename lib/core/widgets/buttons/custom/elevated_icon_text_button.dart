@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../decoration/button/button_styles.dart';
+import '../../../extensions/color/color_extensions.dart';
 import '../../../extensions/context/responsiveness_extensions.dart';
-import '../../../helpers/material_state_helpers.dart';
+import '../../../extensions/context/theme_extensions.dart';
 import '../../widgets_shelf.dart';
 
 /// Returns an elevated button with both text and icon.
-class ElevatedIconTextButton extends StatelessWidget with MaterialStateHelpers {
+class ElevatedIconTextButton extends StatelessWidget {
   /// Default constructor for [ElevatedIconTextButton].
   const ElevatedIconTextButton({
     required this.text,
@@ -26,7 +28,11 @@ class ElevatedIconTextButton extends StatelessWidget with MaterialStateHelpers {
   @override
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: onPressed,
-        style: ButtonStyle(padding: _padding(context)),
+        style: ButtonStyles(context).roundedStyle(
+          padding: _padding(context),
+          backgroundColor: context.primaryColor,
+          borderColor: context.primaryDarkColor.darken(.1),
+        ),
         child: _rowChild(context),
       );
 
@@ -39,11 +45,8 @@ class ElevatedIconTextButton extends StatelessWidget with MaterialStateHelpers {
         ],
       );
 
-  MaterialStateProperty<EdgeInsets> _padding(BuildContext context) =>
-      all<EdgeInsets>(
-        EdgeInsets.symmetric(
-          horizontal: context.width * 3,
-          vertical: context.responsiveSize * 5,
-        ),
+  EdgeInsets _padding(BuildContext context) => EdgeInsets.symmetric(
+        horizontal: context.responsiveSize * 6,
+        vertical: context.responsiveSize * 4,
       );
 }

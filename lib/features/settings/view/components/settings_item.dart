@@ -8,7 +8,7 @@ class _SettingsItem extends StatelessWidget with SettingsTexts {
   Widget build(BuildContext context) => Theme(
         data: Theme.of(context).copyWith(
           dividerColor: Colors.transparent,
-          highlightColor: context.primaryLightColor,
+          highlightColor: context.primaryLightColor.lighten(.15),
           hoverColor: context.primaryLightColor,
         ),
         child: ListTileTheme(

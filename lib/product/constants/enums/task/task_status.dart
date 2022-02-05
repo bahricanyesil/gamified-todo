@@ -75,7 +75,7 @@ extension NullableTaskStatusExtensions on TaskStatus? {
     switch (this) {
       case TaskStatus.open:
         return DismissDirection.startToEnd;
-      case TaskStatus.finished:
+      case TaskStatus.active:
         return DismissDirection.endToStart;
       default:
         return DismissDirection.horizontal;

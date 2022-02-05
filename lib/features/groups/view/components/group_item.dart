@@ -106,8 +106,9 @@ class _ExpansionChildren extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                BaseText(status.value, color: Colors.black, underline: true),
-                context.sizedH(.6),
+                BaseText(status.value,
+                    color: Colors.black, underline: true, fontSizeFactor: 5.4),
+                context.sizedH(.4),
                 SelectorHelper<List<Task>, HomeViewModel>().builder(
                   (_, HomeViewModel model) =>
                       model.getByGroupIdAndStatus(groupId, status),
