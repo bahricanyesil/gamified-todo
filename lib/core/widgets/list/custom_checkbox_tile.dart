@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/enums/view-enums/sizes.dart';
 import '../../decoration/text_styles.dart';
 import '../../extensions/color/color_extensions.dart';
 import '../../extensions/context/responsiveness_extensions.dart';
@@ -51,7 +52,8 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile>
         ),
       );
 
-  Widget get _checkbox => ConstrainedBox(
+  Widget get _checkbox => Container(
+        margin: context.rightPadding(Sizes.low),
         constraints:
             BoxConstraints.loose(Size.fromHeight(context.height * 4.5)),
         child: Theme(
@@ -63,6 +65,7 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile>
             color: Colors.transparent,
             child: Checkbox(
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: const VisualDensity(horizontal: -4),
               value: value,
               onChanged: (bool? newValue) {
                 if (newValue != null) _changeValue(newValue);
@@ -75,8 +78,12 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile>
   Widget get _text => NotFittedText(
         widget.text,
         textAlign: TextAlign.left,
-        style: TextStyles(context)
-            .subBodyStyle(color: value ? context.primaryColor : widget.color),
+        hyphenate: false,
+        useCorrectEllipsis: false,
+        style: TextStyles(context).subBodyStyle(
+          color: value ? context.primaryColor : widget.color,
+          fontSizeFactor: 4.8,
+        ),
       );
 
   void _changeValue(bool newValue) {
