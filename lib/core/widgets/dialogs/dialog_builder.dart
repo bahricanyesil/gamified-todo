@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/enums/view-enums/sizes.dart';
 import '../../extensions/color/color_extensions.dart';
+import '../../extensions/context/responsiveness_extensions.dart';
 import '../../extensions/context/theme_extensions.dart';
 import '../../theme/color/l_colors.dart';
-import '../text/base_text.dart';
+import '../widgets_shelf.dart';
 import 'base-dialog/base_dialog_action.dart';
 import 'base-dialog/base_dialog_alert.dart';
 import 'choose/choose_dialogs_shelf.dart';
@@ -95,11 +97,12 @@ class DialogBuilder {
   /// Delete confirmation dialog.
   Future<bool?> deleteDialog<T>({
     required VoidCallback deleteAction,
+    String? contentText,
     bool waitAction = false,
   }) async =>
       DialogBuilder(context).platformSpecific<bool>(
         title: 'Are you sure to delete?',
-        contentText: "This action cannot be undone.",
+        contentText: contentText ?? "This action cannot be undone.",
         actions: <BaseDialogAction>[
           BaseDialogAction(
             text: _dialogActionText('Cancel'),
@@ -135,7 +138,11 @@ class DialogBuilder {
         content: contentWidget ??
             (contentText == null
                 ? null
-                : BaseText(contentText, color: AppColors.black)),
+                : Padding(
+                    padding: context.verticalPadding(Sizes.extremeLow),
+                    child: NotFittedText(contentText,
+                        color: AppColors.black, maxLines: 30),
+                  )),
         actions: actions,
       );
 

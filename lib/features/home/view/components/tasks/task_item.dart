@@ -95,7 +95,7 @@ class TaskItem extends StatelessWidget with HomeTexts {
       case 3:
         return model.navigateToTask(id);
       case 4:
-        await model.delete(context, id);
+        await model.deleteDialog(context, id);
         break;
       default:
     }

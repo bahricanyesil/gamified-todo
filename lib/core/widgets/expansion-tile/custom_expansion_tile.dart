@@ -134,7 +134,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
   late Animation<Color?> _borderColorAnimation;
   late Animation<Color?> _backgroundColorAnimation;
 
-  bool _isExpanded = false;
+  late bool _isExpanded = widget.initiallyExpanded;
 
   @override
   void initState() {

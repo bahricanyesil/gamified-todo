@@ -9,8 +9,11 @@ class _GroupItem extends StatelessWidget {
     final GroupsViewModel model = context.read<GroupsViewModel>();
     final Color color = model.color(group.id);
     return CustomExpansionTile(
+      key: Key(group.id + model.isExpanded(group.id).toString()),
       mainListTile: _mainListTile(context, color, model),
       backgroundColor: color,
+      collapsedBackgroundColor: Colors.transparent,
+      initiallyExpanded: model.isExpanded(group.id),
       customChildrenWidget: _ExpansionChildren(groupId: group.id),
       onExpansionChanged: (bool val) => context
           .read<GroupsViewModel>()
@@ -24,12 +27,13 @@ class _GroupItem extends StatelessWidget {
         children: <Widget>[
           _circledText(color),
           Expanded(child: _colorSelector(_titleBuilder)),
-          _deleteButton(model),
+          _deleteButton(context),
         ],
       );
 
-  Widget _deleteButton(GroupsViewModel model) => BaseIconButton(
-      onPressed: () => model.deleteGroup(group.id),
+  Widget _deleteButton(BuildContext context) => BaseIconButton(
+      onPressed: () async =>
+          context.read<GroupsViewModel>().deleteDialog(context, group.id),
       icon: Icons.delete,
       color: AppColors.error.darken(.1));
 

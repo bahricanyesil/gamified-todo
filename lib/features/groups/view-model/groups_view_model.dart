@@ -1,12 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/base/view-model/base_view_model.dart';
 import '../../../core/helpers/color_helpers.dart';
 import '../../../core/helpers/completer_helper.dart';
+import '../../../core/widgets/dialogs/dialog_builder.dart';
 import '../../../product/managers/local-storage/groups/groups_local_manager.dart';
 import '../../../product/models/group/group.dart';
+import '../../../product/models/task/task.dart';
+import '../../home/view-model/home_view_model.dart';
+import '../constants/groups_texts.dart';
 
 /// View model to manage the data on create group screen.
 class GroupsViewModel extends BaseViewModel {
@@ -62,12 +67,24 @@ class GroupsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  /// Opens a delete dialog.
+  Future<bool?> deleteDialog(BuildContext context, String id) async =>
+      DialogBuilder(context).deleteDialog(
+        deleteAction: () => _deleteGroup(id, context),
+        contentText: GroupsTexts.deleteContent,
+      );
+
   /// Deletes the group whose id is given.
-  void deleteGroup(String id) {
+  void _deleteGroup(String id, BuildContext context) {
     final int index =
         _groups.indexWhere((_GroupComplexModel g) => g.group.id == id);
     if (index != -1) {
+      final HomeViewModel model = context.read<HomeViewModel>();
+      final List<Task> groupTasks = model.getByGroupId(_groups[index].group.id);
       _groups.removeAt(index);
+      for (final Task t in groupTasks) {
+        model.deleteItem(t.id);
+      }
       completer = CompleterHelper.wrapCompleter<void>(_removeLocal(id));
       notifyListeners();
     }
@@ -118,7 +135,9 @@ class GroupsViewModel extends BaseViewModel {
   }
 }
 
+/// Complex group model with additional fields.
 class _GroupComplexModel with ColorHelpers {
+  /// Default constructor.
   _GroupComplexModel(
     this.group, {
     required this.controller,
@@ -127,8 +146,16 @@ class _GroupComplexModel with ColorHelpers {
   }) {
     backgroundColor = bgColor ?? lightRandomColor;
   }
+
+  /// Text form controller.
   final TextEditingController controller;
+
+  /// Background color.
   late final Color backgroundColor;
+
+  /// Corresponding group for the item.
   Group group;
+
+  /// Whether the item is expanded.
   bool isExpanded;
 }

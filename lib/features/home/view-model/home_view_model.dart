@@ -196,10 +196,11 @@ class HomeViewModel extends BaseViewModel {
       NavigationManager.instance.setNewRoutePath(ScreenConfig.task(id: id));
 
   /// Asks for confirmation and deletes the task.
-  Future<bool?> delete(BuildContext context, String id) async =>
-      DialogBuilder(context).deleteDialog(deleteAction: () => _deleteItem(id));
+  Future<bool?> deleteDialog(BuildContext context, String id) async =>
+      DialogBuilder(context).deleteDialog(deleteAction: () => deleteItem(id));
 
-  void _deleteItem(String id) {
+  /// Directly deletes a task.
+  void deleteItem(String id) {
     final int index = _tasks.indexWhere((Task t) => t.id == id);
     if (index != -1) {
       _removeItemFromList(_tasks[index]);

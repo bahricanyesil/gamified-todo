@@ -11,8 +11,9 @@ class NotFittedText extends StatelessWidget {
     this.style,
     this.textAlign = TextAlign.center,
     this.maxLines = 2,
-    this.useCorrectEllipsis = true,
-    this.hyphenate = true,
+    this.useCorrectEllipsis,
+    this.hyphenate,
+    this.color,
     Key? key,
   }) : super(key: key);
 
@@ -29,24 +30,29 @@ class NotFittedText extends StatelessWidget {
   final int? maxLines;
 
   /// Whether to use correct ellipsis.
-  final bool useCorrectEllipsis;
+  final bool? useCorrectEllipsis;
 
   /// Whether to hypenate.
-  final bool hyphenate;
+  final bool? hyphenate;
+
+  /// Custom color for the text.
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Text(
         _text,
-        style: TextStyles(context).subBodyStyle().merge(style),
+        style: TextStyles(context).subBodyStyle(color: color).merge(style),
         textAlign: textAlign,
         overflow: TextOverflow.ellipsis,
         maxLines: maxLines,
       );
 
   String get _text {
+    final bool ellipsis = useCorrectEllipsis ?? (maxLines ?? 1) <= 1;
+    final bool hyphenateLocal = hyphenate ?? (maxLines ?? 1) <= 1;
     String finalText = text;
-    if (useCorrectEllipsis) finalText = finalText.useCorrectEllipsis;
-    if (hyphenate) finalText = finalText.hyphenate;
+    if (ellipsis) finalText = finalText.useCorrectEllipsis;
+    if (hyphenateLocal) finalText = finalText.hyphenate;
     return finalText;
   }
 }

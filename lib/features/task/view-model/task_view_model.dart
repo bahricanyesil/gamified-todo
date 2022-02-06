@@ -117,7 +117,7 @@ class TaskViewModel extends BaseViewModel {
 
   /// Callback to call on award tasks choose.
   void onAwardsChoose(List<Task> awardTasks, HomeViewModel model) {
-    if (_screenType == ScreenType.edit && _editTask != null) {
+    if (!isCreate && _editTask != null) {
       _updateOtherTasksAwards(model, _editTask!.id);
     }
     _awardsTasks = awardTasks;
@@ -204,8 +204,9 @@ class TaskViewModel extends BaseViewModel {
   /// Deletes the task.
   Future<void> delete(BuildContext context) async {
     if (_editTask == null) return;
-    final bool? isDeleted =
-        await context.read<HomeViewModel>().delete(context, _editTask!.id);
+    final bool? isDeleted = await context
+        .read<HomeViewModel>()
+        .deleteDialog(context, _editTask!.id);
     if (isDeleted ?? false) await navigationManager.popRoute();
   }
 }
