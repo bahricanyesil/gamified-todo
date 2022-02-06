@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/enums/view-enums/sizes.dart';
 import '../../extensions/color/color_extensions.dart';
-import '../../extensions/context/responsiveness_extensions.dart';
 import '../../extensions/context/theme_extensions.dart';
 import '../../theme/color/l_colors.dart';
 import '../widgets_shelf.dart';
@@ -138,11 +136,8 @@ class DialogBuilder {
         content: contentWidget ??
             (contentText == null
                 ? null
-                : Padding(
-                    padding: context.verticalPadding(Sizes.extremeLow),
-                    child: NotFittedText(contentText,
-                        color: AppColors.black, maxLines: 30),
-                  )),
+                : NotFittedText(contentText,
+                    color: AppColors.black, maxLines: 30)),
         actions: actions,
       );
 

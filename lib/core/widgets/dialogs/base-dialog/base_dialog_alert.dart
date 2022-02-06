@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../constants/enums/view-enums/sizes.dart';
 import '../../../extensions/color/color_extensions.dart';
+import '../../../extensions/context/responsiveness_extensions.dart';
 import '../../../theme/color/l_colors.dart';
 
 import 'base_dialog.dart';
@@ -32,7 +34,8 @@ class BaseDialogAlert extends BaseDialog<AlertDialog, CupertinoAlertDialog> {
   CupertinoAlertDialog buildIOSWidget(BuildContext context) =>
       CupertinoAlertDialog(
         title: title,
-        content: content,
+        content: Padding(
+            padding: context.verticalPadding(Sizes.extremeLow), child: content),
         actions: actions ?? <Widget>[],
       );
 }

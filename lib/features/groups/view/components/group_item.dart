@@ -23,12 +23,17 @@ class _GroupItem extends StatelessWidget {
 
   Widget _mainListTile(
           BuildContext context, Color color, GroupsViewModel model) =>
-      Row(
-        children: <Widget>[
-          _circledText(color),
-          Expanded(child: _colorSelector(_titleBuilder)),
-          _deleteButton(context),
-        ],
+
+      /// You can adjust the size of the group item here.
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * .1),
+        child: Row(
+          children: <Widget>[
+            _circledText(color),
+            Expanded(child: _colorSelector(_titleBuilder)),
+            _deleteButton(context),
+          ],
+        ),
       );
 
   Widget _deleteButton(BuildContext context) => BaseIconButton(

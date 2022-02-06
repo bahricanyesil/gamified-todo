@@ -33,11 +33,7 @@ class GroupsScreen extends StatelessWidget with GroupsTexts {
         padding: context.verticalPadding(Sizes.low),
         child: Column(
           children: <Widget>[
-            ConstrainedBox(
-              constraints:
-                  BoxConstraints.loose(Size.fromHeight(context.height * 70)),
-              child: const _GroupsList(),
-            ),
+            const Flexible(child: _GroupsList()),
             context.sizedH(2),
             ElevatedIconTextButton(
               text: 'Add a Group',
