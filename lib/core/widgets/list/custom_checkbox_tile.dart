@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/widgets/widgets_shelf.dart';
 import 'package:provider/provider.dart';
 
 import '../../decoration/text_styles.dart';
@@ -10,7 +9,7 @@ import '../../helpers/material_state_helpers.dart';
 import '../../providers/theme/theme_provider.dart';
 import '../../theme/color/l_colors.dart';
 import '../dialogs/choose/custom_checkbox.dart';
-import '../text/base_text.dart';
+import '../widgets_shelf.dart';
 
 /// Customized [Checkbox] with a leading text.
 class CustomCheckboxTile extends StatefulWidget {

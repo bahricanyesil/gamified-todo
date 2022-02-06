@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../core/extensions/date/date_time_extensions.dart';
 import '../../../core/extensions/string/type_conversion_extensions.dart';
 import '../../../core/helpers/equality_checkers.dart';
 import '../../../core/helpers/hasher.dart';
@@ -138,13 +137,9 @@ class Task with HiveObjectMixin, EqualityCheckers {
     return other is Task &&
         other.priority == priority &&
         other.content == content &&
-        other.createdAt == createdAt &&
-        other.updatedAt == updatedAt &&
         other.dueDate == dueDate &&
         other.status == status &&
         other.groupId == groupId &&
-        listsEqual(awardIds, other.awardIds) &&
-        listsEqual(awardOfIds, other.awardOfIds) &&
         other.id == id;
   }
 

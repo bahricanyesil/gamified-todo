@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/base/view-model/base_view_model.dart';
@@ -28,19 +29,23 @@ class HomeViewModel extends BaseViewModel {
     TasksSection(title: 'Active Tasks', status: TaskStatus.active),
     TasksSection(title: 'Open Tasks', status: TaskStatus.open),
     TasksSection(title: 'Finished Tasks', status: TaskStatus.finished),
-    TasksSection(title: 'Past Due Tasks', status: TaskStatus.pastDue),
+    TasksSection(title: 'Over Due Tasks', status: TaskStatus.overDue),
   ];
 
   /// Titles of the menu items.
   static const List<String> menuItemTitles = <String>[
     'Finish',
+    'Activate',
+    'Open',
     'Edit',
     'Delete'
   ];
 
   /// Icons of the menu items.
   static const List<IconData> menuItemIcons = <IconData>[
-    Icons.flag_outlined,
+    Icons.check_outlined,
+    Icons.run_circle_outlined,
+    Icons.access_time_outlined,
     Icons.edit_outlined,
     Icons.delete_outline,
   ];
@@ -72,7 +77,7 @@ class HomeViewModel extends BaseViewModel {
     _tasks.sort((Task a, Task b) => b > a);
     for (int i = 0; i < _tasks.length; i++) {
       if (_tasks[i].dueDate.isBefore(DateTime.now())) {
-        _tasks[i].setStatus(TaskStatus.pastDue);
+        _tasks[i].setStatus(TaskStatus.overDue);
         completer =
             CompleterHelper.wrapCompleter<void>(_updateLocal(_tasks[i]));
       }
@@ -117,9 +122,11 @@ class HomeViewModel extends BaseViewModel {
       if (newStatus == TaskStatus.finished) {
         final List<String> awardOfIds = task.awardIds;
         for (final String id in awardOfIds) {
-          final int otherIndex = _tasks.indexWhere((Task t) => t.id == id);
-          if (otherIndex == -1) continue;
-          updateTaskStatus(id, TaskStatus.active, notify: false);
+          final Task? otherTask =
+              _tasks.firstWhereOrNull((Task t) => t.id == id);
+          if (otherTask != null && !otherTask.isFinished && !task.isOverDue) {
+            updateTaskStatus(id, TaskStatus.active, notify: false);
+          }
         }
       }
       if (notify) notifyListeners();

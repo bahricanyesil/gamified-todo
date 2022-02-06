@@ -32,3 +32,14 @@ extension TaskListExtensions on List<Task> {
       where((Task element) => element.status == status).toList()
         ..sort((Task a, Task b) => b > a);
 }
+
+/// Extensions on [Task].
+extension TaskExtensions on Task {
+  /// Returns whether the task is over due or not.
+  bool get isOverDue =>
+      status == TaskStatus.overDue ||
+      dueDate.isBefore(DateTime.now().add(const Duration(seconds: 10)));
+
+  /// Returns whether the task is finished.
+  bool get isFinished => status == TaskStatus.finished;
+}

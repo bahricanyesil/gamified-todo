@@ -32,7 +32,7 @@ mixin _DefaultData {
       priority: Priorities.high,
       content: 'Be happy',
       groupId: _defaultGroups[3].id,
-      taskStatus: TaskStatus.pastDue,
+      taskStatus: TaskStatus.overDue,
       dueDate: DateTime.now().add(const Duration(days: 1)),
     ),
   ];

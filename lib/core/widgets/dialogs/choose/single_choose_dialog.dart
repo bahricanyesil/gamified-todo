@@ -4,7 +4,6 @@ import '../../../constants/border/shape_borders.dart';
 import '../../../decoration/text_styles.dart';
 import '../../../extensions/context/context_extensions_shelf.dart';
 import '../../../extensions/string/type_conversion_extensions.dart';
-import '../../divider/custom_divider.dart';
 import '../../widgets_shelf.dart';
 
 /// A choose dialog with single option.

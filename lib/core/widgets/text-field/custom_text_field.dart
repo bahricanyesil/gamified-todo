@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/constants/border/border_radii.dart';
+import '../../constants/border/border_radii.dart';
 
 import '../../constants/enums/view-enums/sizes.dart';
 import '../../decoration/input_decoration.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/core/managers/navigation/navigation_shelf.dart';
+import 'package:gamified_todo/product/constants/enums/task/task_enums_shelf.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../core/base/view/base_view.dart';
 import '../../../core/constants/constants_shelf.dart';
@@ -10,6 +9,7 @@ import '../../../core/helpers/selector_helper.dart';
 import '../../../core/theme/color/l_colors.dart';
 import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/constants/enums/task/priorities.dart';
+import '../../../product/extensions/task_extensions.dart';
 import '../../../product/models/group/group.dart';
 import '../../../product/models/task/task.dart';
 import '../../home/view-model/home_view_model.dart';
@@ -67,10 +67,8 @@ class TaskScreen extends StatelessWidget with TaskTexts {
       context.sizedH(2.5),
       _dueDateButton,
       context.sizedH(2.5),
-      _awardButtonWrapper(isAwardOf: true),
-      context.sizedH(2.5),
-      _awardButtonWrapper(isAwardOf: false),
-      context.sizedH(3.5),
+      _awardButtonWrapper,
+      context.sizedH(4),
       _createButton(context, model),
     ];
   }
@@ -137,65 +135,38 @@ class TaskScreen extends StatelessWidget with TaskTexts {
         },
       );
 
-  Widget _awardButtonWrapper({required bool isAwardOf}) =>
+  Widget get _awardButtonWrapper =>
       SelectorHelper<List<Task>, HomeViewModel>().builder(
         (_, HomeViewModel model) => model.tasks,
         (BuildContext context, List<Task> tasks, __) =>
-            SelectorHelper<Tuple2<List<Task>, List<Task>>, TaskViewModel>()
-                .builder(
-          (_, TaskViewModel model) => Tuple2<List<Task>, List<Task>>(
-              model.awardOfTasks, model.awardsTasks),
-          (BuildContext context, Tuple2<List<Task>, List<Task>> tuple, _) =>
-              _awardButtonBuilder(context, tuple, tasks, isAwardOf),
+            SelectorHelper<List<Task>, TaskViewModel>().builder(
+          (_, TaskViewModel model) => model.awardsTasks,
+          (BuildContext context, List<Task> list, _) =>
+              _awardButtonBuilder(context, list, tasks),
         ),
       );
 
-  Widget _awardButtonBuilder(BuildContext context,
-      Tuple2<List<Task>, List<Task>> tuple, List<Task> tasks, bool isAwardOf) {
+  Widget _awardButtonBuilder(
+      BuildContext context, List<Task> awardsTasks, List<Task> tasks) {
     final TaskViewModel model = context.read<TaskViewModel>();
     final List<Task> possibleValues = <Task>[];
-    final List<Task> initialValues = isAwardOf ? tuple.item1 : tuple.item2;
-    final List<Task> otherList = isAwardOf ? tuple.item2 : tuple.item1;
     for (final Task t in tasks) {
-      final bool existOther =
-          otherList.indexWhere((Task el) => el.id == t.id) != -1;
-      if (t.id != id && !existOther) possibleValues.add(t);
+      final bool otherContains = model.awardsOfTasks.contains(t.id);
+      if (t.id != id && !otherContains && !t.isOverDue && !t.isFinished) {
+        possibleValues.add(t);
+      }
     }
-    final Function(List<Task> tasks) callback =
-        isAwardOf ? model.onAwardOfChoose : model.onAwardsChoose;
-    final IconData icon =
-        isAwardOf ? Icons.card_giftcard_outlined : Icons.task_outlined;
-    return _awardButton(
-      context,
+    return TitledButton<Task>(
+      buttonTitle: TaskTexts.awardsTitle,
+      title: TaskTexts.awardsDialogTitle,
       values: possibleValues,
-      initialValues: initialValues,
-      callback: callback,
-      icon: icon,
-      buttonTitle: isAwardOf ? TaskTexts.awardOfTitle : TaskTexts.awardsTitle,
-      dialogTitle: isAwardOf
-          ? TaskTexts.awardOfDialogTitle
-          : TaskTexts.awardsDialogTitle,
+      dialogType: ChooseDialogTypes.multiple,
+      initialValues: awardsTasks,
+      callback: (List<Task> tasks) =>
+          model.onAwardsChoose(tasks, context.read<HomeViewModel>()),
+      autoSizeText: false,
+      buttonWidth: context.responsiveSize * 110,
+      icon: Icons.card_giftcard_outlined,
     );
   }
-
-  Widget _awardButton(
-    BuildContext context, {
-    required List<Task> values,
-    required List<Task> initialValues,
-    required Function(List<Task>) callback,
-    required IconData icon,
-    required String buttonTitle,
-    required String dialogTitle,
-  }) =>
-      TitledButton<Task>(
-        buttonTitle: buttonTitle,
-        title: dialogTitle,
-        values: values,
-        dialogType: ChooseDialogTypes.multiple,
-        initialValues: initialValues,
-        callback: callback,
-        autoSizeText: false,
-        buttonWidth: context.responsiveSize * 110,
-        icon: icon,
-      );
 }

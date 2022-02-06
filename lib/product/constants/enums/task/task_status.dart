@@ -6,7 +6,7 @@ import '../../../../core/widgets/icons/base_icon.dart';
 /// Enum to indicate the status of a task.
 /// * Open
 /// * Active
-/// * Past Due
+/// * Over Due
 /// * Finished
 enum TaskStatus {
   /// Indicates that the task is craeted but not yet in progress.
@@ -15,8 +15,8 @@ enum TaskStatus {
   /// Indicates that the task is active and currently working on.
   active,
 
-  /// Indicates that the task is past due and it's aimed date is passed.
-  pastDue,
+  /// Indicates that the task is over due and it's aimed date is passed.
+  overDue,
 
   /// Indicates that the task is finished on time.
   finished,
@@ -31,8 +31,8 @@ extension TaskStatusValue on TaskStatus {
         return 'Open';
       case TaskStatus.active:
         return 'Active';
-      case TaskStatus.pastDue:
-        return 'Past Due';
+      case TaskStatus.overDue:
+        return 'Over Due';
       case TaskStatus.finished:
         return 'Finished';
     }
@@ -47,7 +47,7 @@ extension TaskStatusValue on TaskStatus {
       case TaskStatus.active:
         return const SizedBaseIcon(Icons.run_circle_outlined,
             color: AppColors.loadingColor);
-      case TaskStatus.pastDue:
+      case TaskStatus.overDue:
         return const SizedBaseIcon(Icons.close_outlined,
             color: AppColors.highPriority);
       case TaskStatus.finished:
@@ -61,7 +61,7 @@ extension TaskStatusValue on TaskStatus {
 extension OrderedTasks on List<TaskStatus> {
   /// Ordered task status list.
   List<TaskStatus> get ordered => <TaskStatus>[
-        TaskStatus.pastDue,
+        TaskStatus.overDue,
         TaskStatus.active,
         TaskStatus.open,
         TaskStatus.finished

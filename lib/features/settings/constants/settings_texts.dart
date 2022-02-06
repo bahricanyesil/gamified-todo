@@ -17,12 +17,12 @@ mixin SettingsTexts on StatelessWidget {
     1- Active Tasks: Represented with blue color and a person who runs. These are the tasks that you've started but not yet finished.
     2- Open Tasks: Respresented with yellow color and a clock. These are the tasks that you've created but not yet started.
     3- Finished Tasks: Respresented with green color and a check sign. These are the tasks that you've finished.
-    4- Past Due Tasks: Respresented with red color and a cross sign. These are the tasks that you couldn't finished before the deadline""":
+    4- Over Due Tasks: Respresented with red color and a cross sign. These are the tasks that you couldn't finished before the deadline""":
         <String>[
       'Active Tasks',
       'Open Tasks',
       'Finished Tasks',
-      'Past Due Tasks'
+      'Over Due Tasks'
     ],
   };
 

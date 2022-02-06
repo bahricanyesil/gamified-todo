@@ -35,7 +35,7 @@ class DialogBuilder {
     bool enableSearch = true,
     Widget? contentWidget,
   }) async {
-    List<T> items = <T>[];
+    List<T> items = initialValues;
     final List<T>? result =
         await DialogBuilder(context).platformSpecific<List<T>>(
       title: title,
@@ -58,17 +58,6 @@ class DialogBuilder {
     );
     return result ?? initialValues;
   }
-  // await showDialog<List<T>>(
-  //   context: context,
-  //   barrierDismissible: true,
-  //   builder: (BuildContext context) => MultipleChooseDialog<T>(
-  //     title: title,
-  //     elements: elements,
-  //     enableSearch: enableSearch,
-  //     initialSelecteds: initialValues,
-  //   ),
-  // ) ??
-  // <T>[];
 
   /// Shows a platform specific dialog.
   Future<T?> platformSpecific<T>({

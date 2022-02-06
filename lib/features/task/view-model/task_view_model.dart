@@ -57,17 +57,15 @@ class TaskViewModel extends BaseViewModel {
   /// Gets the screen type.
   ScreenType get screenType => _screenType;
 
-  late Task? _editTask;
-
-  List<Task> _awardOfTasks = <Task>[];
-
-  /// Returns the list of tasks which are this task is award of.
-  List<Task> get awardOfTasks => _awardOfTasks;
+  Task? _editTask;
 
   List<Task> _awardsTasks = <Task>[];
 
   /// Returns the list of tasks which are the award of this task.
   List<Task> get awardsTasks => _awardsTasks;
+
+  /// Returns the list of task ids whose awards include this task.
+  List<String> get awardsOfTasks => _editTask?.awardOfIds ?? <String>[];
 
   @override
   Future<void> init() async {
@@ -90,6 +88,7 @@ class TaskViewModel extends BaseViewModel {
     _selectedGroup = _groups[0];
     _dueDate = DateTime.now().add(const Duration(days: 1));
     _priority = Priorities.low;
+    _awardsTasks = <Task>[];
   }
 
   /// Sets the screen type.
@@ -104,7 +103,6 @@ class TaskViewModel extends BaseViewModel {
           _groups.firstWhereOrNull((Group g) => g.id == task.groupId) ??
               _selectedGroup;
       _priority = task.priority;
-      _awardOfTasks = _localManager.getMultiple(task.awardOfIds);
       _awardsTasks = _localManager.getMultiple(task.awardIds);
       _editTask = task;
     }
@@ -117,16 +115,33 @@ class TaskViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  /// Callback to call on award of tasks choose.
-  void onAwardOfChoose(List<Task> awardOfTasks) {
-    _awardOfTasks = awardOfTasks;
+  /// Callback to call on award tasks choose.
+  void onAwardsChoose(List<Task> awardTasks, HomeViewModel model) {
+    if (_screenType == ScreenType.edit && _editTask != null) {
+      _updateOtherTasksAwards(model, _editTask!.id);
+    }
+    _awardsTasks = awardTasks;
     notifyListeners();
   }
 
-  /// Callback to call on award tasks choose.
-  void onAwardsChoose(List<Task> awardTasks) {
-    _awardsTasks = awardTasks;
-    notifyListeners();
+  void _updateOtherTasksAwards(HomeViewModel model, String id) {
+    for (final Task task in model.tasks) {
+      Task? newTask;
+      final List<String> oldAwardOf = task.awardOfIds;
+      final int index = oldAwardOf.indexOf(id);
+      final int newListIndex =
+          awardsTasks.indexWhere((Task el) => el.id == task.id);
+      if (index == -1 && newListIndex != -1) {
+        newTask = task.copyWith(awardOfIds: <String>[...oldAwardOf, id]);
+        model.updateTask(task.id, newTask);
+      } else if (index != -1 && newListIndex == -1) {
+        oldAwardOf.removeAt(index);
+        newTask = task.copyWith(awardOfIds: oldAwardOf);
+        model.updateTask(task.id, newTask);
+      }
+      if (newTask == null) continue;
+      completer = CompleterHelper.wrapCompleter<void>(_localAction(newTask));
+    }
   }
 
   /// Callback to call on due date choose.
@@ -146,7 +161,6 @@ class TaskViewModel extends BaseViewModel {
   /// Creates a task.
   void action(HomeViewModel model) {
     late final Task newTask;
-    final List<String> awardOfIds = _ids(_awardOfTasks);
     final List<String> awardsIds = _ids(_awardsTasks);
     if (isCreate) {
       newTask = Task(
@@ -154,18 +168,17 @@ class TaskViewModel extends BaseViewModel {
         groupId: _selectedGroup.id,
         dueDate: _dueDate,
         priority: _priority,
-        awardOfIds: awardOfIds,
         awardIds: awardsIds,
       );
       model.addTask(newTask);
       _setDefaultValues();
+      _updateOtherTasksAwards(model, newTask.id);
     } else {
       newTask = _editTask!.copyWith(
         content: _contentController.text,
         groupId: _selectedGroup.id,
         dueDate: _dueDate,
         newPriority: _priority,
-        awardOfIds: awardOfIds,
         awardIds: awardsIds,
       );
       model.updateTask(newTask.id, newTask);

@@ -41,7 +41,7 @@ class AnimatedListModel<T> {
   /// Removes an item from the list.
   T removeAt(int index) {
     final T removedItem = items.removeAt(index);
-    if (removedItem != null) {
+    if (removedItem != null && _animatedList != null) {
       _animatedList!
           .removeItem(index, (_, __) => _removedItemBuilder(__, removedItem));
     }

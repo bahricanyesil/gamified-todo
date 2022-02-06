@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamified_todo/product/models/task/task.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/border/border_radii.dart';
@@ -58,31 +59,42 @@ class TaskItem extends StatelessWidget with HomeTexts {
       );
 
   List<FocusedMenuItem> _menuOptions(BuildContext context) {
+    final Task? task = context.read<HomeViewModel>().tasks.byId(id);
+    if (task == null) return <FocusedMenuItem>[];
     const List<String> titles = HomeViewModel.menuItemTitles;
     const List<IconData> icons = HomeViewModel.menuItemIcons;
-    return List<FocusedMenuItem>.generate(
-      titles.length,
-      (int i) {
-        final bool isDelete = i == titles.length - 1;
-        return FocusedMenuItem(
+    final List<FocusedMenuItem> items = <FocusedMenuItem>[];
+    for (int i = 0; i < titles.length; i++) {
+      if ((i == 0 && task.status == TaskStatus.finished) ||
+          (i == 1 && task.status == TaskStatus.active) ||
+          (i == 2 && task.status == TaskStatus.open)) {
+        continue;
+      }
+      final bool isDelete = i == titles.length - 1;
+      items.add(
+        FocusedMenuItem(
           onPressed: () async => _onMenuItemPressed(i, context),
           title: BaseText(titles[i], color: isDelete ? AppColors.error : null),
           leadingIcon:
               BaseIcon(icons[i], color: isDelete ? AppColors.error : null),
-        );
-      },
-    );
+        ),
+      );
+    }
+    return items;
   }
 
   Future<void> _onMenuItemPressed(int i, BuildContext context) async {
     final HomeViewModel model = context.read<HomeViewModel>();
     switch (i) {
       case 0:
-        model.updateTaskStatus(id, TaskStatus.finished);
-        break;
+        return model.updateTaskStatus(id, TaskStatus.finished);
       case 1:
-        return model.navigateToTask(id);
+        return model.updateTaskStatus(id, TaskStatus.active);
       case 2:
+        return model.updateTaskStatus(id, TaskStatus.open);
+      case 3:
+        return model.navigateToTask(id);
+      case 4:
         await model.delete(context, id);
         break;
       default:
