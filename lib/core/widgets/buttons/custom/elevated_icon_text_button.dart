@@ -49,7 +49,7 @@ class ElevatedIconTextButton extends StatelessWidget {
       );
 
   EdgeInsets _padding(BuildContext context) => EdgeInsets.symmetric(
-        horizontal: context.width * 4,
-        vertical: context.height * 1.6,
+        horizontal: context.width * 3.5,
+        vertical: context.height * 1,
       );
 }
