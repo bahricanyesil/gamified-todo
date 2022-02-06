@@ -39,7 +39,7 @@ class CustomDatePicker extends StatelessWidget {
         },
         child: Row(
           children: <Widget>[
-            const BaseIcon(Icons.calendar_today_outlined, sizeFactor: 7.5),
+            const BaseIcon(Icons.calendar_today_outlined),
             context.sizedW(3),
             BaseText(selectedDate.dm),
           ],

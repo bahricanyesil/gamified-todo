@@ -66,7 +66,6 @@ class _TitleRow extends StatelessWidget {
                 color: tuple.item1
                     ? context.primaryLightColor
                     : context.primaryDarkColor,
-                sizeFactor: 11,
               )
             : Container(),
       );

@@ -49,7 +49,7 @@ class _GroupItem extends StatelessWidget {
       CircledText(
         text: val,
         color: color.darken(.4),
-        paddingFactor: 2.5,
+        paddingFactor: 1.2,
         margin: context.horizontalPadding(Sizes.extremeLow),
       );
 
@@ -65,7 +65,7 @@ class _GroupItem extends StatelessWidget {
     return Padding(
       padding: context
           .horizontalPadding(Sizes.low)
-          .copyWith(bottom: context.responsiveSize),
+          .copyWith(bottom: context.height * .8),
       child: TextField(
         controller: model.titleController(group.id),
         style: TextStyles(context).textFormStyle(color: color),
@@ -105,9 +105,13 @@ class _ExpansionChildren extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                BaseText(status.value,
-                    color: Colors.black, underline: true, fontSizeFactor: 5.4),
-                context.sizedH(.4),
+                BaseText(
+                  status.value,
+                  color: AppColors.black,
+                  underline: true,
+                  fontSizeFactor: 5.4,
+                ),
+                context.sizedH(.6),
                 SelectorHelper<List<Task>, HomeViewModel>().builder(
                   (_, HomeViewModel model) =>
                       model.getByGroupIdAndStatus(groupId, status),
@@ -124,7 +128,7 @@ class _ExpansionChildren extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int i) => BulletText(
           tasks[i].content,
-          color: Colors.black,
+          color: AppColors.black,
           textAlign: TextAlign.start,
           fontSizeFactor: 4.8,
         ),
@@ -132,9 +136,10 @@ class _ExpansionChildren extends StatelessWidget {
 
   EdgeInsets _expansionChildPadding(int i, BuildContext context) =>
       EdgeInsets.symmetric(
-        horizontal: context.responsiveSize * 5,
+        horizontal: context.width * 4,
       ).copyWith(
-        top: context.responsiveSize * (i == 0 ? 2 : 1),
-        bottom: context.responsiveSize * (i == 1 ? 2 : 1),
+        top: context.height * (i == 0 ? 1.2 : .8),
+        bottom: context.height *
+            ((i == 1 || i == TaskStatus.values.length - 1) ? 1.2 : .8),
       );
 }

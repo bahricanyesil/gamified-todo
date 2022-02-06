@@ -25,7 +25,7 @@ class _SettingsItem extends StatelessWidget with SettingsTexts {
         collapsedIconColor: context.primaryLightColor,
         tilePadding: context.horizontalPadding(Sizes.low),
         childrenPadding: EdgeInsets.zero,
-        leading: PrimaryBaseIcon(settings.icon, sizeFactor: 9),
+        leading: PrimaryBaseIcon(settings.icon),
         title: _title(context),
         subtitle: _subtitle(context),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -36,8 +36,8 @@ class _SettingsItem extends StatelessWidget with SettingsTexts {
   List<Widget> _children(BuildContext context) {
     switch (settings) {
       case SettingsOptions.visibleTaskSections:
-        return List<Widget>.generate(
-            TaskStatus.values.length, (int i) => _checkbox(i, context));
+        return List<Widget>.generate((TaskStatus.values.length / 2).ceil(),
+            (int i) => _checkboxRow(i, context));
       case SettingsOptions.info:
         return _infoTexts(context);
       case SettingsOptions.socialInfo:
@@ -58,6 +58,18 @@ class _SettingsItem extends StatelessWidget with SettingsTexts {
             coloredTexts: SettingsTexts.infoSentences.values.elementAt(i),
           ),
         ),
+      );
+
+  Widget _checkboxRow(int i, BuildContext context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Spacer(),
+          Expanded(flex: 6, child: _checkbox(i, context)),
+          const Spacer(),
+          Expanded(flex: 6, child: _checkbox(i + 1, context)),
+          const Spacer(),
+        ],
       );
 
   Widget _checkbox(int i, BuildContext context) {

@@ -69,7 +69,7 @@ class CustomDropdownButton<T> extends StatelessWidget {
     if (icon != null) {
       return Row(
         children: <Widget>[
-          BaseIcon(icon!, sizeFactor: 7.5),
+          BaseIcon(icon!),
           context.sizedW(3),
           Expanded(child: _textWidget(context, value)),
         ],

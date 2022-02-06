@@ -33,7 +33,7 @@ class InputDeco {
       InputDecoration(
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
-              vertical: _context.responsiveSize * 3,
+              vertical: _context.responsiveSize * 6,
               horizontal: _context.responsiveSize * 6,
             ),
         fillColor: fillColor ?? AppColors.white,
@@ -61,7 +61,7 @@ class InputDeco {
       ? null
       : Padding(
           padding: _context.horizontalPadding(Sizes.low),
-          child: BaseIcon(prefixIcon, sizeFactor: 8),
+          child: BaseIcon(prefixIcon),
         );
 
   /// Default function returns [OutlineInputBorder] with some common values.

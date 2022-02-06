@@ -67,7 +67,7 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
   }
 
   DefaultAppBar? get _appBar =>
-      widget.appBar?.copyWithSize(context.height * 6.5);
+      widget.appBar?.copyWithSize(context.height * 6.8);
 
   Widget get _child => SelectorHelper<ViewStates, T>().builder(
         (BuildContext context, T localModel) => localModel.state,

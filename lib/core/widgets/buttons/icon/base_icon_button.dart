@@ -50,12 +50,12 @@ class BaseIconButton extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: IconButton(
             icon: BaseIcon(icon, color: color),
-            splashRadius: context.responsiveSize * 9,
+            splashRadius: context.width * 7,
             padding: padding ?? context.allPadding(Sizes.extremeLow),
             highlightColor:
                 highlightColor ?? context.primaryLightColor.lighten(),
             constraints: const BoxConstraints(),
-            iconSize: context.responsiveSize * 9,
+            iconSize: context.width * 7,
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
               onPressed();

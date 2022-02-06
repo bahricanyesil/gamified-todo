@@ -29,7 +29,6 @@ class SettingsViewModel extends BaseViewModel {
     if (storedInterval != null) {
       _deleteInterval = storedInterval;
     }
-
     final List<Tuple2<TaskStatus, bool>>? storedList =
         _localManager.get(SettingsStorageKeys.sectionStatus)?.fromJson;
     _visibleSections = storedList ??

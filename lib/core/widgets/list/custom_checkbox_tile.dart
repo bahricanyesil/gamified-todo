@@ -55,7 +55,7 @@ class _CustomCheckboxTileState extends State<CustomCheckboxTile>
   Widget get _checkbox => Container(
         margin: context.rightPadding(Sizes.low),
         constraints:
-            BoxConstraints.loose(Size.fromHeight(context.height * 4.5)),
+            BoxConstraints.loose(Size.fromHeight(context.height * 4.4)),
         child: Theme(
           data: context.read<ThemeProvider>().currentTheme.copyWith(
                 unselectedWidgetColor:

@@ -43,7 +43,10 @@ class CircledText extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(context.responsiveSize * paddingFactor),
+        padding: EdgeInsets.symmetric(
+          vertical: context.height * paddingFactor,
+          horizontal: context.width * paddingFactor,
+        ),
         margin: margin ?? context.horizontalPadding(Sizes.lowMed),
         decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         width: context.responsiveSize * sizeFactor,

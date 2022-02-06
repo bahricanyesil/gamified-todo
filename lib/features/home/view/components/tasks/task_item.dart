@@ -112,12 +112,15 @@ class TaskItem extends StatelessWidget with HomeTexts {
         child: _customListTile(context),
       );
 
-  Widget _customListTile(BuildContext context) => Row(
-        children: <Widget>[
-          Expanded(child: _taskPriorityNumber),
-          Expanded(flex: 5, child: _textColumn(context)),
-          Expanded(child: _taskIcon(context)),
-        ],
+  Widget _customListTile(BuildContext context) => Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * .2),
+        child: Row(
+          children: <Widget>[
+            Expanded(child: _taskPriorityNumber),
+            Expanded(flex: 5, child: _textColumn(context)),
+            Expanded(child: _taskIcon(context)),
+          ],
+        ),
       );
 
   Widget get _taskPriorityNumber =>

@@ -75,6 +75,6 @@ class _GroupsList extends StatelessWidget with GroupsTexts {
       );
 
   Widget _selectorChildBuilder(BuildContext context, Group group, _) => Padding(
-      padding: EdgeInsets.symmetric(vertical: context.responsiveSize * 1.5),
+      padding: EdgeInsets.symmetric(vertical: context.height * .6),
       child: _GroupItem(group));
 }

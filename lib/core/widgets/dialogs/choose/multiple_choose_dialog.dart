@@ -58,12 +58,12 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
   @override
   Widget build(BuildContext context) {
     _maxMenuHeight = context.height * 60;
-    _itemHeight = context.height * 5;
+    _itemHeight = context.height * 4.8;
     final double _menuHeight = _itemHeight * _searchedList.length;
     return SizedBox(
-      width: context.width * 85,
+      width: context.width * 80,
       height: (_menuHeight > _maxMenuHeight ? _maxMenuHeight : _menuHeight) +
-          (widget.enableSearch ? context.height * 9 : 0),
+          (widget.enableSearch ? context.height * 6 : 0),
       child: widget.enableSearch
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,8 +87,7 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
   Widget get _itemList => DefaultListViewBuilder(
         itemCount: _searchedList.length,
         itemBuilder: (BuildContext context, int index) => Padding(
-          padding:
-              EdgeInsets.only(top: context.height * (index == 0 ? 1.5 : .4)),
+          padding: EdgeInsets.only(top: context.height * .4),
           child: CustomCheckboxTile(
             key: UniqueKey(),
             initialValue: _selectedItems.contains(_searchedList[index]),
@@ -99,8 +98,9 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
         ),
       );
 
-  Widget get _searchForm => Padding(
-        padding: context.allPadding(Sizes.low).copyWith(bottom: context.height),
+  Widget get _searchForm => Container(
+        height: context.height * 4,
+        margin: context.allPadding(Sizes.low),
         child: Material(
           color: Colors.transparent,
           child: TextField(

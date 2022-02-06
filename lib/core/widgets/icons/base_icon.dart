@@ -7,7 +7,7 @@ import '../../theme/color/l_colors.dart';
 class SizedBaseIcon extends BaseIcon {
   /// Default constructor for [SizedBaseIcon]..
   const SizedBaseIcon(IconData icon, {Color? color, Key? key})
-      : super(icon, color: color, sizeFactor: 8.25, key: key);
+      : super(icon, color: color, sizeFactor: 6.8, key: key);
 }
 
 /// Base icon with custom parameters
@@ -42,8 +42,7 @@ class BaseIcon extends StatelessWidget {
 
   Widget _icon(BuildContext context) => Icon(
         iconData,
-        size:
-            sizeFactor != null ? (context.responsiveSize * sizeFactor!) : null,
+        size: sizeFactor != null ? (context.width * sizeFactor!) : null,
         color: color ?? AppColors.white,
       );
 

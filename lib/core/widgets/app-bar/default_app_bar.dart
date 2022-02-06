@@ -76,7 +76,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: <Widget>[
               if (showBack ?? !kIsWeb) _backButton(context),
               if (titleIcon != null)
-                BaseIcon(titleIcon!, sizeFactor: 8, color: AppColors.white),
+                BaseIcon(titleIcon!, color: AppColors.white),
               context.sizedW(2),
               if (titleText != null) Expanded(child: _titleTextWidget(context)),
               ...actionsList,
