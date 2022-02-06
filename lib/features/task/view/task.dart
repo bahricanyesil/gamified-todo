@@ -118,6 +118,7 @@ class TaskScreen extends StatelessWidget with TaskTexts {
             values: model.priorities,
             initialValues: <Priorities>[priority],
             callback: model.onPriorityChoose,
+            buttonWidth: context.width * 36,
           );
         },
       );
@@ -133,7 +134,7 @@ class TaskScreen extends StatelessWidget with TaskTexts {
             initialValues: <Group>[group],
             callback: model.onGroupChoose,
             autoSizeText: false,
-            buttonWidth: context.responsiveSize * 55,
+            buttonWidth: context.width * 36,
           );
         },
       );
@@ -168,7 +169,6 @@ class TaskScreen extends StatelessWidget with TaskTexts {
       callback: (List<Task> tasks) =>
           model.onAwardsChoose(tasks, context.read<HomeViewModel>()),
       autoSizeText: false,
-      buttonWidth: context.responsiveSize * 110,
       icon: Icons.card_giftcard_outlined,
     );
   }

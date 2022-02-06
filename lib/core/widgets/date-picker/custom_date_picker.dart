@@ -31,7 +31,7 @@ class CustomDatePicker extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         style: ButtonStyles(context).roundedStyle(
           padding: context.horizontalPadding(Sizes.med),
-          size: Size(context.responsiveSize * 110, context.responsiveSize * 18),
+          size: Size(context.width * 85, context.responsiveSize * 18),
         ),
         onPressed: () async {
           FocusManager.instance.primaryFocus?.unfocus();

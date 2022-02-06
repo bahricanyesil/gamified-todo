@@ -53,7 +53,7 @@ class CustomDropdownButton<T> extends StatelessWidget {
       style: ButtonStyles(context).roundedStyle(
         padding: context.horizontalPadding(Sizes.med),
         size: Size(
-          buttonWidth ?? context.responsiveSize * 45,
+          buttonWidth ?? context.width * 85,
           context.responsiveSize * 18,
         ),
       ),

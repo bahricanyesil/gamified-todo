@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'core/managers/navigation/navigation_manager.dart';
 import 'core/managers/navigation/screen_config.dart';
 import 'core/providers/provider_list.dart';
-import 'initial_app.dart' if (dart.library.hmtl) 'initial_web_app.dart';
+import 'initial_web_app.dart' if (dart.library.io) 'initial_app.dart';
 import 'product/managers/local-storage/settings/settings_local_manager.dart';
 
 Future<void> main() async {

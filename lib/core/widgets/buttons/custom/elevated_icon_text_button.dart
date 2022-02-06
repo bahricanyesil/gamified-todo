@@ -42,8 +42,8 @@ class ElevatedIconTextButton extends StatelessWidget {
   Widget _rowChild(BuildContext context) => Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          BaseIcon(icon),
-          context.sizedW(1.6),
+          BaseIcon(icon, sizeFactor: 7),
+          context.sizedWR(3),
           BaseText(text),
         ],
       );

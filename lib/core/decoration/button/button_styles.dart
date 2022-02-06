@@ -55,7 +55,7 @@ class ButtonStyles {
       );
 
   MaterialStateProperty<Size> _size(Size? size) => size == null
-      ? _all(Size.fromHeight(context.responsiveSize * 20))
+      ? _all(Size.fromHeight(context.responsiveSize * 19))
       : _all(size);
 
   MaterialStateProperty<T> _all<T>(T value) => MaterialStateProperty.all(value);

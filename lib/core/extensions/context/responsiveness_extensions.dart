@@ -105,6 +105,12 @@ extension ResponsivenessExtensions on BuildContext {
   /// Returns a responsive vertical [SizedBox] to give space.
   SizedBox sizedH(double factor) => SizedBox(height: height * factor);
 
+  /// Returns a responsive horizontal [SizedBox] to give space.
+  SizedBox sizedWR(double factor) => SizedBox(width: responsiveSize * factor);
+
+  /// Returns a responsive vertical [SizedBox] to give space.
+  SizedBox sizedHR(double factor) => SizedBox(height: responsiveSize * factor);
+
   List<double> _getSizedValue(Sizes sizeType) {
     late double horizontalValue;
     late double verticalValue;
