@@ -80,8 +80,7 @@ class _ExpansionChildren extends StatelessWidget {
   const _ExpansionChildren({required this.groupId, Key? key}) : super(key: key);
   final String groupId;
   @override
-  Widget build(BuildContext context) => ListView.builder(
-        shrinkWrap: true,
+  Widget build(BuildContext context) => DefaultListViewBuilder(
         itemCount: TaskStatus.values.length,
         itemBuilder: _listItemBuilder,
         physics: const NeverScrollableScrollPhysics(),
@@ -120,8 +119,7 @@ class _ExpansionChildren extends StatelessWidget {
         : Container();
   }
 
-  Widget _statusTasksBuilder(_, List<Task> tasks, __) => ListView.builder(
-        shrinkWrap: true,
+  Widget _statusTasksBuilder(_, List<Task> tasks, __) => DefaultListViewBuilder(
         itemCount: tasks.length,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int i) => BulletText(

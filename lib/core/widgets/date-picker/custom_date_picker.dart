@@ -33,7 +33,10 @@ class CustomDatePicker extends StatelessWidget {
           padding: context.horizontalPadding(Sizes.med),
           size: Size(context.responsiveSize * 110, context.responsiveSize * 18),
         ),
-        onPressed: () async => _show(context),
+        onPressed: () async {
+          FocusManager.instance.primaryFocus?.unfocus();
+          await _show(context);
+        },
         child: Row(
           children: <Widget>[
             const BaseIcon(Icons.calendar_today_outlined, sizeFactor: 7.5),

@@ -6,6 +6,7 @@ import '../../constants/durations/durations.dart';
 import '../../decoration/text_styles.dart';
 import '../../extensions/context/responsiveness_extensions.dart';
 import '../../extensions/context/theme_extensions.dart';
+import '../list/default_list_view_builder.dart';
 import '../text/base_text.dart';
 
 /// Text mapper function definion.
@@ -171,17 +172,17 @@ class _NumberPickerState extends State<NumberPicker> {
         scrollDirection: widget.axis,
         controller: _scrollController as InfiniteScrollController,
         itemExtent: itemExtent,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemBuilder: _itemBuilder,
         padding: EdgeInsets.zero,
       );
 
-  Widget get _normalLoop => ListView.builder(
+  Widget get _normalLoop => DefaultListViewBuilder(
         itemCount: listItemsCount,
         scrollDirection: widget.axis,
         controller: _scrollController,
         itemExtent: itemExtent,
         itemBuilder: _itemBuilder,
-        padding: EdgeInsets.zero,
       );
 
   double get _width => widget.axis == Axis.vertical

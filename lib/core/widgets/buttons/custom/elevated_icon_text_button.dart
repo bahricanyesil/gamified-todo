@@ -27,7 +27,10 @@ class ElevatedIconTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          onPressed();
+        },
         style: ButtonStyles(context).roundedStyle(
           padding: _padding(context),
           backgroundColor: context.primaryColor,

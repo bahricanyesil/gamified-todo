@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/product/models/task/task.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/border/border_radii.dart';
@@ -16,6 +15,7 @@ import '../../../../../core/widgets/widgets_shelf.dart';
 import '../../../../../product/constants/enums/task/priorities.dart';
 import '../../../../../product/constants/enums/task/task_status.dart';
 import '../../../../../product/extensions/task_extensions.dart';
+import '../../../../../product/models/task/task.dart';
 import '../../../constants/home_texts.dart';
 import '../../../view-model/home_view_model.dart';
 

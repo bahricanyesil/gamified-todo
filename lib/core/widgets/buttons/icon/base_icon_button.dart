@@ -56,7 +56,10 @@ class BaseIconButton extends StatelessWidget {
                 highlightColor ?? context.primaryLightColor.lighten(),
             constraints: const BoxConstraints(),
             iconSize: context.responsiveSize * 9,
-            onPressed: onPressed,
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              onPressed();
+            },
             hoverColor: hoverColor ?? context.primaryColor.lighten(.05),
           ),
         ),

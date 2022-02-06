@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../constants/border/border_constants_shelf.dart';
 
+import '../constants/border/border_constants_shelf.dart';
 import 'color/l_colors.dart';
 import 'text/l_text_theme.dart';
 
@@ -21,7 +21,7 @@ abstract class ITheme {
         fontFamily: textTheme.fontFamily,
         textTheme: textTheme.data,
         primaryTextTheme: textTheme.data,
-        cardColor: colors.colorScheme.onSecondary,
+        cardColor: AppColors.white,
         bottomAppBarColor: colors.scaffoldBackgroundColor,
         scaffoldBackgroundColor: colors.scaffoldBackgroundColor,
         colorScheme: colors.colorScheme,

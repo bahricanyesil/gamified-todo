@@ -25,7 +25,10 @@ class ElevatedTextButton extends StatelessWidget with MaterialStateHelpers {
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          onPressed();
+        },
         style: ButtonStyle(
           padding: all<EdgeInsets>(
             EdgeInsets.symmetric(

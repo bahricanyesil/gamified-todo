@@ -6,6 +6,7 @@ import '../../../decoration/text_styles.dart';
 import '../../../extensions/context/responsiveness_extensions.dart';
 import '../../../theme/color/l_colors.dart';
 import '../../list/custom_checkbox_tile.dart';
+import '../../list/default_list_view_builder.dart';
 
 /// Item selection callback definiton.
 typedef ItemSelection<T> = void Function(List<T> items);
@@ -60,9 +61,9 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
     _itemHeight = context.height * 5;
     final double _menuHeight = _itemHeight * _searchedList.length;
     return SizedBox(
-      width: context.width * 80,
+      width: context.width * 85,
       height: (_menuHeight > _maxMenuHeight ? _maxMenuHeight : _menuHeight) +
-          (widget.enableSearch ? context.height * 8 : 0),
+          (widget.enableSearch ? context.height * 9 : 0),
       child: widget.enableSearch
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,22 +84,18 @@ class _MultipleChooseDialogState<T> extends State<MultipleChooseDialog<T>> {
         .toList();
   }
 
-  Widget get _itemList => ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
+  Widget get _itemList => DefaultListViewBuilder(
         itemCount: _searchedList.length,
-        padding: EdgeInsets.zero,
-        itemBuilder: _sheetElement,
-      );
-
-  Widget _sheetElement(BuildContext context, int index) => Padding(
-        padding: EdgeInsets.only(top: context.height * (index == 0 ? 1.5 : .4)),
-        child: CustomCheckboxTile(
-          key: UniqueKey(),
-          initialValue: _selectedItems.contains(_searchedList[index]),
-          onTap: (bool? val) => _chooseItem(index),
-          text: _searchedList[index].toString(),
-          color: AppColors.black,
+        itemBuilder: (BuildContext context, int index) => Padding(
+          padding:
+              EdgeInsets.only(top: context.height * (index == 0 ? 1.5 : .4)),
+          child: CustomCheckboxTile(
+            key: UniqueKey(),
+            initialValue: _selectedItems.contains(_searchedList[index]),
+            onTap: (bool? val) => _chooseItem(index),
+            text: _searchedList[index].toString(),
+            color: AppColors.black,
+          ),
         ),
       );
 

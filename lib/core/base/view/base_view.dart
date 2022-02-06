@@ -56,6 +56,7 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
   Widget build(BuildContext context) {
     model = context.read<T>();
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,

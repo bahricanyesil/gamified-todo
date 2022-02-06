@@ -261,44 +261,4 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
       widget.borderRadius ?? BorderRadii.mediumCircular;
 
   Color get _borderColor => _borderColorAnimation.value ?? Colors.transparent;
-
-  // Widget get _defaultLeading => CircledText(
-  //       text: widget.leadingText,
-  //       color: widget.leadingColor,
-  //       paddingFactor: 2.5,
-  //       margin: context.horizontalPadding(Sizes.extremeLow),
-  //     );
-
-  // Widget get _defaultTrailing => RotationTransition(
-  //       turns: _iconTurns,
-  //       child: const BaseIcon(Icons.expand_more),
-  //     );
-
-  // Widget get _textColumn => Padding(
-  //       padding: context.verticalPadding(Sizes.extremeLow),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: <Widget>[
-  //           const NotFittedText('ASD', textAlign: TextAlign.start),
-  //           NotFittedText(
-  //             'SUBT',
-  //             textAlign: TextAlign.start,
-  //             style: TextStyles(context).subtitleTextStyle(),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-
-  // TODO(bahrican): Default main widget
-  // Padding(
-  //           padding: widget.tilePadding ?? EdgeInsets.zero,
-  //           child: Row(
-  //             children: <Widget>[
-  //               Expanded(child: widget.leading ?? _defaultLeading),
-  //               Expanded(flex: 5, child: _textColumn),
-  //               Expanded(child: widget.trailing ?? _defaultTrailing),
-  //             ],
-  //           ),
-  //         ),
 }

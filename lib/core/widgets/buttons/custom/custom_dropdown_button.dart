@@ -57,7 +57,10 @@ class CustomDropdownButton<T> extends StatelessWidget {
           context.responsiveSize * 18,
         ),
       ),
-      onPressed: () async => _onPressed(context),
+      onPressed: () async {
+        FocusManager.instance.primaryFocus?.unfocus();
+        await _onPressed(context);
+      },
       child: _child(context, value),
     );
   }

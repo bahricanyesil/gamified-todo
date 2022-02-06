@@ -92,10 +92,9 @@ class _FocusedMenuDetails extends StatelessWidget {
         ),
       );
 
-  Widget get _menuList => ListView.builder(
+  Widget get _menuList => DefaultListViewBuilder(
         itemCount: menuItems.length,
-        padding: EdgeInsets.zero,
-        physics: scrollingPhysics ?? const BouncingScrollPhysics(),
+        physics: scrollingPhysics,
         itemBuilder: (BuildContext context, int index) {
           final FocusedMenuItem item = menuItems[index];
           if (animateMenu) {

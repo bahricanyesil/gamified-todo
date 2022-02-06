@@ -7,6 +7,7 @@ import '../../../constants/durations/durations.dart';
 import '../../../extensions/color/color_extensions.dart';
 import '../../../extensions/context/responsiveness_extensions.dart';
 import '../../../theme/color/l_colors.dart';
+import '../../list/default_list_view_builder.dart';
 
 part 'focused_menu_details.dart';
 part 'focused_menu_item_model.dart';
@@ -36,22 +37,52 @@ class FocusedMenu extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  // TODO(bahrican): Fix
+  /// Child of the focused menu.
   final Widget child;
+
+  /// Extent of the menu items.
   final double? menuItemExtent;
+
+  /// Width of the menu.
   final double? menuWidth;
+
+  /// Menu items list.
   final List<FocusedMenuItem> menuItems;
+
+  /// Determines whether to animate menu items.
   final bool? animateMenuItems;
+
+  /// Decoration of the menu.
   final BoxDecoration? menuBoxDecoration;
+
+  /// Callback to call on pressed.
   final VoidCallback onPressed;
+
+  /// Custom duration for animation.
   final Duration? duration;
+
+  /// Size of the blur.
   final double? blurSize;
+
+  /// Custom background color of the blur.
   final Color? blurBackgroundColor;
+
+  /// Offset from the bottom.
   final double? bottomOffsetHeight;
+
+  /// Menu offset.
   final double? menuOffset;
+
+  /// Determines whether to open with tap.
   final bool openWithTap;
+
+  /// Custom scroll physics.
   final ScrollPhysics? scrollPhysics;
+
+  /// Highlight color.
   final Color? highlightColor;
+
+  /// Radius of the border.
   final BorderRadius? borderRadius;
 
   @override

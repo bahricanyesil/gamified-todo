@@ -6,6 +6,7 @@ part of 'task.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+/// Adapter for task.
 class TaskAdapter extends TypeAdapter<Task> {
   @override
   final int typeId = 0;
@@ -23,8 +24,8 @@ class TaskAdapter extends TypeAdapter<Task> {
       id: fields[2] as String?,
       createdAt: fields[3] as DateTime?,
       updatedAt: fields[4] as DateTime?,
-      awardIds: (fields[9] as List?)?.cast<String>(),
-      awardOfIds: (fields[8] as List?)?.cast<String>(),
+      awardIds: (fields[9] as List<dynamic>?)?.cast<String>(),
+      awardOfIds: (fields[8] as List<dynamic>?)?.cast<String>(),
     )
       .._priority = fields[0] as String
       .._status = fields[5] as String;

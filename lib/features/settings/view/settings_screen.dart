@@ -37,7 +37,7 @@ class SettingsScreen extends StatelessWidget with SettingsTexts {
 
   Widget _bodyBuilder(BuildContext context) {
     final int optionLength = SettingsOptions.values.length;
-    return ListView.builder(
+    return DefaultListViewBuilder(
       itemCount: optionLength + 1,
       padding: context.allPadding(Sizes.med),
       itemBuilder: (BuildContext context, int index) => index == optionLength

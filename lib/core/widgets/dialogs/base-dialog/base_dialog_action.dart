@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../helpers/material_state_helpers.dart';
 import 'base_dialog.dart';
 
 /// Basic dialog action widget displays buttons specific to the platforms.
-class BaseDialogAction extends BaseDialog<TextButton, CupertinoDialogAction> {
+class BaseDialogAction extends BaseDialog<TextButton, CupertinoDialogAction>
+    with MaterialStateHelpers {
   /// Default constructor of [BaseDialogAction]
   const BaseDialogAction({
     this.onPressed,

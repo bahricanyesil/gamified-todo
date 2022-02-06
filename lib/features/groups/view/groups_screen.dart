@@ -60,9 +60,9 @@ class _GroupsList extends StatelessWidget with GroupsTexts {
         _selectorBuilder,
       );
 
-  Widget _selectorBuilder(BuildContext context, int val, _) => ListView.builder(
+  Widget _selectorBuilder(BuildContext context, int val, _) =>
+      DefaultListViewBuilder(
         itemCount: val,
-        shrinkWrap: true,
         padding: context.horizontalPadding(Sizes.med),
         itemBuilder: (_, int i) => _listenGroup(i),
       );

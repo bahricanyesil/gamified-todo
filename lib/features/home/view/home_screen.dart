@@ -66,6 +66,7 @@ class HomeScreen extends StatelessWidget with HomeTexts {
         (_, List<TasksSection> sections, __) => ListView.separated(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           itemBuilder: (_, int index) =>
               _TasksSection(tasksSection: sections[index]),
           separatorBuilder: (_, __) => const CustomDivider(),

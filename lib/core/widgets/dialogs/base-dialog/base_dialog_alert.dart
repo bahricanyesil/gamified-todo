@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../extensions/color/color_extensions.dart';
+import '../../../theme/color/l_colors.dart';
 
 import 'base_dialog.dart';
 
@@ -23,6 +25,7 @@ class BaseDialogAlert extends BaseDialog<AlertDialog, CupertinoAlertDialog> {
         title: title,
         content: content,
         actions: actions,
+        backgroundColor: AppColors.white.darken(.1),
       );
 
   @override

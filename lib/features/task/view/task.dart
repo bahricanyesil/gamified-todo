@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamified_todo/product/constants/enums/task/task_enums_shelf.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/view/base_view.dart';
@@ -7,8 +6,10 @@ import '../../../core/constants/constants_shelf.dart';
 import '../../../core/extensions/extensions_shelf.dart';
 import '../../../core/helpers/selector_helper.dart';
 import '../../../core/theme/color/l_colors.dart';
+import '../../../core/widgets/list/custom_single_child_scroll_view.dart';
 import '../../../core/widgets/widgets_shelf.dart';
 import '../../../product/constants/enums/task/priorities.dart';
+import '../../../product/constants/enums/task/task_enums_shelf.dart';
 import '../../../product/extensions/task_extensions.dart';
 import '../../../product/models/group/group.dart';
 import '../../../product/models/task/task.dart';
@@ -49,9 +50,11 @@ class TaskScreen extends StatelessWidget with TaskTexts {
     if (id != null) model.setScreenType(ScreenType.edit, id!);
   }
 
-  Widget _bodyBuilder(BuildContext context) => Padding(
-        padding: context.verticalPadding(Sizes.lowMed),
-        child: Column(children: _bodyChildren(context)),
+  Widget _bodyBuilder(BuildContext context) => CustomSingleChildScrollView(
+        child: Padding(
+          padding: context.verticalPadding(Sizes.lowMed),
+          child: Column(children: _bodyChildren(context)),
+        ),
       );
 
   List<Widget> _bodyChildren(BuildContext context) {

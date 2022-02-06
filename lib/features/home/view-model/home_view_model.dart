@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:collection/src/iterable_extensions.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/base/view-model/base_view_model.dart';
